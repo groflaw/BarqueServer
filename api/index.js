@@ -1,8 +1,23 @@
 const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const connectDB = require("./config/db"); // Import your db connection
+
 const app = express();
 
-app.get("/", (req, res) => res.json({ success: "flag" }));
+app.use(cors());
+app.use(bodyParser.json());
 
-app.listen(3000, () => console.log("Server ready on port 3000."));
+// Connect to MongoDB
+connectDB();
 
-module.exports = app;
+// Define your routes here (example)
+app.get("/", (req, res) => {
+  res.send("API is running...");
+});
+
+// Start the server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
