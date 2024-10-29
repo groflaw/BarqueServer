@@ -22,4 +22,26 @@ exports.createUser = async (req, res) => {
   }
 };
 
-exports.loginUser = async (req, res) => {};
+exports.loginUser = async (req, res) => {
+  const { email, password } = req.params; // Get email and password from URL parameters
+
+  try {
+    const existingUser = await User.findOne({ email });
+
+    if (!existingUser) {
+      return res.status(400).json({ error: "Invalid email or password" });
+    }
+
+    const isMatch = await bcrypt.compare(password, existingUser.password);
+
+    if (!isMatch) {
+      return res.status(400).json({ error: "Invalid email or password" });
+    }
+
+    res.status(200).json({
+      existingUser,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
+  }
+};
