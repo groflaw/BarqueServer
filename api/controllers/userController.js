@@ -40,6 +40,6 @@ exports.loginUser = async (req, res) => {
 
     res.json({ flag: true, existingUser });
   } catch (error) {
-    res.status(500).json({ error: "Server error" });
+    res.json({ flag: false, error: "Server error" });
   }
 };
