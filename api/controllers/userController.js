@@ -23,7 +23,7 @@ exports.createUser = async (req, res) => {
 };
 
 exports.loginUser = async (req, res) => {
-  const { email, password } = req.body; // Get email and password from URL parameters
+  const { email, password } = req.params; // Get email and password from URL parameters
   console.log(email, password);
   // try {
   //   const existingUser = await User.findOne({ email });
