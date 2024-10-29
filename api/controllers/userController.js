@@ -8,7 +8,7 @@ exports.createUser = async (req, res) => {
     const existingUser = await User.findOne({ email: newUser.email });
 
     if (existingUser) {
-      return res.status(400).json({ error: "Email already exists" });
+      return res.json({ flag: false, error: "Email already exists" });
     }
 
     const saltRounds = 10;
@@ -16,9 +16,9 @@ exports.createUser = async (req, res) => {
 
     await newUser.save();
 
-    res.status(201).json(newUser);
+    res.json({ flag: true, newUser });
   } catch (error) {
-    res.status(400).json({ error: "Could not create user" });
+    res.json({ flag: false, error: "Could not create user" });
   }
 };
 
@@ -29,18 +29,16 @@ exports.loginUser = async (req, res) => {
     const existingUser = await User.findOne({ email });
 
     if (!existingUser) {
-      return res.status(400).json({ error: "Invalid email or password" });
+      return res.json({ flag: false, error: "Invalid email or password" });
     }
 
     const isMatch = await bcrypt.compare(password, existingUser.password);
 
     if (!isMatch) {
-      return res.status(400).json({ error: "Invalid email or password" });
+      return res.json({ flag: false, error: "Invalid email or password" });
     }
 
-    res.status(200).json({
-      existingUser,
-    });
+    res.json({ flag: true, existingUser });
   } catch (error) {
     res.status(500).json({ error: "Server error" });
   }
