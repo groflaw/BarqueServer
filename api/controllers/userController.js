@@ -36,7 +36,7 @@ exports.loginUser = async (req, res) => {
       return res.json({
         flag: false,
         sort: "email",
-        error: "Invalid email or password",
+        error: "Unregistered user",
       });
     }
 
@@ -46,7 +46,7 @@ exports.loginUser = async (req, res) => {
       return res.json({
         flag: false,
         sort: "password",
-        error: "Invalid email or password",
+        error: "Incorrect password",
       });
     }
 
