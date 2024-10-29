@@ -8,7 +8,11 @@ exports.createUser = async (req, res) => {
     const existingUser = await User.findOne({ email: newUser.email });
 
     if (existingUser) {
-      return res.json({ flag: false, error: "Email already exists" });
+      return res.json({
+        flag: false,
+        sort: "email",
+        error: "Email already exists",
+      });
     }
 
     const saltRounds = 10;
@@ -18,7 +22,7 @@ exports.createUser = async (req, res) => {
 
     res.json({ flag: true, newUser });
   } catch (error) {
-    res.json({ flag: false, error: "Could not create user" });
+    res.json({ flag: false, sort: "general", error: "Could not create user" });
   }
 };
 
@@ -29,17 +33,25 @@ exports.loginUser = async (req, res) => {
     const existingUser = await User.findOne({ email });
 
     if (!existingUser) {
-      return res.json({ flag: false, error: "Invalid email or password" });
+      return res.json({
+        flag: false,
+        sort: "email",
+        error: "Invalid email or password",
+      });
     }
 
     const isMatch = await bcrypt.compare(password, existingUser.password);
 
     if (!isMatch) {
-      return res.json({ flag: false, error: "Invalid email or password" });
+      return res.json({
+        flag: false,
+        sort: "password",
+        error: "Invalid email or password",
+      });
     }
 
     res.json({ flag: true, existingUser });
   } catch (error) {
-    res.json({ flag: false, error: "Server error" });
+    res.json({ flag: false, sort: "general", error: "Server error" });
   }
 };
