@@ -3,7 +3,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const connectDB = require("./config/db"); // Import your db connection
 const userRoutes = require("./routes/userRoutes");
-
+const boatRoutes = require("./routes/boatRoutes");
 const app = express();
 
 app.use(cors());
@@ -19,6 +19,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/users", userRoutes);
+app.use("/api/boats", boatRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
