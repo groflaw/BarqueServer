@@ -2,7 +2,7 @@ const BoatType = require("../models/boattype");
 
 exports.getallboattype = async (req, res) => {
   try {
-    const allboattypes = BoatType.find();
+    const allboattypes = BoatType.find({});
     res.json({ flag: true, allboattypes });
   } catch (error) {
     res.json({
