@@ -15,4 +15,13 @@ router.post("/addboatpower", boatController.addboatpower);
 router.post("/setEnginesCount", boatController.setEnginesCount);
 router.get("/getEnginesCount", boatController.getEnginesCount);
 
+router.post("/setBathroomCount", boatController.setBathroomCount);
+router.get("/getBathroomCount", boatController.getBathroomCount);
+
+router.post("/setCapacity", boatController.setCapacity);
+router.get("/getCapacity", boatController.getCapacity);
+
+router.post("/setCabinscount", boatController.setCabinscount);
+router.get("/getCabinscount", boatController.getCabinscount);
+
 module.exports = router;

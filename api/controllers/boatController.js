@@ -124,7 +124,6 @@ exports.getallboatpower = async (req, res) => {
     });
   }
 };
-
 exports.addboatpower = async (req, res) => {
   try {
     const boatPower = req.body.name;
@@ -155,6 +154,7 @@ exports.addboatpower = async (req, res) => {
     });
   }
 };
+
 exports.setEnginesCount = async (req, res) => {
   try {
     let basicset = await basicboat.findOne({});
@@ -163,6 +163,7 @@ exports.setEnginesCount = async (req, res) => {
       await basicset.save();
       res.json({ flag: true, enginecount: basicset.enginecount });
     } else {
+      basicset = new basicboat();
       basicset.enginecount = req.body.count;
       await basicset.save();
       res.json({ flag: true, enginecount: basicset.enginecount });
@@ -175,7 +176,6 @@ exports.setEnginesCount = async (req, res) => {
     });
   }
 };
-
 exports.getEnginesCount = async (req, res) => {
   try {
     const basicset = await basicboat.findOne({});
@@ -193,6 +193,159 @@ exports.getEnginesCount = async (req, res) => {
       res.json({
         flag: false,
         sort: "enginecount",
+        error: "Boat configuration not found.",
+      });
+    }
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could not get engine count",
+    });
+  }
+};
+
+exports.setBathroomCount = async (req, res) => {
+  try {
+    let basicset = await basicboat.findOne({});
+    if (basicset) {
+      basicset.bathroomcount = req.body.count;
+      await basicset.save();
+      res.json({ flag: true, data: basicset.bathroomcount });
+    } else {
+      basicset = new basicboat();
+      basicset.bathroomcount = req.body.count;
+      await basicset.save();
+      res.json({ flag: true, data: basicset.enginecount });
+    }
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could not set engines count",
+    });
+  }
+};
+exports.getBathroomCount = async (req, res) => {
+  try {
+    const basicset = await basicboat.findOne({});
+    let resultArray = Array.from(
+      { length: basicset.bathroomcount },
+      (_, i) => ({
+        _id: i + 1,
+        name: i + 1 + "",
+      })
+    );
+
+    if (basicset) {
+      res.json({
+        flag: true,
+        data: resultArray, // Returning engine count from basicboat
+      });
+    } else {
+      res.json({
+        flag: false,
+        sort: "bathroomcount",
+        error: "Boat configuration not found.",
+      });
+    }
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could not get engine count",
+    });
+  }
+};
+
+exports.setCapacity = async (req, res) => {
+  try {
+    let basicset = await basicboat.findOne({});
+    if (basicset) {
+      basicset.capacity = req.body.count;
+      await basicset.save();
+      res.json({ flag: true, data: basicset.capacity });
+    } else {
+      basicset = new basicboat();
+      basicset.capacity = req.body.count;
+      await basicset.save();
+      res.json({ flag: true, data: basicset.capacity });
+    }
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could not set engines count",
+    });
+  }
+};
+exports.getCapacity = async (req, res) => {
+  try {
+    const basicset = await basicboat.findOne({});
+    let resultArray = Array.from({ length: basicset.capacity }, (_, i) => ({
+      _id: i + 1,
+      name: i + 1 + "",
+    }));
+
+    if (basicset) {
+      res.json({
+        flag: true,
+        data: resultArray, // Returning engine count from basicboat
+      });
+    } else {
+      res.json({
+        flag: false,
+        sort: "capacity",
+        error: "Boat configuration not found.",
+      });
+    }
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could not get engine count",
+    });
+  }
+};
+
+exports.setCabinscount = async (req, res) => {
+  try {
+    let basicset = await basicboat.findOne({});
+    if (basicset) {
+      basicset.cabinscount = req.body.count;
+      await basicset.save();
+      res.json({ flag: true, data: basicset.cabinscount });
+    } else {
+      basicset = new basicboat();
+      basicset.cabinscount = req.body.count;
+      await basicset.save();
+      res.json({ flag: true, data: basicset.cabinscount });
+    }
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could not set engines count",
+    });
+  }
+};
+exports.getCabinscount = async (req, res) => {
+  try {
+    const basicset = await basicboat.findOne({});
+    let resultArray = Array.from({ length: basicset.cabinscount }, (_, i) => ({
+      _id: i + 1,
+      name: i + 1 + "",
+    }));
+
+    if (basicset) {
+      res.json({
+        flag: true,
+        data: resultArray, // Returning engine count from basicboat
+      });
+    } else {
+      res.json({
+        flag: false,
+        sort: "cabinscount",
         error: "Boat configuration not found.",
       });
     }
