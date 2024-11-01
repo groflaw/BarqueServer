@@ -18,20 +18,18 @@ exports.getallboattype = async (req, res) => {
 
 exports.addboattype = async (req, res) => {
   try {
-    const basicset = await basicboat.findOne({});
+    let basicset = await basicboat.findOne({});
     if (basicset) {
-      // Check for duplicates if necessary
       if (!basicset.types.includes(req.body.name)) {
         basicset.types.push(req.body.name);
         await basicset.save(); // Await the save operation
       }
       res.json({ flag: true, data: basicset.types });
     } else {
-      res.json({
-        flag: false,
-        sort: "boattype",
-        error: "Boat configuration not found.",
-      });
+      basicset = new basicboat();
+      basicset.types.push(req.body.name);
+      await basicset.save();
+      res.json({ flag: true, data: basicset.types });
     }
   } catch (error) {
     res.json({
@@ -60,7 +58,7 @@ exports.getallboatbrand = async (req, res) => {
 
 exports.addboatbrand = async (req, res) => {
   try {
-    const basicset = await basicboat.findOne({});
+    let basicset = await basicboat.findOne({});
     if (basicset) {
       if (!basicset.brands.includes(req.body.name)) {
         basicset.brands.push(req.body.name);
@@ -68,11 +66,10 @@ exports.addboatbrand = async (req, res) => {
       }
       res.json({ flag: true, data: basicset.brands });
     } else {
-      res.json({
-        flag: false,
-        sort: "boatbrand",
-        error: "Boat configuration not found.",
-      });
+      basicset = new basicboat();
+      basicset.types.push(req.body.name);
+      await basicset.save();
+      res.json({ flag: true, data: basicset.types });
     }
   } catch (error) {
     res.json({
@@ -85,17 +82,15 @@ exports.addboatbrand = async (req, res) => {
 
 exports.setEnginesCount = async (req, res) => {
   try {
-    const basicset = await basicboat.findOne({}); // Use the correct model
+    let basicset = await basicboat.findOne({}); // Use the correct model
     if (basicset) {
       basicset.enginecount = req.body.count; // Setting the engine count
       await basicset.save(); // Await the save operation
       res.json({ flag: true, count: basicset.enginecount });
     } else {
-      res.json({
-        flag: false,
-        sort: "enginecount",
-        error: "Boat configuration not found.",
-      });
+      basicset.enginecount = req.body.count;
+      await basicset.save();
+      res.json({ flag: true, count: basicset.enginecount });
     }
   } catch (error) {
     res.json({
