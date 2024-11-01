@@ -187,7 +187,7 @@ exports.getEnginesCount = async (req, res) => {
     if (basicset) {
       res.json({
         flag: true,
-        enginecount: resultArray, // Returning engine count from basicboat
+        data: resultArray, // Returning engine count from basicboat
       });
     } else {
       res.json({
