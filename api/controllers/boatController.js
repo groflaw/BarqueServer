@@ -120,7 +120,7 @@ exports.getEnginesCount = async (req, res) => {
     const basicset = await basicboat.findOne({});
     let resultArray = Array.from({ length: basicset.enginecount }, (_, i) => ({
       _id: i + 1,
-      name: i + 1,
+      name: i + 1 + "",
     }));
 
     if (basicset) {
