@@ -94,6 +94,67 @@ exports.addboatbrand = async (req, res) => {
   }
 };
 
+exports.getallboatpower = async (req, res) => {
+  try {
+    const boatPower = req.body.name;
+    let basicset = await basicboat.findOne({});
+    if (basicset) {
+      if (!basicset.powers.some((type) => type.name === boatPower)) {
+        basicset.powers.push({
+          _id: basicset.brands.length + 1,
+          name: boatPower,
+        });
+
+        await basicset.save();
+      }
+
+      return res.json({ flag: true, data: basicset.powers });
+    } else {
+      basicset = new basicboat();
+      basicset.powers.push({ _id: 0, name: boatPower });
+
+      await basicset.save();
+      return res.json({ flag: true, data: basicset.powers });
+    }
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could not add boat brand",
+    });
+  }
+};
+
+exports.addboatpower = async (req, res) => {
+  try {
+    const boatPower = req.body.name;
+    let basicset = await basicboat.findOne({});
+    if (basicset) {
+      if (!basicset.powers.some((type) => type.name === boatPower)) {
+        basicset.powers.push({
+          _id: basicset.powers.length + 1,
+          name: boatPower,
+        });
+
+        await basicset.save();
+      }
+
+      return res.json({ flag: true, data: basicset.powers });
+    } else {
+      basicset = new basicboat();
+      basicset.powers.push({ _id: 0, name: boatPower });
+
+      await basicset.save();
+      return res.json({ flag: true, data: basicset.powers });
+    }
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could not add boat power",
+    });
+  }
+};
 exports.setEnginesCount = async (req, res) => {
   try {
     let basicset = await basicboat.findOne({});
