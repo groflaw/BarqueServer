@@ -18,24 +18,28 @@ exports.getallboattype = async (req, res) => {
 
 exports.addboattype = async (req, res) => {
   try {
-    const basicset = await basicboat.findOne({});
+    const boatType = req.body.name;
+    let basicset = await basicboat.findOne({});
     if (basicset) {
-      if (!basicset.types.includes(req.body.name)) {
+      if (!basicset.types.some((type) => type.name === boatType)) {
         basicset.types.push({
-          _id: basicset.types.length() + 1,
-          name: req.body.name,
+          _id: basicset.types.length + 1,
+          name: boatType,
         });
+
         await basicset.save();
       }
-      res.json({ flag: true, data: basicset.types });
+
+      return res.json({ flag: true, data: basicset.types });
     } else {
       basicset = new basicboat();
-      basicset.types.push({ _id: 0, name: req.body.name });
+      basicset.types.push({ _id: 0, name: boatType });
+
       await basicset.save();
-      res.json({ flag: true, data: basicset.types });
+      return res.json({ flag: true, data: basicset.types });
     }
   } catch (error) {
-    res.json({
+    return res.json({
       flag: false,
       sort: "general",
       error: "Could not add boat type",
@@ -61,21 +65,25 @@ exports.getallboatbrand = async (req, res) => {
 
 exports.addboatbrand = async (req, res) => {
   try {
+    const boatBrand = req.body.name;
     let basicset = await basicboat.findOne({});
     if (basicset) {
-      if (!basicset.brands.includes(req.body.name)) {
+      if (!basicset.brands.some((type) => type.name === boatBrand)) {
         basicset.brands.push({
-          _id: basicset.brands.length() + 1,
-          name: req.body.name,
+          _id: basicset.brands.length + 1,
+          name: boatBrand,
         });
-        await basicset.save(); // Await the save operation
+
+        await basicset.save();
       }
-      res.json({ flag: true, data: basicset.brands });
+
+      return res.json({ flag: true, data: basicset.brands });
     } else {
       basicset = new basicboat();
-      basicset.types.push(req.body.name);
+      basicset.brands.push({ _id: 0, name: boatBrand });
+
       await basicset.save();
-      res.json({ flag: true, data: basicset.types });
+      return res.json({ flag: true, data: basicset.brands });
     }
   } catch (error) {
     res.json({
