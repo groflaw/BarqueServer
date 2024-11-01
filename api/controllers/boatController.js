@@ -21,13 +21,16 @@ exports.addboattype = async (req, res) => {
     let basicset = await basicboat.findOne({});
     if (basicset) {
       if (!basicset.types.includes(req.body.name)) {
-        basicset.types.push(req.body.name);
-        await basicset.save(); // Await the save operation
+        basicset.types.push({
+          _id: basicset.types.length() + 1,
+          name: req.body.name,
+        });
+        await basicset.save();
       }
       res.json({ flag: true, data: basicset.types });
     } else {
       basicset = new basicboat();
-      basicset.types.push(req.body.name);
+      basicset.types.push({ _id: 0, name: req.body.name });
       await basicset.save();
       res.json({ flag: true, data: basicset.types });
     }
@@ -61,7 +64,10 @@ exports.addboatbrand = async (req, res) => {
     let basicset = await basicboat.findOne({});
     if (basicset) {
       if (!basicset.brands.includes(req.body.name)) {
-        basicset.brands.push(req.body.name);
+        basicset.brands.push({
+          _id: basicset.brands.length() + 1,
+          name: req.body.name,
+        });
         await basicset.save(); // Await the save operation
       }
       res.json({ flag: true, data: basicset.brands });
@@ -82,10 +88,10 @@ exports.addboatbrand = async (req, res) => {
 
 exports.setEnginesCount = async (req, res) => {
   try {
-    let basicset = await basicboat.findOne({}); // Use the correct model
+    let basicset = await basicboat.findOne({});
     if (basicset) {
-      basicset.enginecount = req.body.count; // Setting the engine count
-      await basicset.save(); // Await the save operation
+      basicset.enginecount = req.body.count;
+      await basicset.save();
       res.json({ flag: true, count: basicset.enginecount });
     } else {
       basicset.enginecount = req.body.count;

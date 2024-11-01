@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
 const basicboatSchema = new mongoose.Schema({
-  types: { type: [String] },
-  brands: { type: [String] },
+  types: { type: [{ _id: { type: Number }, name: { type: String } }] },
+  brands: { type: [{ _id: { type: Number }, name: { type: String } }] },
   enginecount: { type: Number },
 });
 
