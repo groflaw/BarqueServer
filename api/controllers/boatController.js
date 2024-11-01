@@ -18,7 +18,7 @@ exports.getallboattype = async (req, res) => {
 
 exports.addboattype = async (req, res) => {
   try {
-    let basicset = await basicboat.findOne({});
+    const basicset = await basicboat.findOne({});
     if (basicset) {
       if (!basicset.types.includes(req.body.name)) {
         basicset.types.push({
