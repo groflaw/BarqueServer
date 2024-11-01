@@ -100,11 +100,11 @@ exports.setEnginesCount = async (req, res) => {
     if (basicset) {
       basicset.enginecount = req.body.count;
       await basicset.save();
-      res.json({ flag: true, count: basicset.enginecount });
+      res.json({ flag: true, enginecount: basicset.enginecount });
     } else {
       basicset.enginecount = req.body.count;
       await basicset.save();
-      res.json({ flag: true, count: basicset.enginecount });
+      res.json({ flag: true, enginecount: basicset.enginecount });
     }
   } catch (error) {
     res.json({
@@ -121,7 +121,7 @@ exports.getEnginesCount = async (req, res) => {
     if (basicset) {
       res.json({
         flag: true,
-        data: { enginecount: basicset.enginecount }, // Returning engine count from basicboat
+        enginecount: basicset.enginecount, // Returning engine count from basicboat
       });
     } else {
       res.json({
