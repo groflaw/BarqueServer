@@ -1,11 +1,11 @@
-const BoatType = require("../models/boattype");
-const Brand = require("../models/brand");
+const basicboat = require("../models/basicboat");
+
 exports.getallboattype = async (req, res) => {
   try {
-    const allboattypes = await BoatType.find({});
+    const basicset = await basicboat.findOne({});
     res.json({
       flag: true,
-      data: allboattypes,
+      data: basicset.types,
     });
   } catch (error) {
     res.json({
@@ -18,11 +18,10 @@ exports.getallboattype = async (req, res) => {
 
 exports.addboattype = async (req, res) => {
   try {
-    const newtype = new BoatType(req.body);
-
-    await newtype.save();
-
-    res.json({ flag: true, newtype });
+    const basicset = await basicboat.findOne({});
+    basicset.types.push(req.body.name);
+    basicset.save();
+    res.json({ flag: true, data: basicset.types });
   } catch (error) {
     res.json({
       flag: false,
@@ -32,13 +31,43 @@ exports.addboattype = async (req, res) => {
   }
 };
 
-exports.addbrand = async (req, res) => {
+exports.getallboatbrand = async (req, res) => {
   try {
-    const newbrand = new Brand(req.body);
+    const basicset = await basicboat.findOne({});
+    res.json({
+      flag: true,
+      data: basicset.types,
+    });
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "boattype",
+      error: "Could not get all types",
+    });
+  }
+};
 
-    await newbrand.save();
+exports.addboatbrand = async (req, res) => {
+  try {
+    const basicset = await basicboat.findOne({});
+    basicset.types.push(req.body.name);
+    basicset.save();
+    res.json({ flag: true, data: basicset.types });
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could add boat type",
+    });
+  }
+};
 
-    res.json({ flag: true, newbrand });
+exports.setEnginesCount = async (req, res) => {
+  try {
+    const now = Engines.findOne({});
+    now.count = req.body.count;
+    await now.save();
+    res.json({ flag: true, now });
   } catch (error) {
     res.json({
       flag: false,
@@ -48,7 +77,7 @@ exports.addbrand = async (req, res) => {
   }
 };
 
-exports.getallbrand = async (req, res) => {
+exports.getEnginesCount = async (req, res) => {
   try {
     const allbrand = await Brand.find({});
     res.json({
