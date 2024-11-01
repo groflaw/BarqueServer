@@ -118,10 +118,15 @@ exports.setEnginesCount = async (req, res) => {
 exports.getEnginesCount = async (req, res) => {
   try {
     const basicset = await basicboat.findOne({});
+    let resultArray = Array.from({ length: basicset.enginecount }, (_, i) => ({
+      _id: i + 1,
+      name: i + 1,
+    }));
+
     if (basicset) {
       res.json({
         flag: true,
-        enginecount: basicset.enginecount, // Returning engine count from basicboat
+        enginecount: resultArray, // Returning engine count from basicboat
       });
     } else {
       res.json({
