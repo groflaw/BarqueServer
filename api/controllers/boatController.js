@@ -1,5 +1,5 @@
 const BoatType = require("../models/boattype");
-
+const Brand = require("../models/brand");
 exports.getallboattype = async (req, res) => {
   try {
     const allboattypes = await BoatType.find({});
@@ -10,7 +10,7 @@ exports.getallboattype = async (req, res) => {
   } catch (error) {
     res.json({
       flag: false,
-      sort: "general",
+      sort: "boattype",
       error: "Could not get all types",
     });
   }
@@ -28,6 +28,38 @@ exports.addboattype = async (req, res) => {
       flag: false,
       sort: "general",
       error: "Could add boat type",
+    });
+  }
+};
+
+exports.addbrand = async (req, res) => {
+  try {
+    const newbrand = new Brand(req.body);
+
+    await newbrand.save();
+
+    res.json({ flag: true, newbrand });
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could add boat brand",
+    });
+  }
+};
+
+exports.getallbrand = async (req, res) => {
+  try {
+    const allbrand = await Brand.find({});
+    res.json({
+      flag: true,
+      data: allbrand,
+    });
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "brand",
+      error: "Could not get all brand",
     });
   }
 };
