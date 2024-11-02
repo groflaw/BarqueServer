@@ -361,20 +361,7 @@ exports.getboatbasicInfo = async (req, res) => {
     if (boat) {
       res.json({
         flag: true,
-        data: {
-          model: boat.model,
-          description: boat.description,
-          location: boat.location,
-          year: boat.year,
-          size: boat.size,
-          boattype: boat.boattype,
-          boatbrand: boat.boatbrand,
-          enginecount: boat.enginecount,
-          bathroomcount: boat.bathroomcount,
-          power: boat.power,
-          capacity: boat.capacity,
-          cabinscount: boat.cabinscount,
-        },
+        data: boat,
       });
     } else {
       res.json({
@@ -405,28 +392,12 @@ exports.addPlan = async (req, res) => {
       captain: captain,
     });
     await boat.save();
-    res.json({ flag: true, data: boat.plans });
+    res.json({ flag: true, data: boat });
   } catch (error) {
     res.json({
       flag: false,
       general: "general",
       error: "There is unknown error,Pleae try again",
-    });
-  }
-};
-
-exports.getPlans = async (req, res) => {
-  try {
-    const boat = await Boat.findOne({ _id: req.params.id });
-    res.json({
-      flag: true,
-      data: boat.plans,
-    });
-  } catch (error) {
-    res.json({
-      flag: false,
-      general: "general",
-      error: "There is unknown error, Please try again",
     });
   }
 };
