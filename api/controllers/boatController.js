@@ -361,20 +361,7 @@ exports.getboatbasicInfo = async (req, res) => {
     if (boat) {
       res.json({
         fkag: true,
-        data: {
-          model: "boat.model",
-          description: boat.description,
-          location: boat.location,
-          year: boat.year,
-          size: boat.size,
-          boattype: boat.boattype,
-          boatbrand: boat.boatbrand,
-          enginecount: boat.enginecount,
-          bathroomcount: boat.bathroomcount,
-          power: boat.power,
-          capacity: boat.capacity,
-          cabinscount: boat.cabinscount,
-        },
+        boat,
       });
     } else {
       res.json({
