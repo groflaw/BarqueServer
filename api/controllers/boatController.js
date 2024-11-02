@@ -1,8 +1,9 @@
-const basicboat = require("../models/basicboat");
+const BasicBoat = require("../models/basicboat");
+const Boat = require("../models/boat");
 
 exports.getallboattype = async (req, res) => {
   try {
-    const basicset = await basicboat.findOne({});
+    const basicset = await BasicBoat.findOne({});
     res.json({
       flag: true,
       data: basicset ? basicset.types : [], // Handles case if no document found
@@ -15,11 +16,10 @@ exports.getallboattype = async (req, res) => {
     });
   }
 };
-
 exports.addboattype = async (req, res) => {
   try {
     const boatType = req.body.name;
-    let basicset = await basicboat.findOne({});
+    let basicset = await BasicBoat.findOne({});
     if (basicset) {
       if (!basicset.types.some((type) => type.name === boatType)) {
         basicset.types.push({
@@ -32,7 +32,7 @@ exports.addboattype = async (req, res) => {
 
       return res.json({ flag: true, data: basicset.types });
     } else {
-      basicset = new basicboat();
+      basicset = new BasicBoat();
       basicset.types.push({ _id: 0, name: boatType });
 
       await basicset.save();
@@ -49,7 +49,7 @@ exports.addboattype = async (req, res) => {
 
 exports.getallboatbrand = async (req, res) => {
   try {
-    const basicset = await basicboat.findOne({});
+    const basicset = await BasicBoat.findOne({});
     res.json({
       flag: true,
       data: basicset ? basicset.brands : [], // Corrected to brands
@@ -62,11 +62,10 @@ exports.getallboatbrand = async (req, res) => {
     });
   }
 };
-
 exports.addboatbrand = async (req, res) => {
   try {
     const boatBrand = req.body.name;
-    let basicset = await basicboat.findOne({});
+    let basicset = await BasicBoat.findOne({});
     if (basicset) {
       if (!basicset.brands.some((type) => type.name === boatBrand)) {
         basicset.brands.push({
@@ -79,7 +78,7 @@ exports.addboatbrand = async (req, res) => {
 
       return res.json({ flag: true, data: basicset.brands });
     } else {
-      basicset = new basicboat();
+      basicset = new BasicBoat();
       basicset.brands.push({ _id: 0, name: boatBrand });
 
       await basicset.save();
@@ -96,7 +95,7 @@ exports.addboatbrand = async (req, res) => {
 
 exports.getallboatpower = async (req, res) => {
   try {
-    const basicset = await basicboat.findOne({});
+    const basicset = await BasicBoat.findOne({});
     res.json({
       flag: true,
       data: basicset ? basicset.powers : [], // Corrected to brands
@@ -112,7 +111,7 @@ exports.getallboatpower = async (req, res) => {
 exports.addboatpower = async (req, res) => {
   try {
     const boatPower = req.body.name;
-    let basicset = await basicboat.findOne({});
+    let basicset = await BasicBoat.findOne({});
     if (basicset) {
       if (!basicset.powers.some((type) => type.name === boatPower)) {
         basicset.powers.push({
@@ -125,7 +124,7 @@ exports.addboatpower = async (req, res) => {
 
       return res.json({ flag: true, data: basicset.powers });
     } else {
-      basicset = new basicboat();
+      basicset = new BasicBoat();
       basicset.powers.push({ _id: 0, name: boatPower });
 
       await basicset.save();
@@ -142,13 +141,13 @@ exports.addboatpower = async (req, res) => {
 
 exports.setEnginesCount = async (req, res) => {
   try {
-    let basicset = await basicboat.findOne({});
+    let basicset = await BasicBoat.findOne({});
     if (basicset) {
       basicset.enginecount = req.body.count;
       await basicset.save();
       res.json({ flag: true, enginecount: basicset.enginecount });
     } else {
-      basicset = new basicboat();
+      basicset = new BasicBoat();
       basicset.enginecount = req.body.count;
       await basicset.save();
       res.json({ flag: true, enginecount: basicset.enginecount });
@@ -163,7 +162,7 @@ exports.setEnginesCount = async (req, res) => {
 };
 exports.getEnginesCount = async (req, res) => {
   try {
-    const basicset = await basicboat.findOne({});
+    const basicset = await BasicBoat.findOne({});
     let resultArray = Array.from({ length: basicset.enginecount }, (_, i) => ({
       _id: i + 1,
       name: i + 1 + "",
@@ -172,7 +171,7 @@ exports.getEnginesCount = async (req, res) => {
     if (basicset) {
       res.json({
         flag: true,
-        data: resultArray, // Returning engine count from basicboat
+        data: resultArray, // Returning engine count from BasicBoat
       });
     } else {
       res.json({
@@ -192,13 +191,13 @@ exports.getEnginesCount = async (req, res) => {
 
 exports.setBathroomCount = async (req, res) => {
   try {
-    let basicset = await basicboat.findOne({});
+    let basicset = await BasicBoat.findOne({});
     if (basicset) {
       basicset.bathroomcount = req.body.count;
       await basicset.save();
       res.json({ flag: true, data: basicset.bathroomcount });
     } else {
-      basicset = new basicboat();
+      basicset = new BasicBoat();
       basicset.bathroomcount = req.body.count;
       await basicset.save();
       res.json({ flag: true, data: basicset.enginecount });
@@ -213,7 +212,7 @@ exports.setBathroomCount = async (req, res) => {
 };
 exports.getBathroomCount = async (req, res) => {
   try {
-    const basicset = await basicboat.findOne({});
+    const basicset = await BasicBoat.findOne({});
     let resultArray = Array.from(
       { length: basicset.bathroomcount },
       (_, i) => ({
@@ -225,7 +224,7 @@ exports.getBathroomCount = async (req, res) => {
     if (basicset) {
       res.json({
         flag: true,
-        data: resultArray, // Returning engine count from basicboat
+        data: resultArray, // Returning engine count from BasicBoat
       });
     } else {
       res.json({
@@ -245,13 +244,13 @@ exports.getBathroomCount = async (req, res) => {
 
 exports.setCapacity = async (req, res) => {
   try {
-    let basicset = await basicboat.findOne({});
+    let basicset = await BasicBoat.findOne({});
     if (basicset) {
       basicset.capacity = req.body.count;
       await basicset.save();
       res.json({ flag: true, data: basicset.capacity });
     } else {
-      basicset = new basicboat();
+      basicset = new BasicBoat();
       basicset.capacity = req.body.count;
       await basicset.save();
       res.json({ flag: true, data: basicset.capacity });
@@ -266,7 +265,7 @@ exports.setCapacity = async (req, res) => {
 };
 exports.getCapacity = async (req, res) => {
   try {
-    const basicset = await basicboat.findOne({});
+    const basicset = await BasicBoat.findOne({});
     let resultArray = Array.from({ length: basicset.capacity }, (_, i) => ({
       _id: i + 1,
       name: i + 1 + "",
@@ -275,7 +274,7 @@ exports.getCapacity = async (req, res) => {
     if (basicset) {
       res.json({
         flag: true,
-        data: resultArray, // Returning engine count from basicboat
+        data: resultArray, // Returning engine count from BasicBoat
       });
     } else {
       res.json({
@@ -295,13 +294,13 @@ exports.getCapacity = async (req, res) => {
 
 exports.setCabinscount = async (req, res) => {
   try {
-    let basicset = await basicboat.findOne({});
+    let basicset = await BasicBoat.findOne({});
     if (basicset) {
       basicset.cabinscount = req.body.count;
       await basicset.save();
       res.json({ flag: true, data: basicset.cabinscount });
     } else {
-      basicset = new basicboat();
+      basicset = new BasicBoat();
       basicset.cabinscount = req.body.count;
       await basicset.save();
       res.json({ flag: true, data: basicset.cabinscount });
@@ -316,7 +315,7 @@ exports.setCabinscount = async (req, res) => {
 };
 exports.getCabinscount = async (req, res) => {
   try {
-    const basicset = await basicboat.findOne({});
+    const basicset = await BasicBoat.findOne({});
     let resultArray = Array.from({ length: basicset.cabinscount }, (_, i) => ({
       _id: i + 1,
       name: i + 1 + "",
@@ -325,7 +324,7 @@ exports.getCabinscount = async (req, res) => {
     if (basicset) {
       res.json({
         flag: true,
-        data: resultArray, // Returning engine count from basicboat
+        data: resultArray, // Returning engine count from BasicBoat
       });
     } else {
       res.json({
@@ -339,6 +338,56 @@ exports.getCabinscount = async (req, res) => {
       flag: false,
       sort: "general",
       error: "Could not get engine count",
+    });
+  }
+};
+
+exports.addBoat = async (req, res) => {
+  try {
+    const newboat = new Boat(req.body);
+    await newboat.save();
+    res.json({ flag: true, data: newboat });
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "There is unknown error, Please try again.",
+    });
+  }
+};
+exports.getboatbasicInfo = async (req, res) => {
+  try {
+    const boat = Boat.findById(req.params.id);
+    if (boat) {
+      res.json({
+        fkag: true,
+        data: {
+          model: boat.model,
+          description: boat.description,
+          location: boat.location,
+          year: boat.year,
+          size: boat.size,
+          boattype: boat.boattype,
+          boatbrand: boat.boatbrand,
+          enginecount: boat.enginecount,
+          bathroomcount: boat.bathroomcount,
+          power: boat.power,
+          capacity: boat.capacity,
+          cabinscount: boat.cabinscount,
+        },
+      });
+    } else {
+      res.json({
+        flag: false,
+        sort: "general",
+        error: "Boat's basic information not found",
+      });
+    }
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "There is unknown error, Please try again",
     });
   }
 };
