@@ -391,3 +391,42 @@ exports.getboatbasicInfo = async (req, res) => {
     });
   }
 };
+
+exports.addPlan = async (req, res) => {
+  const { price, description, start, end, captain } = req.body;
+  try {
+    const boat = await Boat.findOne({ _id: req.params.id });
+    boat.plans.push({
+      _id: basicset.plans.length + 1,
+      price: price,
+      description: description,
+      start: start,
+      end: end,
+      captain: captain,
+    });
+    await boat.save();
+    res.json({ flag: true, data: boat });
+  } catch (error) {
+    res.json({
+      flag: false,
+      general: "general",
+      error: "There is unknown error,Pleae try again",
+    });
+  }
+};
+
+exports.getPlans = async (req, res) => {
+  try {
+    const boat = await Boat.findOne({ _id: req.params.id });
+    res.json({
+      flag: true,
+      data: boat.plans,
+    });
+  } catch (error) {
+    res.json({
+      flag: false,
+      general: "general",
+      error: "There is unknown error, Please try again",
+    });
+  }
+};

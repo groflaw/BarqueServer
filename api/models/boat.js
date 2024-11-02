@@ -13,6 +13,18 @@ const userSchema = new mongoose.Schema({
   power: { type: Number },
   capacity: { type: Number },
   cabinscount: { type: Number },
+  plans: {
+    type: [
+      {
+        _id: { type: Number },
+        price: { type: String },
+        description: { type: String },
+        start: { type: Number },
+        end: { type: Number },
+        captain: { type: Number },
+      },
+    ],
+  },
 });
 
 module.exports = mongoose.model("boat", userSchema);
