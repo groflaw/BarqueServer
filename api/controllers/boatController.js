@@ -357,7 +357,7 @@ exports.addBoat = async (req, res) => {
 };
 exports.getboatbasicInfo = async (req, res) => {
   try {
-    const boat = Boat.findById(req.params.id);
+    const boat = Boat.findOne({ _id: req.params.id });
     if (boat) {
       res.json({
         fkag: true,
