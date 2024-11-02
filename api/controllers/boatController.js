@@ -397,7 +397,7 @@ exports.addPlan = async (req, res) => {
   try {
     const boat = await Boat.findOne({ _id: req.params.id });
     boat.plans.push({
-      _id: basicset.plans.length + 1,
+      _id: boat.plans.length + 1,
       price: price,
       description: description,
       start: start,
