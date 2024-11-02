@@ -15,4 +15,4 @@ const userSchema = new mongoose.Schema({
   cabinscount: { type: Number },
 });
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("boat", userSchema);
