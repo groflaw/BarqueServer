@@ -96,31 +96,16 @@ exports.addboatbrand = async (req, res) => {
 
 exports.getallboatpower = async (req, res) => {
   try {
-    const boatPower = req.body.name;
-    let basicset = await basicboat.findOne({});
-    if (basicset) {
-      if (!basicset.powers.some((type) => type.name === boatPower)) {
-        basicset.powers.push({
-          _id: basicset.brands.length + 1,
-          name: boatPower,
-        });
-
-        await basicset.save();
-      }
-
-      return res.json({ flag: true, data: basicset.powers });
-    } else {
-      basicset = new basicboat();
-      basicset.powers.push({ _id: 0, name: boatPower });
-
-      await basicset.save();
-      return res.json({ flag: true, data: basicset.powers });
-    }
+    const basicset = await basicboat.findOne({});
+    res.json({
+      flag: true,
+      data: basicset ? basicset.powers : [], // Corrected to brands
+    });
   } catch (error) {
     res.json({
       flag: false,
-      sort: "general",
-      error: "Could not add boat brand",
+      sort: "powers",
+      error: "Could not get all powers",
     });
   }
 };
@@ -222,7 +207,7 @@ exports.setBathroomCount = async (req, res) => {
     res.json({
       flag: false,
       sort: "general",
-      error: "Could not set engines count",
+      error: "Could not set bathroom count",
     });
   }
 };
@@ -275,7 +260,7 @@ exports.setCapacity = async (req, res) => {
     res.json({
       flag: false,
       sort: "general",
-      error: "Could not set engines count",
+      error: "Could not set capacity",
     });
   }
 };
@@ -325,7 +310,7 @@ exports.setCabinscount = async (req, res) => {
     res.json({
       flag: false,
       sort: "general",
-      error: "Could not set engines count",
+      error: "Could not set Cabins count",
     });
   }
 };
