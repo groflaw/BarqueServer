@@ -405,7 +405,7 @@ exports.addPlan = async (req, res) => {
       captain: captain,
     });
     await boat.save();
-    res.json({ flag: true, data: boat });
+    res.json({ flag: true, data: boat.plans });
   } catch (error) {
     res.json({
       flag: false,
