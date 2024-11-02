@@ -362,7 +362,7 @@ exports.getboatbasicInfo = async (req, res) => {
       res.json({
         fkag: true,
         data: {
-          model: boat.model,
+          model: "boat.model",
           description: boat.description,
           location: boat.location,
           year: boat.year,
