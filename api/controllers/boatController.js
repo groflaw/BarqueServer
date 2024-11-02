@@ -357,11 +357,24 @@ exports.addBoat = async (req, res) => {
 };
 exports.getboatbasicInfo = async (req, res) => {
   try {
-    const boat = Boat.findOne({ _id: req.params.id });
+    const boat = await Boat.findOne({ _id: req.params.id });
     if (boat) {
       res.json({
-        fkag: true,
-        boat,
+        flag: true,
+        data: {
+          model: boat.model,
+          description: boat.description,
+          location: boat.location,
+          year: boat.year,
+          size: boat.size,
+          boattype: boat.boattype,
+          boatbrand: boat.boatbrand,
+          enginecount: boat.enginecount,
+          bathroomcount: boat.bathroomcount,
+          power: boat.power,
+          capacity: boat.capacity,
+          cabinscount: boat.cabinscount,
+        },
       });
     } else {
       res.json({
@@ -374,7 +387,7 @@ exports.getboatbasicInfo = async (req, res) => {
     res.json({
       flag: false,
       sort: "general",
-      error: "There is unknown error, Please try again",
+      error: "There is an unknown error, please try again.",
     });
   }
 };
