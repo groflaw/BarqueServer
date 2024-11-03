@@ -419,3 +419,19 @@ exports.addPlan = async (req, res) => {
     });
   }
 };
+
+exports.delPlan = async (req, res) => {
+  const { _id } = req.body;
+  try {
+    const boat = await Boat.findOne({ _id: req.params.id });
+    boat.plans = boat.plans.filter((plan) => plan._id !== _id);
+    await boat.save();
+    res.json({ flag: true, data: boat });
+  } catch (error) {
+    res.json({
+      flag: false,
+      general: "general",
+      error: "There is unknown error,Pleae try again",
+    });
+  }
+};

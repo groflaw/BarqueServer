@@ -28,5 +28,6 @@ router.post("/addboat", boatController.addBoat);
 router.get("/getbasicInfo/:id", boatController.getboatbasicInfo);
 
 router.post("/addplan/:id", boatController.addPlan);
+router.post("/delplan/:id");
 
 module.exports = router;
