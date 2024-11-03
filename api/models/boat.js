@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
     type: [
       {
         _id: { type: Number },
-        price: { type: String },
+        price: { type: Number },
         description: { type: String },
         start: { type: Date },
         end: { type: Date },
