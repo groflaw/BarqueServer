@@ -380,17 +380,35 @@ exports.getboatbasicInfo = async (req, res) => {
 };
 
 exports.addPlan = async (req, res) => {
-  const { price, description, start, end, captain } = req.body;
+  const { _id, price, description, start, end, captain } = req.body;
   try {
     const boat = await Boat.findOne({ _id: req.params.id });
-    boat.plans.push({
-      _id: boat.plans.length + 1,
-      price: price,
-      description: description,
-      start: start,
-      end: end,
-      captain: captain,
-    });
+
+    const existingPlanIndex = boat.plans.findIndex(
+      (plan) => plan._id.toString() === _id
+    );
+
+    if (existingPlanIndex !== -1) {
+      boat.plans[existingPlanIndex] = {
+        _id,
+        price,
+        description,
+        start,
+        end,
+        captain,
+      };
+    } else {
+      const newPlanId = boat.plans.length + 1; // A simple way to generate a new ID
+      boat.plans.push({
+        _id: newPlanId,
+        price,
+        description,
+        start,
+        end,
+        captain,
+      });
+    }
+
     await boat.save();
     res.json({ flag: true, data: boat });
   } catch (error) {
