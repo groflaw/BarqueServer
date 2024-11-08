@@ -1,5 +1,12 @@
-const BasicBoat = require("../models/basicboat");
-const Boat = require("../models/boat");
+const AWS = require("aws-sdk");
+
+AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
+});
+
+const s3 = new AWS.S3();
 
 exports.getallboattype = async (req, res) => {
   try {
@@ -419,7 +426,6 @@ exports.addPlan = async (req, res) => {
     });
   }
 };
-
 exports.delPlan = async (req, res) => {
   const { _id } = req.body;
   try {
@@ -432,6 +438,41 @@ exports.delPlan = async (req, res) => {
       flag: false,
       general: "general",
       error: "There is unknown error,Pleae try again",
+    });
+  }
+};
+
+exports.addDocImage = async (req, res) => {
+  const boatId = req.params.id;
+  const files = req.files["photo"];
+
+  if (!files || files.length === 0) {
+    return res
+      .status(400)
+      .json({ errors: { general: "No files were uploaded." } });
+  }
+
+  try {
+    const uploadedUrls = []; // Array to store the URLs of the uploaded images
+
+    for (const file of files) {
+      const params = {
+        Bucket: process.env.S3_BUCKET,
+        Key: `boats/${boatId}/${Date.now()}_${file.originalname}`, // Unique filename
+        Body: file.buffer,
+        ContentType: file.mimetype,
+      };
+
+      // Upload file to S3
+      const uploadResult = await s3.upload(params).promise();
+      uploadedUrls.push(uploadResult.Location); // Store the URL of the uploaded file
+    }
+
+    return res.status(200).json({ plans: uploadedUrls });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      errors: { general: "There was an error uploading the images." },
     });
   }
 };

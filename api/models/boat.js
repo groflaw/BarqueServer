@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
       },
     ],
   },
+  docImage: {
+    navigation: { type: String },
+    authorization: { type: String },
+  },
 });
 
 module.exports = mongoose.model("boat", userSchema);

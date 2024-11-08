@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+require("dotenv").config();
+
 const connectDB = require("./config/db"); // Import your db connection
 const userRoutes = require("./routes/userRoutes");
 const boatRoutes = require("./routes/boatRoutes");

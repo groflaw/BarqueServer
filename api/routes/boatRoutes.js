@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
+const upload = multer({ storage: multer.memoryStorage() });
 
 const boatController = require("../controllers/boatController");
 
@@ -29,5 +31,11 @@ router.get("/getbasicInfo/:id", boatController.getboatbasicInfo);
 
 router.post("/addplan/:id", boatController.addPlan);
 router.post("/delplan/:id", boatController.delPlan);
+
+router.post(
+  "/adddocImage/:id",
+  upload.fields([{ name: "photo" }, { name: "exif" }]),
+  addDocImage
+);
 
 module.exports = router;
