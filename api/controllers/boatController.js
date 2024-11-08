@@ -456,7 +456,6 @@ exports.addDocImage = async (req, res) => {
   }
 
   try {
-    const uploadedUrls = [];
     const boat = await Boat.findOne({ _id: req.params.id });
     for (const file of files) {
       const params = {

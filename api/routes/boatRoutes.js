@@ -33,7 +33,7 @@ router.post("/addplan/:id", boatController.addPlan);
 router.post("/delplan/:id", boatController.delPlan);
 
 router.post(
-  "/adddocImage/:id",
+  "/adddocImage/:id/:type",
   upload.fields([{ name: "photo" }, { name: "exif" }]),
   boatController.addDocImage
 );
