@@ -1,3 +1,5 @@
+const BasicBoat = require("../models/basicboat");
+const Boat = require("../models/boat");
 const AWS = require("aws-sdk");
 
 AWS.config.update({
@@ -444,6 +446,7 @@ exports.delPlan = async (req, res) => {
 
 exports.addDocImage = async (req, res) => {
   const boatId = req.params.id;
+  const imagetype = req.params.type;
   const files = req.files["photo"];
 
   if (!files || files.length === 0) {
@@ -453,19 +456,22 @@ exports.addDocImage = async (req, res) => {
   }
 
   try {
-    const uploadedUrls = []; // Array to store the URLs of the uploaded images
+    const uploadedUrls = [];
+    const boat = await Boat.findOne({ _id: req.params.id });
     for (const file of files) {
       const params = {
         Bucket: process.env.S3_BUCKET,
-        Key: `boats/${boatId}/${Date.now()}_${file.originalname}`, // Unique filename
+        Key: `boats/${boatId}/${Date.now()}_${file.originalname}`,
         Body: file.buffer,
         ContentType: file.mimetype,
       };
-      // Upload file to S3
       const uploadResult = await s3.upload(params).promise();
-      uploadedUrls.push(uploadResult.Location); // Store the URL of the uploaded file
+      if (["navigation", "authorization"].includes(imagetype)) {
+        boat.docImage[imagetype] = uploadResult.Location;
+      }
+      await boat.save();
     }
-    return res.status(200).json({ plans: uploadedUrls });
+    res.json({ flag: true, data: boat });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
