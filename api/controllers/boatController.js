@@ -455,15 +455,15 @@ exports.addDocImage = async (req, res) => {
   try {
     const uploadedUrls = []; // Array to store the URLs of the uploaded images
     for (const file of files) {
-      // const params = {
-      // Bucket: process.env.S3_BUCKET,
-      // Key: `boats/${boatId}/${Date.now()}_${file.originalname}`, // Unique filename
-      //       Body: file.buffer,
-      //       ContentType: file.mimetype,
-      //     };
-      //     // Upload file to S3
-      //     const uploadResult = await s3.upload(params).promise();
-      uploadedUrls.push(file.originalname); // Store the URL of the uploaded file
+      const params = {
+        Bucket: process.env.S3_BUCKET,
+        Key: `boats/${boatId}/${Date.now()}_${file.originalname}`, // Unique filename
+        Body: file.buffer,
+        ContentType: file.mimetype,
+      };
+      // Upload file to S3
+      const uploadResult = await s3.upload(params).promise();
+      uploadedUrls.push(uploadResult.Location); // Store the URL of the uploaded file
     }
     return res.status(200).json({ plans: uploadedUrls });
   } catch (error) {
