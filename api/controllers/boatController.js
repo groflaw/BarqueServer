@@ -456,21 +456,22 @@ exports.addDocImage = async (req, res) => {
   }
 
   try {
-    const boat = await Boat.findOne({ _id: req.params.id });
-    for (const file of files) {
-      const params = {
-        Bucket: process.env.S3_BUCKET,
-        Key: `boats/${boatId}/${Date.now()}_${file.originalname}`,
-        Body: file.buffer,
-        ContentType: file.mimetype,
-      };
-      const uploadResult = await s3.upload(params).promise();
-      if (["navigation", "authorization"].includes(imagetype)) {
-        boat.docImage[imagetype] = uploadResult.Location;
-      }
-      await boat.save();
-    }
-    res.json({ flag: true, data: boat });
+    res.json({ flag: true, data: imagetype });
+    // const boat = await Boat.findOne({ _id: req.params.id });
+    // for (const file of files) {
+    //   const params = {
+    //     Bucket: process.env.S3_BUCKET,
+    //     Key: `boats/${boatId}/${Date.now()}_${file.originalname}`,
+    //     Body: file.buffer,
+    //     ContentType: file.mimetype,
+    //   };
+    //   const uploadResult = await s3.upload(params).promise();
+    //   if (["navigation", "authorization"].includes(imagetype)) {
+    //     boat.docImage[imagetype] = uploadResult.Location;
+    //   }
+    //   await boat.save();
+    // }
+    // res.json({ flag: true, data: boat });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
