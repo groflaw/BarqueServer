@@ -35,7 +35,7 @@ router.post("/delplan/:id", boatController.delPlan);
 router.post(
   "/adddocImage/:id",
   upload.fields([{ name: "photo" }, { name: "exif" }]),
-  addDocImage
+  boatController.addDocImage
 );
 
 module.exports = router;
