@@ -447,29 +447,29 @@ exports.delPlan = async (req, res) => {
 exports.addDocImage = async (req, res) => {
   const boatId = req.params.id;
   const imagetype = req.params.type;
-  // const files = req.files["photo"];
+  const files = req.files["photo"];
 
-  // if (!files || files.length === 0) {
-  //   return res
-  //     .status(400)
-  //     .json({ errors: { general: "No files were uploaded." } });
-  // }
+  if (!files || files.length === 0) {
+    return res
+      .status(400)
+      .json({ errors: { general: "No files were uploaded." } });
+  }
 
   try {
     const boat = await Boat.findOne({ _id: boatId });
-    // for (const file of files) {
-    //   const params = {
-    //     Bucket: process.env.S3_BUCKET,
-    //     Key: `boats/${boatId}/${Date.now()}_${file.originalname}`,
-    //     Body: file.buffer,
-    //     ContentType: file.mimetype,
-    //   };
-    //   const uploadResult = await s3.upload(params).promise();
-    //   if (["navigation", "authorization"].includes(imagetype)) {
-    //     boat.docImage[imagetype] = uploadResult.Location;
-    //   }
-    //   await boat.save();
-    // }
+    for (const file of files) {
+      const params = {
+        Bucket: process.env.S3_BUCKET,
+        Key: `boats/${boatId}/${Date.now()}_${file.originalname}`,
+        Body: file.buffer,
+        ContentType: file.mimetype,
+      };
+      const uploadResult = await s3.upload(params).promise();
+      if (["navigation", "authorization"].includes(imagetype)) {
+        boat.docImage[imagetype] = uploadResult.Location;
+      }
+      await boat.save();
+    }
     res.json({ flag: true, data: boat });
   } catch (error) {
     console.error(error);
