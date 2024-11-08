@@ -447,13 +447,13 @@ exports.delPlan = async (req, res) => {
 exports.addDocImage = async (req, res) => {
   const boatId = req.params.id;
   const imagetype = req.params.type;
-  const files = req.files["photo"];
+  // const files = req.files["photo"];
 
-  if (!files || files.length === 0) {
-    return res
-      .status(400)
-      .json({ errors: { general: "No files were uploaded." } });
-  }
+  // if (!files || files.length === 0) {
+  //   return res
+  //     .status(400)
+  //     .json({ errors: { general: "No files were uploaded." } });
+  // }
 
   try {
     const boat = await Boat.findOne({ _id: boatId });
