@@ -9,7 +9,7 @@ AWS.config.update({
 });
 
 const s3 = new AWS.S3();
-
+// -----------------BOATBASIC---------------------//
 exports.getallboattype = async (req, res) => {
   try {
     const basicset = await BasicBoat.findOne({});
@@ -42,7 +42,7 @@ exports.addboattype = async (req, res) => {
       return res.json({ flag: true, data: basicset.types });
     } else {
       basicset = new BasicBoat();
-      basicset.types.push({ _id: 0, name: boatType });
+      basicset.types.push({ _id: 1, name: boatType });
 
       await basicset.save();
       return res.json({ flag: true, data: basicset.types });
@@ -88,7 +88,7 @@ exports.addboatbrand = async (req, res) => {
       return res.json({ flag: true, data: basicset.brands });
     } else {
       basicset = new BasicBoat();
-      basicset.brands.push({ _id: 0, name: boatBrand });
+      basicset.brands.push({ _id: 1, name: boatBrand });
 
       await basicset.save();
       return res.json({ flag: true, data: basicset.brands });
@@ -134,7 +134,7 @@ exports.addboatpower = async (req, res) => {
       return res.json({ flag: true, data: basicset.powers });
     } else {
       basicset = new BasicBoat();
-      basicset.powers.push({ _id: 0, name: boatPower });
+      basicset.powers.push({ _id: 1, name: boatPower });
 
       await basicset.save();
       return res.json({ flag: true, data: basicset.powers });
@@ -351,6 +351,52 @@ exports.getCabinscount = async (req, res) => {
   }
 };
 
+exports.setLocationType = async (req, res) => {
+  try {
+    const locationtype = req.body.name;
+    let basicset = await BasicBoat.findOne({});
+    if (basicset) {
+      if (!basicset.locationtype.some((type) => type.name === locationtype)) {
+        basicset.locationtype.push({
+          _id: basicset.locationtype.length + 1,
+          name: locationtype,
+        });
+
+        await basicset.save();
+      }
+
+      return res.json({ flag: true, data: basicset.locationtype });
+    } else {
+      basicset = new BasicBoat();
+      basicset.locationtype.push({ _id: 1, name: locationtype });
+
+      await basicset.save();
+      return res.json({ flag: true, data: basicset.locationtype });
+    }
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could not add boat power",
+    });
+  }
+};
+exports.getalllocationtype = async (req, res) => {
+  try {
+    const basicset = await BasicBoat.findOne({});
+    res.json({
+      flag: true,
+      data: basicset ? basicset.locationtype : [],
+    });
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "locationtype",
+      error: "Could not get all locationtype",
+    });
+  }
+};
+// -----------------ADDBOAT---------------------//
 exports.addBoat = async (req, res) => {
   try {
     const newboat = new Boat(req.body);

@@ -8,6 +8,7 @@ const basicboatSchema = new mongoose.Schema({
   bathroomcount: { type: Number },
   capacity: { type: Number },
   cabinscount: { type: Number },
+  locationtype: { type: [{ _id: { type: Number }, name: { type: String } }] },
 });
 
 module.exports = mongoose.model("basicboat", basicboatSchema);

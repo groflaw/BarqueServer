@@ -29,6 +29,9 @@ const userSchema = new mongoose.Schema({
     navigation: { type: String },
     authorization: { type: String },
   },
+  locationtype: {
+    type: Number,
+  },
 });
 
 module.exports = mongoose.model("boat", userSchema);
