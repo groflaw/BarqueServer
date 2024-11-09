@@ -26,6 +26,9 @@ router.get("/getCapacity", boatController.getCapacity);
 router.post("/setCabinscount", boatController.setCabinscount);
 router.get("/getCabinscount", boatController.getCabinscount);
 
+router.post("/setLocationType", boatController.setLocationType);
+router.get("/getLocationType", boatController.getalllocationtype);
+
 //------------------ADDBOAT--------------------//
 router.post("/addboat", boatController.addBoat);
 router.get("/getbasicInfo/:id", boatController.getboatbasicInfo);
