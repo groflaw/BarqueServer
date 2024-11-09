@@ -470,7 +470,7 @@ exports.addDocImage = async (req, res) => {
       }
       await boat.save();
     }
-    res.json({ flag: true, data: files });
+    res.json({ flag: true, data: boat });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
