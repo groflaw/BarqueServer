@@ -13,7 +13,7 @@ const basicboatSchema = new mongoose.Schema({
     type: [
       {
         _id: { type: Number },
-        name: { tyep: String },
+        name: { type: String },
         description: { type: String },
       },
     ],
