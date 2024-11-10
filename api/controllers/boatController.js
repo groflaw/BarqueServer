@@ -180,7 +180,7 @@ exports.getEnginesCount = async (req, res) => {
     if (basicset) {
       res.json({
         flag: true,
-        data: resultArray, // Returning engine count from BasicBoat
+        data: resultArray,
       });
     } else {
       res.json({
@@ -233,7 +233,7 @@ exports.getBathroomCount = async (req, res) => {
     if (basicset) {
       res.json({
         flag: true,
-        data: resultArray, // Returning engine count from BasicBoat
+        data: resultArray,
       });
     } else {
       res.json({
@@ -246,7 +246,7 @@ exports.getBathroomCount = async (req, res) => {
     res.json({
       flag: false,
       sort: "general",
-      error: "Could not get engine count",
+      error: "Could not get bathroom count",
     });
   }
 };
@@ -283,7 +283,7 @@ exports.getCapacity = async (req, res) => {
     if (basicset) {
       res.json({
         flag: true,
-        data: resultArray, // Returning engine count from BasicBoat
+        data: resultArray,
       });
     } else {
       res.json({
@@ -296,7 +296,7 @@ exports.getCapacity = async (req, res) => {
     res.json({
       flag: false,
       sort: "general",
-      error: "Could not get engine count",
+      error: "Could not get Capacity",
     });
   }
 };
@@ -333,7 +333,7 @@ exports.getCabinscount = async (req, res) => {
     if (basicset) {
       res.json({
         flag: true,
-        data: resultArray, // Returning engine count from BasicBoat
+        data: resultArray,
       });
     } else {
       res.json({
@@ -346,7 +346,7 @@ exports.getCabinscount = async (req, res) => {
     res.json({
       flag: false,
       sort: "general",
-      error: "Could not get engine count",
+      error: "Could not get Cabins count",
     });
   }
 };
