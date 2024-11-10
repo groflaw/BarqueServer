@@ -36,6 +36,8 @@ router.get("/getbasicInfo/:id", boatController.getboatbasicInfo);
 router.post("/addplan/:id", boatController.addPlan);
 router.post("/delplan/:id", boatController.delPlan);
 
+router.post("/addLocation/:id", boatController.addLocation);
+
 router.post(
   "/adddocImage/:id/:type",
   upload.fields([{ name: "photo" }, { name: "exif" }]),

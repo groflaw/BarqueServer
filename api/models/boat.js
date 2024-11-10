@@ -29,8 +29,11 @@ const userSchema = new mongoose.Schema({
     navigation: { type: String },
     authorization: { type: String },
   },
-  locationtype: {
-    type: Number,
+  location: {
+    boatname: { type: String },
+    locationtype: { type: Number },
+    marinaname: { type: String },
+    address: { type: String },
   },
 });
 

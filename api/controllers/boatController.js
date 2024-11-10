@@ -490,6 +490,21 @@ exports.delPlan = async (req, res) => {
   }
 };
 
+exports.addLocation = async (req, res) => {
+  try {
+    const boat = await Boat.findOne({ _id: req.params.id });
+    boat.location = req.body;
+    await boat.save();
+    res.json({ flag: true, data: boat });
+  } catch (error) {
+    res.json({
+      flag: false,
+      general: "general",
+      error: "There is unknown error, Please try again",
+    });
+  }
+};
+
 exports.addDocImage = async (req, res) => {
   const boatId = req.params.id;
   const imagetype = req.params.type;
