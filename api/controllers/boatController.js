@@ -696,3 +696,19 @@ exports.addCancellation = async (req, res) => {
     });
   }
 };
+
+exports.addAccessories = async (req, res) => {
+  try {
+    const { accessories } = req.body;
+    const boat = await Boat.findOne({ _id: req.params.id });
+    boat.accessories = accessories;
+    await boat.save();
+    res.json({ flag: true, data: boat });
+  } catch (error) {
+    res.json({
+      flag: false,
+      general: "general",
+      error: "There is unknown error, Please try again",
+    });
+  }
+};

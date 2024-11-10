@@ -43,6 +43,7 @@ const userSchema = new mongoose.Schema({
     photo5: { type: String },
   },
   cancellation: { type: Number },
+  accessories: { type: [{ type: Number }] },
 });
 
 module.exports = mongoose.model("boat", userSchema);

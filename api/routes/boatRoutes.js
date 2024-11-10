@@ -61,5 +61,5 @@ router.post(
 );
 
 router.post("/addCancellation/:id", boatController.addCancellation);
-
+router.post("/addAccessories/:id", boatController.addAccessories);
 module.exports = router;
