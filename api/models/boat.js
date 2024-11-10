@@ -35,6 +35,13 @@ const userSchema = new mongoose.Schema({
     marinaname: { type: String },
     address: { type: String },
   },
+  boatImage: {
+    cover: { type: String },
+    photo2: { type: String },
+    photo3: { type: String },
+    photo4: { type: String },
+    photo5: { type: String },
+  },
 });
 
 module.exports = mongoose.model("boat", userSchema);

@@ -44,4 +44,10 @@ router.post(
   boatController.addDocImage
 );
 
+router.post(
+  "/addboatImage/:id/:type",
+  upload.fields([{ name: "photo" }, { name: "exif" }]),
+  boatController.addBoatImage
+);
+
 module.exports = router;
