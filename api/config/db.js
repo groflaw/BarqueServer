@@ -7,7 +7,6 @@ const connectDB = async () => {
   try {
     // Connect to the MongoDB cluster
     await mongoose.connect(uri, {
-      useNewUrlParser: false,
       useUnifiedTopology: true,
     });
 
