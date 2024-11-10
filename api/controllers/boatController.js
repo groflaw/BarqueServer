@@ -562,7 +562,7 @@ exports.addBoatImage = async (req, res) => {
       if (
         ["cover", "photo2", "photo3", "photo4", "photo5"].includes(imagetype)
       ) {
-        boat.docImage[imagetype] = uploadResult.Location;
+        boat.boatImage[imagetype] = uploadResult.Location;
       }
       await boat.save();
     }
