@@ -398,13 +398,13 @@ exports.getalllocationtype = async (req, res) => {
 };
 
 exports.setCancellation = async (req, res) => {
-  const { title, description } = req.body;
+  const { name, description } = req.body;
   try {
     let basicset = await BasicBoat.findOne({});
     if (basicset) {
       basicset.cancellation.push({
         _id: basicset.cancellation.length + 1,
-        title,
+        name,
         description,
       });
 
@@ -413,7 +413,7 @@ exports.setCancellation = async (req, res) => {
       return res.json({ flag: true, data: basicset.cancellation });
     } else {
       basicset = new BasicBoat();
-      basicset.cancellation.push({ _id: 1, title, description });
+      basicset.cancellation.push({ _id: 1, name, description });
 
       await basicset.save();
       return res.json({ flag: true, data: basicset.cancellation });
