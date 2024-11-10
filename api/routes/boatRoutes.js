@@ -32,6 +32,9 @@ router.get("/getLocationType", boatController.getalllocationtype);
 router.post("/setCancellation", boatController.setCancellation);
 router.post("/getCancellation", boatController.getCancellation);
 
+router.post("/setAccessories/:title", boatController.setAccessories);
+router.get("/getAccessories", boatController.getAccessories);
+
 //------------------ADDBOAT--------------------//
 router.post("/addboat", boatController.addBoat);
 router.get("/getbasicInfo/:id", boatController.getboatbasicInfo);

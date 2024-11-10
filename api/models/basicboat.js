@@ -18,6 +18,15 @@ const basicboatSchema = new mongoose.Schema({
       },
     ],
   },
+  accessories: {
+    type: [
+      {
+        _id: { type: Number },
+        icon: { type: String },
+        title: { type: String },
+      },
+    ],
+  },
 });
 
 module.exports = mongoose.model("basicboat", basicboatSchema);

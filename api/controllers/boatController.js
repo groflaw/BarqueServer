@@ -442,6 +442,66 @@ exports.getCancellation = async (req, res) => {
   }
 };
 
+exports.setAccessories = async (req, res) => {
+  const title = req.params.title;
+  const files = req.files["photo"];
+  if (!files || files.length === 0) {
+    return res
+      .status(400)
+      .json({ errors: { general: "No files were uploaded." } });
+  }
+  try {
+    for (const file of files) {
+      const params = {
+        Bucket: process.env.S3_BUCKET,
+        Key: `basicdata/Accessories/${Date.now()}_${file.originalname}`,
+        Body: file.buffer,
+        ContentType: file.mimetype,
+      };
+      const uploadResult = await s3.upload(params).promise();
+
+      let basicset = await BasicBoat.findOne({});
+      if (basicset) {
+        basicset.accessories.push({
+          _id: basicset.accessories.length + 1,
+          icon: uploadResult.Location,
+          title: title,
+        });
+        await basicset.save();
+        return res.json({ flag: true, data: basicset.accessories });
+      } else {
+        basicset = new BasicBoat();
+        basicset.accessories.push({
+          _id: 1,
+          icon: uploadResult.Location,
+          title: title,
+        });
+        await basicset.save();
+        return res.json({ flag: true, data: basicset.accessories });
+      }
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      errors: { general: "There was an error uploading the images." },
+    });
+  }
+};
+exports.getAccessories = async (req, res) => {
+  try {
+    const basicset = await BasicBoat.findOne({});
+    res.json({
+      flag: true,
+      data: basicset ? basicset.accessories : [], // Corrected to brands
+    });
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "powers",
+      error: "Could not get all accessories",
+    });
+  }
+};
 // -----------------ADDBOAT---------------------//
 exports.addBoat = async (req, res) => {
   try {
