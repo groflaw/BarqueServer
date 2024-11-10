@@ -32,7 +32,11 @@ router.get("/getLocationType", boatController.getalllocationtype);
 router.post("/setCancellation", boatController.setCancellation);
 router.post("/getCancellation", boatController.getCancellation);
 
-router.post("/setAccessories/:title", boatController.setAccessories);
+router.post(
+  "/setAccessories/:title",
+  upload.fields([{ name: "photo" }, { name: "exif" }]),
+  boatController.setAccessories
+);
 router.get("/getAccessories", boatController.getAccessories);
 
 //------------------ADDBOAT--------------------//
