@@ -396,6 +396,52 @@ exports.getalllocationtype = async (req, res) => {
     });
   }
 };
+
+exports.setCancellation = async (req, res) => {
+  const { title, description } = req.body;
+  try {
+    let basicset = await BasicBoat.findOne({});
+    if (basicset) {
+      basicset.cancellation.push({
+        _id: basicset.cancellation.length + 1,
+        title,
+        description,
+      });
+
+      await basicset.save();
+
+      return res.json({ flag: true, data: basicset.cancellation });
+    } else {
+      basicset = new BasicBoat();
+      basicset.cancellation.push({ _id: 1, title, description });
+
+      await basicset.save();
+      return res.json({ flag: true, data: basicset.cancellation });
+    }
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could not add boat cancellation",
+    });
+  }
+};
+exports.getCancellation = async (req, res) => {
+  try {
+    const basicset = await BasicBoat.findOne({});
+    res.json({
+      flag: true,
+      data: basicset ? basicset.cancellation : [], // Corrected to brands
+    });
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "powers",
+      error: "Could not get all cancellation",
+    });
+  }
+};
+
 // -----------------ADDBOAT---------------------//
 exports.addBoat = async (req, res) => {
   try {
@@ -571,6 +617,22 @@ exports.addBoatImage = async (req, res) => {
     console.error(error);
     return res.status(500).json({
       errors: { general: "There was an error uploading the images." },
+    });
+  }
+};
+
+exports.addCancellation = async (req, res) => {
+  try {
+    const { cancellation } = req.body;
+    const boat = await Boat.findOne({ _id: req.params.id });
+    boat.cancellation = cancellation;
+    await boat.save();
+    res.json({ flag: true, data: boat });
+  } catch (error) {
+    res.json({
+      flag: false,
+      general: "general",
+      error: "There is unknown error, Please try again",
     });
   }
 };

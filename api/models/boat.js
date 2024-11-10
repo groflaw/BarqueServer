@@ -42,6 +42,7 @@ const userSchema = new mongoose.Schema({
     photo4: { type: String },
     photo5: { type: String },
   },
+  cancellation: { type: Number },
 });
 
 module.exports = mongoose.model("boat", userSchema);

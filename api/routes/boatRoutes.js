@@ -29,6 +29,9 @@ router.get("/getCabinscount", boatController.getCabinscount);
 router.post("/setLocationType", boatController.setLocationType);
 router.get("/getLocationType", boatController.getalllocationtype);
 
+router.post("/setCancellation", boatController.setCancellation);
+router.post("/getCancellation", boatController.getCancellation);
+
 //------------------ADDBOAT--------------------//
 router.post("/addboat", boatController.addBoat);
 router.get("/getbasicInfo/:id", boatController.getboatbasicInfo);
@@ -49,5 +52,7 @@ router.post(
   upload.fields([{ name: "photo" }, { name: "exif" }]),
   boatController.addBoatImage
 );
+
+router.post("/addCancellation");
 
 module.exports = router;

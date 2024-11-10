@@ -9,6 +9,15 @@ const basicboatSchema = new mongoose.Schema({
   capacity: { type: Number },
   cabinscount: { type: Number },
   locationtype: { type: [{ _id: { type: Number }, name: { type: String } }] },
+  cancellation: {
+    type: [
+      {
+        _id: { type: Number },
+        title: { tyep: String },
+        description: { type: String },
+      },
+    ],
+  },
 });
 
 module.exports = mongoose.model("basicboat", basicboatSchema);
