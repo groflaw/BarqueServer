@@ -39,6 +39,13 @@ router.post(
 );
 router.get("/getAccessories", boatController.getAccessories);
 
+router.post(
+  "/setAllowes/:title",
+  upload.fields([{ name: "photo" }, { name: "exif" }]),
+  boatController.setAllowes
+);
+router.get("/getAllowes", boatController.getAllowes);
+
 //------------------ADDBOAT--------------------//
 router.post("/addboat", boatController.addBoat);
 router.get("/getbasicInfo/:id", boatController.getboatbasicInfo);
@@ -62,4 +69,6 @@ router.post(
 
 router.post("/addCancellation/:id", boatController.addCancellation);
 router.post("/addAccessories/:id", boatController.addAccessories);
+router.post("/addAllowes/:id", boatController.addAllowes);
+
 module.exports = router;

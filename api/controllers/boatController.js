@@ -502,6 +502,68 @@ exports.getAccessories = async (req, res) => {
     });
   }
 };
+
+exports.setAllowes = async (req, res) => {
+  const title = req.params.title;
+  const files = req.files["photo"];
+  if (!files || files.length === 0) {
+    return res
+      .status(400)
+      .json({ errors: { general: "No files were uploaded." } });
+  }
+  try {
+    for (const file of files) {
+      const params = {
+        Bucket: process.env.S3_BUCKET,
+        Key: `basicdata/Allowes/${Date.now()}_${file.originalname}`,
+        Body: file.buffer,
+        ContentType: file.mimetype,
+      };
+      const uploadResult = await s3.upload(params).promise();
+
+      let basicset = await BasicBoat.findOne({});
+      if (basicset) {
+        basicset.allowes.push({
+          _id: basicset.allowes.length + 1,
+          icon: uploadResult.Location,
+          title: title,
+        });
+        await basicset.save();
+        return res.json({ flag: true, data: basicset.allowes });
+      } else {
+        basicset = new BasicBoat();
+        basicset.allowes.push({
+          _id: 1,
+          icon: uploadResult.Location,
+          title: title,
+        });
+        await basicset.save();
+        return res.json({ flag: true, data: basicset.allowes });
+      }
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      errors: { general: "There was an error uploading the images." },
+    });
+  }
+};
+exports.getAllowes = async (req, res) => {
+  try {
+    const basicset = await BasicBoat.findOne({});
+    res.json({
+      flag: true,
+      data: basicset ? basicset.allowes : [], // Corrected to brands
+    });
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "powers",
+      error: "Could not get all allowes",
+    });
+  }
+};
+
 // -----------------ADDBOAT---------------------//
 exports.addBoat = async (req, res) => {
   try {
@@ -702,6 +764,22 @@ exports.addAccessories = async (req, res) => {
     const { accessories } = req.body;
     const boat = await Boat.findOne({ _id: req.params.id });
     boat.accessories = accessories;
+    await boat.save();
+    res.json({ flag: true, data: boat });
+  } catch (error) {
+    res.json({
+      flag: false,
+      general: "general",
+      error: "There is unknown error, Please try again",
+    });
+  }
+};
+
+exports.addAllowes = async (req, res) => {
+  try {
+    const { allowes } = req.body;
+    const boat = await Boat.findOne({ _id: req.params.id });
+    boat.allowes = allowes;
     await boat.save();
     res.json({ flag: true, data: boat });
   } catch (error) {

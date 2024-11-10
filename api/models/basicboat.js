@@ -27,6 +27,15 @@ const basicboatSchema = new mongoose.Schema({
       },
     ],
   },
+  allowes: {
+    type: [
+      {
+        _id: { type: Number },
+        icon: { type: String },
+        title: { type: String },
+      },
+    ],
+  },
 });
 
 module.exports = mongoose.model("basicboat", basicboatSchema);

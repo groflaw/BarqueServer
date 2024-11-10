@@ -44,6 +44,7 @@ const userSchema = new mongoose.Schema({
   },
   cancellation: { type: Number },
   accessories: { type: [{ type: Number }] },
+  allowes: { type: [{ type: Number }] },
 });
 
 module.exports = mongoose.model("boat", userSchema);
