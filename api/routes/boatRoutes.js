@@ -53,6 +53,6 @@ router.post(
   boatController.addBoatImage
 );
 
-router.post("/addCancellation");
+router.post("/addCancellation/:id", boatController.addCancellation);
 
 module.exports = router;
