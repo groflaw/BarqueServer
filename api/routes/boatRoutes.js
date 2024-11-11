@@ -71,4 +71,6 @@ router.post("/addCancellation/:id", boatController.addCancellation);
 router.post("/addAccessories/:id", boatController.addAccessories);
 router.post("/addAllowes/:id", boatController.addAllowes);
 
+//------------------GetMyBoat---------------------//
+router.get("/getMyboat/:user", boatController.getMyboat);
 module.exports = router;

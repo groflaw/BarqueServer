@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.ObjectId, ref: "User" },
   model: { type: String },
   description: { type: String },
   location: { type: String },
@@ -45,6 +46,7 @@ const userSchema = new mongoose.Schema({
   cancellation: { type: Number },
   accessories: { type: [{ type: Number }] },
   allowes: { type: [{ type: Number }] },
+  flag: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model("boat", userSchema);
