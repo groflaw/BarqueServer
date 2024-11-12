@@ -72,5 +72,5 @@ router.post("/addAccessories/:id", boatController.addAccessories);
 router.post("/addAllowes/:id", boatController.addAllowes);
 
 //------------------GetMyBoat---------------------//
-router.get("/getMyboat/:user", boatController.getMyboat);
+router.get("/getMyboat/:userid", boatController.getMyboat);
 module.exports = router;

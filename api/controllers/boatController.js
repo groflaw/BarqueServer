@@ -794,18 +794,18 @@ exports.addAllowes = async (req, res) => {
 
 exports.getMyboat = async (req, res) => {
   try {
-    const boats = await Boat.find({ user: req.params.user }).select(
+    const boats = await Boat.find({ user: req.params.userid }).select(
       "location.boatname boattype location.address"
     );
 
     if (!boats || boats.length === 0) {
-      return res.status(404).json({
+      return res.json({
         flag: false,
         message: "No boats found for this user.",
       });
     }
 
-    res.status(200).json({
+    res.json({
       flag: true,
       data: boats,
     });
