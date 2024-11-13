@@ -75,7 +75,7 @@ exports.setAvatar = async (req, res) => {
       };
       const uploadResult = await s3.upload(params).promise();
       user.avatar = uploadResult.Location;
-      await boat.save();
+      await user.save();
     }
     res.json({ flag: true, data: user });
   } catch (error) {
