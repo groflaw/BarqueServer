@@ -55,3 +55,33 @@ exports.loginUser = async (req, res) => {
     res.json({ flag: false, sort: "general", error: "Server error" });
   }
 };
+
+exports.setAvatar = async (req, res) => {
+  const userId = req.params.id;
+  const files = req.files["photo"];
+  if (!files || files.length === 0) {
+    return res
+      .status(400)
+      .json({ errors: { general: "No files were uploaded." } });
+  }
+  try {
+    const user = await User.findOne({ _id: userId });
+    for (const file of files) {
+      const params = {
+        Bucket: process.env.S3_BUCKET,
+        Key: `users/${boatId}/${Date.now()}_${file.originalname}`,
+        Body: file.buffer,
+        ContentType: file.mimetype,
+      };
+      const uploadResult = await s3.upload(params).promise();
+      user.avatar = uploadResult.Location;
+      await boat.save();
+    }
+    res.json({ flag: true, data: user });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      errors: { general: "There was an error uploading the images." },
+    });
+  }
+};
