@@ -69,7 +69,7 @@ exports.setAvatar = async (req, res) => {
     for (const file of files) {
       const params = {
         Bucket: process.env.S3_BUCKET,
-        Key: `users/${boatId}/${Date.now()}_${file.originalname}`,
+        Key: `users/${userId}/${Date.now()}_${file.originalname}`,
         Body: file.buffer,
         ContentType: file.mimetype,
       };
