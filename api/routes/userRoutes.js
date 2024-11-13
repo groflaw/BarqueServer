@@ -12,4 +12,6 @@ router.post(
   upload.fields([{ name: "photo" }, { name: "exif" }]),
   userController.setAvatar
 );
+router.post("/changeProfile/:id", userController.changeProfile);
+
 module.exports = router;
