@@ -93,3 +93,25 @@ exports.setAvatar = async (req, res) => {
     });
   }
 };
+
+exports.changeProfile = async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const user = await User.findOne({ _id: userId });
+    user.firstName = req.body.firstName;
+    user.lastName = req.body.lastName;
+    user.email = req.body.email;
+    user.phoneNumber = req.body.phoneNumber;
+    user.birthDay = req.body.birthDay;
+    user.address = req.body.address;
+    user.country = req.body.country;
+    user.city = req.body.city;
+    await user.save();
+    res.json({ flag: true, data: user });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      errors: { general: "There was an error uploading the images." },
+    });
+  }
+};
