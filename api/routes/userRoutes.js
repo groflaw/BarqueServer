@@ -13,5 +13,6 @@ router.post(
   userController.setAvatar
 );
 router.post("/changeProfile/:id", userController.changeProfile);
+router.post("/setNotifi/:id", userController.setNotifi);
 
 module.exports = router;

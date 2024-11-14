@@ -115,3 +115,19 @@ exports.changeProfile = async (req, res) => {
     });
   }
 };
+
+exports.setNotifi = async (req, res) => {
+  const { field, status } = req.body;
+  const userId = req.params.id;
+  try {
+    const user = await User.findOne({ _id: userId });
+    user.notification[field] = status;
+    await user.save();
+    res.json({ flag: true, data: user });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      errors: { general: "There was an error uploading the images." },
+    });
+  }
+};

@@ -11,6 +11,12 @@ const userSchema = new mongoose.Schema({
   birthDay: { type: Date, required: true },
   password: { type: String, required: true },
   phoneNumber: { type: String, required: true },
+  notification: {
+    type: {
+      newoffer: { type: Boolean, default: false },
+      allnotifi: { type: Boolean, default: false },
+    },
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);
