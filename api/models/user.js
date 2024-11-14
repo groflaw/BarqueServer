@@ -12,10 +12,8 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   phoneNumber: { type: String, required: true },
   notification: {
-    type: {
-      newoffer: { type: Boolean, default: false },
-      allnotifi: { type: Boolean, default: false },
-    },
+    newoffer: { type: Boolean, default: false },
+    allnotifi: { type: Boolean, default: false },
   },
 });
 

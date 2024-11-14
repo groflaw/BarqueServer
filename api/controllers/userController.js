@@ -121,8 +121,8 @@ exports.setNotifi = async (req, res) => {
   const userId = req.params.id;
   try {
     const user = await User.findOne({ _id: userId });
-    // user.notification[field] = value;
-    // await user.save();
+    user.notification[field] = value;
+    await user.save();
     res.json({ flag: true, data: user });
   } catch (error) {
     console.error(error);
