@@ -127,7 +127,7 @@ exports.setNotifi = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({
-      errors: { general: "There was an error uploading the images." },
+      errors: { general: "There was an error fetching the data." },
     });
   }
 };
