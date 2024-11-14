@@ -117,11 +117,11 @@ exports.changeProfile = async (req, res) => {
 };
 
 exports.setNotifi = async (req, res) => {
-  const { field, status } = req.body;
+  const { field, value } = req.body;
   const userId = req.params.id;
   try {
     const user = await User.findOne({ _id: userId });
-    user.notification[field] = status;
+    user.notification[field] = value;
     await user.save();
     res.json({ flag: true, data: user });
   } catch (error) {
