@@ -856,9 +856,9 @@ exports.getAllboats = async (req, res) => {
       size: boat.size,
       capacity: boat.capacity,
       year: boat.year,
-      review: boat.review,
+      review: boat.review || 0,
       location1: boat.location1,
-      coverImage: boat.boatImage?.cover,
+      coverImage: boat.boatImage?.cover || "",
       price: boat.plans?.[0]?.price || null,
     }));
     res.json({
