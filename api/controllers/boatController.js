@@ -798,13 +798,6 @@ exports.getMyboat = async (req, res) => {
       "location.boatname boattype location.address flag"
     );
 
-    if (!boats || boats.length === 0) {
-      return res.json({
-        flag: false,
-        message: "No boats found for this user.",
-      });
-    }
-
     res.json({
       flag: true,
       data: boats,
@@ -842,13 +835,6 @@ exports.getAllboats = async (req, res) => {
     const boats = await Boat.find({})
       .select("model size capacity year review location1 boatImage.cover plans")
       .lean();
-
-    if (!boats || boats.length === 0) {
-      return res.json({
-        flag: false,
-        message: "No boats found for this user",
-      });
-    }
 
     const result = boats.map((boat) => ({
       _id: boat._id,
