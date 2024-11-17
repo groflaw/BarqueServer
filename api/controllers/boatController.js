@@ -661,7 +661,7 @@ exports.delPlan = async (req, res) => {
 exports.addLocation = async (req, res) => {
   try {
     const boat = await Boat.findOne({ _id: req.params.id });
-    boat.location = req.body;
+    boat.location2 = req.body;
     await boat.save();
     res.json({ flag: true, data: boat });
   } catch (error) {
@@ -839,16 +839,30 @@ exports.setBoatFlag = async (req, res) => {
 //-----------------------GETALLBOAT---------------------//
 exports.getAllboats = async (req, res) => {
   try {
-    const boats = await Boat.find({});
+    const boats = await Boat.find({})
+      .select("model size capacity year review location1 boatImage.cover plans")
+      .lean();
+
     if (!boats || boats.length === 0) {
       return res.json({
         flag: false,
         message: "No boats found for this user",
       });
     }
+
+    const result = boats.map((boat) => ({
+      model: boat.model,
+      size: boat.size,
+      capacity: boat.capacity,
+      year: boat.year,
+      review: boat.review,
+      location1: boat.location1,
+      coverImage: boat.boatImage?.cover,
+      price: boat.plans?.[0]?.price || null,
+    }));
     res.json({
       flag: true,
-      data: boats,
+      data: result,
     });
   } catch (error) {
     console.error("Error fetching boats:", error);

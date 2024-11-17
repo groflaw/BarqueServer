@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.ObjectId, ref: "User" },
   model: { type: String },
   description: { type: String },
-  location: { type: String },
+  location1: { type: String },
   year: { type: Number },
   size: { type: Number },
   boattype: { type: Number },
@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
     navigation: { type: String },
     authorization: { type: String },
   },
-  location: {
+  location2: {
     boatname: { type: String },
     locationtype: { type: Number },
     marinaname: { type: String },
@@ -47,6 +47,7 @@ const userSchema = new mongoose.Schema({
   accessories: { type: [{ type: Number }] },
   allowes: { type: [{ type: Number }] },
   flag: { type: Boolean, default: false },
+  review: { type: Number },
 });
 
 module.exports = mongoose.model("boat", userSchema);
