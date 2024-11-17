@@ -851,6 +851,7 @@ exports.getAllboats = async (req, res) => {
     }
 
     const result = boats.map((boat) => ({
+      _id: boat._id,
       model: boat.model,
       size: boat.size,
       capacity: boat.capacity,
