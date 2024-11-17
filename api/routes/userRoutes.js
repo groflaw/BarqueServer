@@ -14,5 +14,6 @@ router.post(
 );
 router.post("/changeProfile/:id", userController.changeProfile);
 router.post("/setNotifi/:id", userController.setNotifi);
+router.post("/addCohost/:id");
 
 module.exports = router;

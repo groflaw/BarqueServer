@@ -131,3 +131,7 @@ exports.setNotifi = async (req, res) => {
     });
   }
 };
+
+exports.addCohost = async (req, res) => {
+  const user = User.findOne({ _id: req.params._id });
+};

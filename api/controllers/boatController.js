@@ -835,3 +835,27 @@ exports.setBoatFlag = async (req, res) => {
     });
   }
 };
+
+//-----------------------GETALLBOAT---------------------//
+exports.getAllboats = async (req, res) => {
+  try {
+    const boats = await Boat.find({});
+    if (!boats || boats.length === 0) {
+      return res.json({
+        flag: false,
+        message: "No boats found for this user",
+      });
+    }
+    res.json({
+      flag: true,
+      data: boats,
+    });
+  } catch (error) {
+    console.error("Error fetching boats:", error);
+    res.status(500).json({
+      flag: false,
+      general: "general",
+      error: "There is an unknown error, please try again.",
+    });
+  }
+};

@@ -15,6 +15,12 @@ const userSchema = new mongoose.Schema({
     newoffer: { type: Boolean, default: false },
     allnotifi: { type: Boolean, default: false },
   },
+  cohost: { type: mongoose.Schema.ObjectId, ref: "User" },
+  idNumber: { type: Number },
+  idImage: {
+    front: { type: String },
+    back: { type: String },
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);
