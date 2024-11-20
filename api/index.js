@@ -12,7 +12,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Connect to MongoDB
+// // Connect to MongoDB
 connectDB();
 
 // Define your routes here (example)

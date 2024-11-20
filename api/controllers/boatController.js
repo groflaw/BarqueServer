@@ -795,7 +795,7 @@ exports.addAllowes = async (req, res) => {
 exports.getMyboat = async (req, res) => {
   try {
     const boats = await Boat.find({ user: req.params.userid }).select(
-      "location.boatname boattype location.address flag"
+      "location2.boatname boattype location1 flag"
     );
 
     res.json({
