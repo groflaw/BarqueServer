@@ -132,44 +132,44 @@ exports.setNotifi = async (req, res) => {
   }
 };
 
-// exports.addCoHost = async (req, res) => {
-//   const { email, idNumber } = req.body;
-//   try {
-//     let cohost = await User.findOne({ email: email });
-//     if (cohost) {
-//       const uploadToS3 = async (file) => {
-//         const params = {
-//           Bucket: process.env.S3_BUCKET,
-//           Key: `users/${cohost._id}/${Date.now()}_${file.originalname}`,
-//           Body: file.buffer,
-//           ContentType: file.mimetype,
-//         };
-//         const uploadResult = await s3.upload(params).promise();
-//         return uploadResult.Location;
-//       };
-//       const profileImageUrl = await uploadToS3(req.files["profileImage"][0]);
-//       const frontIDUrl = await uploadToS3(req.files["frontID"][0]);
-//       const backIDUrl = await uploadToS3(req.files["backID"][0]);
-//       cohost.avatar = profileImageUrl;
-//       cohost.idImage.front = frontIDUrl;
-//       cohost.idImage.back = backIDUrl;
-//       cohost.idNumber = idNumber;
-//       await cohost.save();
-//       const user = await User.findOne({ _id: req.params.id });
-//       user.cohost = cohost._id;
-//       await user.save();
-//       res.json({ flag: true, data: user });
-//     } else {
-//       res.json({
-//         flag: false,
-//         sort: "general",
-//         error: "Co-Host is an unregistered user",
-//       });
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({
-//       errors: { general: "There was an error uploading the images." },
-//     });
-//   }
-// };
+exports.addCoHost = async (req, res) => {
+  const { email, idNumber } = req.body;
+  try {
+    let cohost = await User.findOne({ email: email });
+    if (cohost) {
+      const uploadToS3 = async (file) => {
+        const params = {
+          Bucket: process.env.S3_BUCKET,
+          Key: `users/${cohost._id}/${Date.now()}_${file.originalname}`,
+          Body: file.buffer,
+          ContentType: file.mimetype,
+        };
+        const uploadResult = await s3.upload(params).promise();
+        return uploadResult.Location;
+      };
+      const profileImageUrl = await uploadToS3(req.files["profileImage"][0]);
+      const frontIDUrl = await uploadToS3(req.files["frontID"][0]);
+      const backIDUrl = await uploadToS3(req.files["backID"][0]);
+      cohost.avatar = profileImageUrl;
+      cohost.idImage.front = frontIDUrl;
+      cohost.idImage.back = backIDUrl;
+      cohost.idNumber = idNumber;
+      await cohost.save();
+      const user = await User.findOne({ _id: req.params.id });
+      user.cohost = cohost._id;
+      await user.save();
+      res.json({ flag: true, data: user });
+    } else {
+      res.json({
+        flag: false,
+        sort: "general",
+        error: "Co-Host is an unregistered user",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      errors: { general: "There was an error uploading the images." },
+    });
+  }
+};

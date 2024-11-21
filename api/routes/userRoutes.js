@@ -14,13 +14,13 @@ router.post(
 );
 router.post("/changeProfile/:id", userController.changeProfile);
 router.post("/setNotifi/:id", userController.setNotifi);
-// router.post(
-//   "/addCoHost/:id",
-//   upload.fields([
-//     { name: "profileImage", maxCount: 1 },
-//     { name: "frontID", maxCount: 1 },
-//     { name: "backID", maxCount: 1 },
-//   ]),
-//   userController.addCoHost
-// );
+router.post(
+  "/addCoHost/:id",
+  upload.fields([
+    { name: "profileImage", maxCount: 1 },
+    { name: "frontID", maxCount: 1 },
+    { name: "backID", maxCount: 1 },
+  ]),
+  userController.addCoHost
+);
 module.exports = router;
