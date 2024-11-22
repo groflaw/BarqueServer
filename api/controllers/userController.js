@@ -9,6 +9,7 @@ AWS.config.update({
 });
 
 const s3 = new AWS.S3();
+
 exports.createUser = async (req, res) => {
   const newUser = new User(req.body);
 
@@ -35,8 +36,7 @@ exports.createUser = async (req, res) => {
 };
 
 exports.loginUser = async (req, res) => {
-  const { email, password } = req.params; // Get email and password from URL parameters
-
+  const { email, password } = req.params;
   try {
     const existingUser = await User.findOne({ email });
 
@@ -174,17 +174,38 @@ exports.addCoHost = async (req, res) => {
   }
 };
 
-exports.getUser = async(req,res) =>{
-  try{
-    
-    let user = await User.findOne({_id :  req.params.id})
-    if(user){
-      res.json({flag : true, data : user})
+exports.getUser = async (req, res) => {
+  try {
+    let user = await User.findOne({ _id: req.params.id });
+    if (user) {
+      res.json({ flag: true, data: user });
     }
-  }catch(error){
+  } catch (error) {
     console.error(error);
     return res.status(500).json({
-      errors : {general : "There was an error get the CoHost profile"}
+      errors: { general: "There was an error get the CoHost profile" },
     });
   }
-}
+};
+
+exports.changePassword = async (req, res) => {
+  const { curpassword, newpassword } = req.body;
+  try {
+    const user = await User.findOne({ _id: req.params.id });
+    const isMatch = await bcrypt.compare(curpassword, user.password);
+    if(!isMatch){
+      return res.json({
+        flag : false,
+        sort : "password",
+        error : "Incorrect password"
+      })
+    }else{
+      const saltRounds = 10;
+      user.password = await bcrypt.hash(newpassword, saltRounds);
+      await user.save();
+      res.json({ flag: true, data : user });
+    }
+  } catch (error) {
+    res.json({ flag: false, sort: "general", error: "Server error" });
+  }
+};

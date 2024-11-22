@@ -25,4 +25,5 @@ router.post(
   userController.addCoHost
 );
 router.get("/:id",userController.getUser);
+router.post("/changePassword/:id",userController.changePassword)
 module.exports = router;
