@@ -17,9 +17,9 @@ router.post("/setNotifi/:id", userController.setNotifi);
 router.post(
   "/addCoHost/:id",
   upload.fields([
-    { name: "profileImage", maxCount: 1 },
-    { name: "frontID", maxCount: 1 },
-    { name: "backID", maxCount: 1 },
+    { name: "profileImage"},
+    { name: "frontID"},
+    { name: "backID"},
   ]),
   userController.addCoHost
 );
