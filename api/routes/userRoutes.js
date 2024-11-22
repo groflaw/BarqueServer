@@ -23,4 +23,5 @@ router.post(
   ]),
   userController.addCoHost
 );
+router.get("/getCoHost/:id",userController.getCoHost);
 module.exports = router;
