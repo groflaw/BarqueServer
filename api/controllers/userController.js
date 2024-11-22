@@ -174,13 +174,13 @@ exports.addCoHost = async (req, res) => {
   }
 };
 
-exports.getCoHost = async(req,res) =>{
+exports.getUser = async(req,res) =>{
   try{
-    console.log(req.params.id)
-    // let user = await User.findOne({_id :  req.params.id})
-    // if(user){
-    //   res.json({flag : true, data : user})
-    // }
+    
+    let user = await User.findOne({_id :  req.params.id})
+    if(user){
+      res.json({flag : true, data : user})
+    }
   }catch(error){
     console.error(error);
     return res.status(500).json({

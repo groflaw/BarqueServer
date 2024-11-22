@@ -5,6 +5,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 const router = express.Router();
 const userController = require("../controllers/userController");
+
 router.post("/", userController.createUser);
 router.get("/:email/:password", userController.loginUser);
 router.post(
@@ -23,5 +24,5 @@ router.post(
   ]),
   userController.addCoHost
 );
-router.get("/getCoHost/:id",userController.getCoHost);
+router.get("/:id",userController.getUser);
 module.exports = router;
