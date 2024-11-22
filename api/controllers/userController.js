@@ -196,7 +196,7 @@ exports.changePassword = async (req, res) => {
     if(!isMatch){
       return res.json({
         flag : false,
-        sort : "password",
+        sort : "curpassword",
         error : "Incorrect password"
       })
     }else{
