@@ -47,7 +47,9 @@ const userSchema = new mongoose.Schema({
   accessories: { type: [{ type: Number }] },
   allowes: { type: [{ type: Number }] },
   flag: { type: Boolean, default: false },
-  review: { type: Number },
+  review: { type: Number, default : 0 },
+  booking : {type : Number, default : 0},
+  resrate : {type : Number, default : 0}
 });
 
 module.exports = mongoose.model("boat", userSchema);
