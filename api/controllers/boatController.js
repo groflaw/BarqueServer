@@ -832,7 +832,7 @@ exports.setBoatFlag = async (req, res) => {
 //-----------------------GETALLBOAT---------------------//
 exports.getAllboats = async (req, res) => {
   try {
-    const boats = await Boat.find({})
+    const boats = await Boat.find({flag : true})
       .select("model size capacity year review location1 boatImage.cover plans")
       .lean();
 
