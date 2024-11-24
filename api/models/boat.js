@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.ObjectId, ref: "User" },
+  user: { type: mongoose.Schema.ObjectId, ref: "User" }, // host
   model: { type: String },
   description: { type: String },
   location1: { type: String },
@@ -49,7 +49,14 @@ const userSchema = new mongoose.Schema({
   flag: { type: Boolean, default: false },
   review: { type: Number, default : 0 },
   booking : {type : Number, default : 0},
-  resrate : {type : Number, default : 0}
+  resrate : {type : Number, default : 0},
+  reviews:{type : [
+    {
+      customer : {type: mongoose.Schema.ObjectId, ref: "User" },
+      review : {type : Number},
+      date : {type : Date},
+    }
+  ]}
 });
 
 module.exports = mongoose.model("boat", userSchema);
