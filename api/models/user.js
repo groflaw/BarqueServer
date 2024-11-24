@@ -21,7 +21,9 @@ const userSchema = new mongoose.Schema({
     front: { type: String },
     back: { type: String },
   },
-  review : {type : Number}
+  review : {type : Number},
+  booking : {type : Number, default : 0},
+  resrate : {type : Number, default : 0},
 });
 
 module.exports = mongoose.model("User", userSchema);
