@@ -830,6 +830,7 @@ exports.setBoatFlag = async (req, res) => {
 };
 
 //-----------------------GETALLBOAT---------------------//
+
 exports.getAllboats = async (req, res) => {
   try {
     const boats = await Boat.find({ flag: true })
@@ -848,6 +849,7 @@ exports.getAllboats = async (req, res) => {
       location1: boat.location1,
       coverImage: boat.boatImage?.cover || "",
       price: boat.plans?.[0]?.price || null,
+      review: calculateAverageReview(boat.reviews),
     }));
     res.json({
       flag: true,
@@ -862,7 +864,11 @@ exports.getAllboats = async (req, res) => {
     });
   }
 };
-
+const calculateAverageReview = (reviews) => {
+  if (!reviews || reviews.length === 0) return 0; 
+  const total = reviews.reduce((sum, review) => sum + review.review, 0); 
+  return (total / reviews.length).toFixed(2);
+};
 //-------------------GETSIMILAR---------------------//
 exports.getSimilar = async (req, res) => {
   try {
