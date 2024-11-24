@@ -81,4 +81,7 @@ router.get("/getAllboats", boatController.getAllboats);
 //-------------------GETSIMILAR---------------------//
 router.get("/getSimilar/:location/:boatId", boatController.getSimilar);
 
+//-------------------SEARCHBOAT----------------------//
+router.get("/search/:location", boatController.searchBoats)
+
 module.exports = router;

@@ -829,7 +829,7 @@ exports.setBoatFlag = async (req, res) => {
   }
 };
 
-//-----------------------GETALLBOAT---------------------//
+//-----------------------GET ALLBOAT---------------------//
 
 exports.getAllboats = async (req, res) => {
   try {
@@ -865,11 +865,11 @@ exports.getAllboats = async (req, res) => {
   }
 };
 const calculateAverageReview = (reviews) => {
-  if (!reviews || reviews.length === 0) return 0; 
-  const total = reviews.reduce((sum, review) => sum + review.review, 0); 
+  if (!reviews || reviews.length === 0) return 0;
+  const total = reviews.reduce((sum, review) => sum + review.review, 0);
   return (total / reviews.length).toFixed(2);
 };
-//-------------------GETSIMILAR---------------------//
+//-------------------GET SIMILAR---------------------//
 exports.getSimilar = async (req, res) => {
   try {
     const boats = await Boat.find({
@@ -884,6 +884,44 @@ exports.getSimilar = async (req, res) => {
       model: boat.model,
       coverImage: boat.boatImage?.cover || "",
       price: boat.plans?.[0]?.price || null,
+    }));
+    res.json({
+      flag: true,
+      data: result,
+    });
+  } catch (error) {
+    console.error("Error fetching boats:", error);
+    res.status(500).json({
+      flag: false,
+      general: "general",
+      error: "There is an unknown error, please try again.",
+    });
+  }
+};
+
+//--------------------SEARCH BOAT------------------//
+exports.searchBoats = async (req, res) => {
+  try {
+    const boats = await Boat.find({
+      flag: true,
+      location1: { $elemMatch: { $regex: req.params.location, $options: "i" } },
+    })
+      .select(
+        "model size capacity year review location1 boatImage.cover plans user"
+      )
+      .lean();
+
+    const result = boats.map((boat) => ({
+      _id: boat._id,
+      user: boat.user,
+      model: boat.model,
+      size: boat.size,
+      capacity: boat.capacity,
+      year: boat.year,
+      location1: boat.location1,
+      coverImage: boat.boatImage?.cover || "",
+      price: boat.plans?.[0]?.price || null,
+      review: calculateAverageReview(boat.reviews),
     }));
     res.json({
       flag: true,
