@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema({
     front: { type: String },
     back: { type: String },
   },
+  review : {type : Number}
 });
 
 module.exports = mongoose.model("User", userSchema);

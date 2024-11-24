@@ -833,11 +833,12 @@ exports.setBoatFlag = async (req, res) => {
 exports.getAllboats = async (req, res) => {
   try {
     const boats = await Boat.find({flag : true})
-      .select("model size capacity year review location1 boatImage.cover plans")
+      .select("model size capacity year review location1 boatImage.cover plans user")
       .lean();
 
     const result = boats.map((boat) => ({
       _id: boat._id,
+      user : boat.user,
       model: boat.model,
       size: boat.size,
       capacity: boat.capacity,
