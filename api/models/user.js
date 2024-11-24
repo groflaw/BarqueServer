@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
   },
   review : {type : Number, default : 0},
   booking : {type : Number, default : 0},
-  resrate : {type : Number, default : 0},
+  resrate : {type : Number, default : 100},
 });
 
 module.exports = mongoose.model("User", userSchema);
