@@ -904,7 +904,7 @@ exports.searchBoats = async (req, res) => {
   try {
     const boats = await Boat.find({
       flag: true,
-      location1: { $regex: req.params.location, $options: "i" } 
+      location1: { $regex: req.params.location, $options: "i" },
     })
       .select(
         "model size capacity year review location1 boatImage.cover plans user"
@@ -923,6 +923,51 @@ exports.searchBoats = async (req, res) => {
       price: boat.plans?.[0]?.price || null,
       review: calculateAverageReview(boat.reviews),
     }));
+    res.json({
+      flag: true,
+      data: result,
+    });
+  } catch (error) {
+    console.error("Error fetching boats:", error);
+    res.status(500).json({
+      flag: false,
+      general: "general",
+      error: "There is an unknown error, please try again.",
+    });
+  }
+};
+exports.filterBoats = async (req, res) => {
+  try {
+    const { size, boattype, capacity, price } = req.body;
+    const boats = await Boat.find({
+      size,
+      boattype,
+      capacity,
+      flag: true,
+    })
+      .select(
+        "model size capacity year review location1 boatImage.cover plans user"
+      )
+      .lean();
+    const result = boats
+      .filter((boat) => {
+        const firstPlanPrice = boat.plans?.[0]?.price || 0;
+        const lastPlanPrice = boat.plans?.[boat.plans.length - 1]?.price || 0;
+        return firstPlanPrice >= price || lastPlanPrice >= price;
+      })
+      .map((boat) => ({
+        _id: boat._id,
+        user: boat.user,
+        model: boat.model,
+        size: boat.size,
+        capacity: boat.capacity,
+        year: boat.year,
+        location1: boat.location1,
+        coverImage: boat.boatImage?.cover || "",
+        price: boat.plans?.[0]?.price || null,
+        review: calculateAverageReview(boat.reviews),
+      }));
+
     res.json({
       flag: true,
       data: result,
