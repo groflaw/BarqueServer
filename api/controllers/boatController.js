@@ -904,7 +904,7 @@ exports.searchBoats = async (req, res) => {
   try {
     const boats = await Boat.find({
       flag: true,
-      location1: { $elemMatch: { $regex: req.params.location, $options: "i" } },
+      location1: { $regex: req.params.location, $options: "i" } 
     })
       .select(
         "model size capacity year review location1 boatImage.cover plans user"
