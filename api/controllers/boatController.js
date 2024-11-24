@@ -843,7 +843,6 @@ exports.getAllboats = async (req, res) => {
       size: boat.size,
       capacity: boat.capacity,
       year: boat.year,
-      review: boat.review || 0,
       location1: boat.location1,
       coverImage: boat.boatImage?.cover || "",
       price: boat.plans?.[0]?.price || null,
@@ -861,3 +860,30 @@ exports.getAllboats = async (req, res) => {
     });
   }
 };
+
+//-------------------GETSIMILAR---------------------//
+exports.getSimilar = async( req,res) =>{
+  
+  try{
+    const boats = await Boat.find({flag : true, location1 : req.params.location})
+      .select("model boatImage.cover plans")
+      .lean()
+    const result = boats.map((boat)=>({
+      _id : boat._id,
+      model: boat.model,
+      coverImage : boat.boatImage?.cover || "",
+      price : boat.plans?.[0]?.price || null
+    }))
+    res.json({
+      flag : true,
+      data : result
+    })
+  }catch(error){
+    console.error("Error fetching boats:", error);
+    res.status(500).json({
+      flag: false,
+      general: "general",
+      error: "There is an unknown error, please try again.",
+    });
+  }
+}

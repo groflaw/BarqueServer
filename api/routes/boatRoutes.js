@@ -77,4 +77,8 @@ router.post("/setBoatFlag/:id", boatController.setBoatFlag);
 
 //-------------------GETAllBOATS---------------------//
 router.get("/getAllboats", boatController.getAllboats);
+
+//-------------------GETSIMILAR---------------------//
+router.get("/getSimilar/:location", boatController.getSimilar);
+
 module.exports = router;
