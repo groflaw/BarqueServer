@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema({
   flag: { type: Boolean, default: false },
   reviews:{type : [
     {
-      customer : {type: mongoose.Schema.ObjectId, ref: "User" },
+      customer : {type: String },
       review : {type : Number},
       date : {type : Date},
     }
