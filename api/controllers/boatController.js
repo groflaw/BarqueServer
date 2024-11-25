@@ -797,7 +797,6 @@ exports.getMyboat = async (req, res) => {
     const boats = await Boat.find({ user: req.params.userid }).select(
       "location2.boatname boattype location1 flag"
     );
-
     res.json({
       flag: true,
       data: boats,
@@ -968,6 +967,34 @@ exports.filterBoats = async (req, res) => {
         review: calculateAverageReview(boat.reviews),
       }));
 
+    res.json({
+      flag: true,
+      data: result,
+    });
+  } catch (error) {
+    console.error("Error fetching boats:", error);
+    res.status(500).json({
+      flag: false,
+      general: "general",
+      error: "There is an unknown error, please try again.",
+    });
+  }
+};
+exports.getHostBoats = async (req, res) => {
+  try {
+    const boats = await Boat.find({ flag: true, user: req.params.userId })
+      .select("model size capacity year review location1 boatImage.cover")
+      .lean();
+    const result = boats.map((boat) => ({
+      _id: boat._id,
+      model: boat.model,
+      size: boat.size,
+      capacity: boat.capacity,
+      year: boat.year,
+      location1: boat.location1,
+      coverImage: boat.boatImage?.cover || "",
+      review: calculateAverageReview(boat.reviews),
+    }));
     res.json({
       flag: true,
       data: result,

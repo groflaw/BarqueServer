@@ -71,18 +71,19 @@ router.post("/addCancellation/:id", boatController.addCancellation);
 router.post("/addAccessories/:id", boatController.addAccessories);
 router.post("/addAllowes/:id", boatController.addAllowes);
 
-//------------------MyBoatSetting---------------------//
+//------------------MyBoat Setting---------------------//
 router.get("/getMyboat/:userid", boatController.getMyboat);
 router.post("/setBoatFlag/:id", boatController.setBoatFlag);
 
-//-------------------GETAllBOATS---------------------//
+//-------------------GET AllBOATS---------------------//
 router.get("/getAllboats", boatController.getAllboats);
 
-//-------------------GETSIMILAR---------------------//
+//-------------------GET SIMILAR---------------------//
 router.get("/getSimilar/:location/:boatId", boatController.getSimilar);
 
-//-------------------SEARCHBOAT----------------------//
+//-------------------SEARCH BOAT----------------------//
 router.get("/search/:location", boatController.searchBoats)
 router.post("/search/filter", boatController.filterBoats)
-
+//-------------------GET HOSTBOATS------------------//
+router.get("/getHostboats/:userId", boatController.getHostBoats)
 module.exports = router;
