@@ -832,7 +832,7 @@ exports.setBoatFlag = async (req, res) => {
 
 exports.getAllboats = async (req, res) => {
   try {
-    const boats = await Boat.find({ flag: true })
+    const boats = await Boat.find({ flag: true,user: { $ne: req.params.userId },  })
       .select(
         "model size capacity year review location1 boatImage.cover plans user"
       )
@@ -903,6 +903,7 @@ exports.searchBoats = async (req, res) => {
   try {
     const boats = await Boat.find({
       flag: true,
+      user: { $ne: req.params.userId },
       location1: { $regex: req.params.location, $options: "i" },
     })
       .select(
@@ -935,6 +936,7 @@ exports.searchBoats = async (req, res) => {
     });
   }
 };
+//--------------------FILTER BOAT------------------//
 exports.filterBoats = async (req, res) => {
   try {
     const { size, boattype, capacity, price } = req.body;
@@ -943,11 +945,13 @@ exports.filterBoats = async (req, res) => {
       boattype,
       capacity,
       flag: true,
+      user: { $ne: req.params.userId }
     })
       .select(
         "model size capacity year review location1 boatImage.cover plans user"
       )
       .lean();
+
     const result = boats
       .filter((boat) => {
         const firstPlanPrice = boat.plans?.[0]?.price || 0;
