@@ -906,9 +906,11 @@ exports.getSimilar = async (req, res) => {
 //--------------------SEARCH BOAT------------------//
 exports.searchBoats = async (req, res) => {
   try {
+    const userId = req.params.userId === "0" ? null : req.params.userId; 
+    
     const boats = await Boat.find({
       flag: true,
-      user: { $ne: req.params.userId },
+      user: { $ne: userId },
       location1: { $regex: req.params.location, $options: "i" },
     })
       .select(
@@ -945,12 +947,14 @@ exports.searchBoats = async (req, res) => {
 exports.filterBoats = async (req, res) => {
   try {
     const { size, boattype, capacity, price } = req.body;
+    const userId = req.params.userId === "0" ? null : req.params.userId; 
+
     const boats = await Boat.find({
       size,
       boattype,
       capacity,
       flag: true,
-      user: { $ne: req.params.userId },
+      user: { $ne: userId },
     })
       .select(
         "model size capacity year review location1 boatImage.cover plans user"
