@@ -832,7 +832,12 @@ exports.setBoatFlag = async (req, res) => {
 
 exports.getAllboats = async (req, res) => {
   try {
-    const boats = await Boat.find({ flag: true,user: { $ne: req.params.userId },  })
+     const userId = req.params.userId === "0" ? null : req.params.userId; 
+
+     const boats = await Boat.find({
+       flag: true,
+       user: { $ne: userId },  
+     })
       .select(
         "model size capacity year review location1 boatImage.cover plans user"
       )
@@ -945,7 +950,7 @@ exports.filterBoats = async (req, res) => {
       boattype,
       capacity,
       flag: true,
-      user: { $ne: req.params.userId }
+      user: { $ne: req.params.userId },
     })
       .select(
         "model size capacity year review location1 boatImage.cover plans user"
