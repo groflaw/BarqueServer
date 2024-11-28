@@ -32,7 +32,7 @@ exports.getReservations = async (req, res) => {
 exports.getBookings = async (req, res) => {
   try {
     const bookings = await Reservation.find({ hostId: req.params.hostId })
-      .populate("uesrId", "_id firstName lastName avatar")
+      .populate("userId", "_id firstName lastName avatar")
       .populate("boatId", "_id model description boatImage.cover");
     res.json({ flag: true, data: bookings });
   } catch (error) {
