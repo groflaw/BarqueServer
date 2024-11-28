@@ -1,5 +1,4 @@
 const Reservation = require("../models/reservation");
-const Boat = require("../models/boat");
 
 exports.saveReservation = async (req, res) => {
   try {
@@ -17,15 +16,24 @@ exports.saveReservation = async (req, res) => {
 
 exports.getReservations = async (req, res) => {
   try {
-    const reservations = Reservation.find({ userId: req.params.userId })
-      .populate("userId", "_id firstName lastName avatar")
-      .populate("boatId", "_id model description");
-    res.json({ flag: true, data : reservations });
+    const reservations = await Reservation.find({ userId: req.params.userId })
+      .populate("hostId", "_id firstName lastName avatar")
+      .populate("boatId", "_id model description boatImage.cover");
+    res.json({ flag: true, data: reservations });
   } catch (error) {
     res.json({
       flag: false,
       sort: "general",
-      error: "Could not create reservation",
+      error: "Could not get reservations",
     });
   }
+};
+
+exports.getBookings = async (req, res) => {
+  try {
+    const bookings = await Reservation.find({ hostId: req.params.hostId })
+      .populate("uesrId", "_id firstName lastName avatar")
+      .populate("boatId", "_id model description boatImage.cover");
+    res.json({ flag: true, data : bookings})
+  } catch (error) {}
 };
