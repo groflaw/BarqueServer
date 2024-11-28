@@ -34,6 +34,12 @@ exports.getBookings = async (req, res) => {
     const bookings = await Reservation.find({ hostId: req.params.hostId })
       .populate("uesrId", "_id firstName lastName avatar")
       .populate("boatId", "_id model description boatImage.cover");
-    res.json({ flag: true, data : bookings})
-  } catch (error) {}
+    res.json({ flag: true, data: bookings });
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could not get bookings",
+    });
+  }
 };
