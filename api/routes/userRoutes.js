@@ -1,10 +1,10 @@
 const express = require("express");
 const multer = require("multer");
 
-const upload = multer({ storage: multer.memoryStorage() });
-
 const router = express.Router();
 const userController = require("../controllers/userController");
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 router.post("/", userController.createUser);
 router.get("/:email/:password", userController.loginUser);

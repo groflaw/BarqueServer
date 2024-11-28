@@ -46,7 +46,8 @@ const userSchema = new mongoose.Schema({
   cancellation: { type: Number },
   accessories: { type: [{ type: Number }] },
   allowes: { type: [{ type: Number }] },
-  flag: { type: Boolean, default: false },
+  flag: { type: Boolean, default: false }, // only can set by host. true : show, false : hidden.
+  status : {type : Boolean, default : true}, // true : can , false : can't reservation
   reviews:{type : [
     {
       customer : {type: String },

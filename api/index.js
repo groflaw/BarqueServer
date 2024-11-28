@@ -6,6 +6,7 @@ require("dotenv").config();
 const connectDB = require("./config/db"); // Import your db connection
 const userRoutes = require("./routes/userRoutes");
 const boatRoutes = require("./routes/boatRoutes");
+const reservationRoutes = require("./routes/reservation");
 const app = express();
 
 app.use(cors());
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/users", userRoutes);
 app.use("/api/boats", boatRoutes);
+app.use("/api/reservation", reservationRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
