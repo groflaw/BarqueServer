@@ -18,7 +18,7 @@ exports.getReservations = async (req, res) => {
   try {
     const reservations = await Reservation.find({ userId: req.params.userId })
       .populate("hostId", "_id firstName lastName avatar phoneNumber")
-      .populate("boatId", "_id model description boatImage.cover location2 boattype capacity location1");
+      .populate("boatId", "_id model description boatImage.cover location2 boattype capacity location1 plans");
     res.json({ flag: true, data: reservations });
   } catch (error) {
     res.json({
@@ -33,7 +33,7 @@ exports.getBookings = async (req, res) => {
   try {
     const bookings = await Reservation.find({ hostId: req.params.hostId })
       .populate("userId", "_id firstName lastName avatar phoneNumber")
-      .populate("boatId", "_id model description boatImage.cover location2 boattype capacity location1");
+      .populate("boatId", "_id model description boatImage.cover location2 boattype capacity location1 plans");
     res.json({ flag: true, data: bookings });
   } catch (error) {
     res.json({
