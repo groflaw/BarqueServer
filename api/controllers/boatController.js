@@ -1026,7 +1026,7 @@ exports.getHostBoats = async (req, res) => {
 };
 exports.getUserBookings = async (req, res) => {
   try {
-    const bookings = Reservation.find({ userId: req.params.userId }).populate(
+    const bookings = await Reservation.find({ userId: req.params.userId }).populate(
       "boatId",
       "_id model boatImage.cover"
     );
