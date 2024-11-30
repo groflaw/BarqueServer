@@ -1,5 +1,7 @@
 const BasicBoat = require("../models/basicboat");
 const Boat = require("../models/boat");
+const Reservation = require("../models/reservation");
+
 const AWS = require("aws-sdk");
 
 AWS.config.update({
@@ -832,12 +834,12 @@ exports.setBoatFlag = async (req, res) => {
 
 exports.getAllboats = async (req, res) => {
   try {
-     const userId = req.params.userId === "0" ? null : req.params.userId; 
+    const userId = req.params.userId === "0" ? null : req.params.userId;
 
-     const boats = await Boat.find({
-       flag: true,
-       user: { $ne: userId },  
-     })
+    const boats = await Boat.find({
+      flag: true,
+      user: { $ne: userId },
+    })
       .select(
         "model size capacity year review location1 boatImage.cover plans user"
       )
@@ -906,8 +908,8 @@ exports.getSimilar = async (req, res) => {
 //--------------------SEARCH BOAT------------------//
 exports.searchBoats = async (req, res) => {
   try {
-    const userId = req.params.userId === "0" ? null : req.params.userId; 
-    
+    const userId = req.params.userId === "0" ? null : req.params.userId;
+
     const boats = await Boat.find({
       flag: true,
       user: { $ne: userId },
@@ -947,7 +949,7 @@ exports.searchBoats = async (req, res) => {
 exports.filterBoats = async (req, res) => {
   try {
     const { size, boattype, capacity, price } = req.body;
-    const userId = req.params.userId === "0" ? null : req.params.userId; 
+    const userId = req.params.userId === "0" ? null : req.params.userId;
 
     const boats = await Boat.find({
       size,
@@ -993,10 +995,11 @@ exports.filterBoats = async (req, res) => {
     });
   }
 };
+//--------------------GET HOST/USRER BOATS/BOOKINGS--------------//
 exports.getHostBoats = async (req, res) => {
   try {
     const boats = await Boat.find({ flag: true, user: req.params.userId })
-      .select("model size capacity year review location1 boatImage.cover")
+      .select("model size capacity year reviews location1 boatImage.cover")
       .lean();
     const result = boats.map((boat) => ({
       _id: boat._id,
@@ -1011,6 +1014,25 @@ exports.getHostBoats = async (req, res) => {
     res.json({
       flag: true,
       data: result,
+    });
+  } catch (error) {
+    console.error("Error fetching boats:", error);
+    res.status(500).json({
+      flag: false,
+      general: "general",
+      error: "There is an unknown error, please try again.",
+    });
+  }
+};
+exports.getUserBookings = async (req, res) => {
+  try {
+    const bookings = Reservation.find({ userId: req.params.userId }).populate(
+      "boatId",
+      "_id model boatImage.cover"
+    );
+    res.json({
+      flag: true,
+      data: bookings,
     });
   } catch (error) {
     console.error("Error fetching boats:", error);
