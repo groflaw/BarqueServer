@@ -48,6 +48,7 @@ router.get("/getAllowes", boatController.getAllowes);
 
 //------------------ADDBOAT--------------------//
 router.post("/addboat", boatController.addBoat);
+router.put("/updateboat/:boatId",boatController.updateBoat);
 router.get("/getbasicInfo/:id", boatController.getboatbasicInfo);
 
 router.post("/addplan/:id", boatController.addPlan);

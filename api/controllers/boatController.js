@@ -580,6 +580,20 @@ exports.addBoat = async (req, res) => {
     });
   }
 };
+exports.updateBoat = async (req, res) => {
+  try {
+    let curboat = await Boat.findOne({_id : req.params.boatId})
+    curboat = Object.assign(curboat, req.body);
+    await curboat.save();
+    res.json({ flag: true, data: curboat });
+  } catch (error){
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "There is unknown error, Please try again.",
+    });
+  }
+};
 exports.getboatbasicInfo = async (req, res) => {
   try {
     const boat = await Boat.findOne({ _id: req.params.id });
@@ -1026,10 +1040,9 @@ exports.getHostBoats = async (req, res) => {
 };
 exports.getUserBookings = async (req, res) => {
   try {
-    const bookings = await Reservation.find({ userId: req.params.userId }).populate(
-      "boatId",
-      "_id model boatImage.cover"
-    );
+    const bookings = await Reservation.find({
+      userId: req.params.userId,
+    }).populate("boatId", "_id model boatImage.cover");
     res.json({
       flag: true,
       data: bookings,
