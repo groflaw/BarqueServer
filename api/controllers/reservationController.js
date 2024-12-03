@@ -47,7 +47,7 @@ exports.getBookings = async (req, res) => {
 exports.getHostNews = async(req,res)=>{
   try{
     const news = await Reservation.find({status : 0, hostId : req.params.hostId})
-    res.json({flag : news.length > 0 ? true : false, data : news.length > 0 ? true : false})
+    res.json({flag : true, data : news.length > 0 ? true : false})
   }catch (error) {
     res.json({
       flag: false,
@@ -60,7 +60,7 @@ exports.getHostNews = async(req,res)=>{
 exports.getUserNews = async(req,res)=>{
   try{
     const news = await Reservation.find({status : 2, userId : req.params.userId})
-    res.json({flag : news.length > 0 ? true : false, data : news.length > 0 ? true : false})
+    res.json({flag : true, data : news.length > 0 ? true : false})
   }catch (error) {
     res.json({
       flag: false,
