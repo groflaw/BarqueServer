@@ -73,7 +73,7 @@ exports.getUserNews = async(req,res)=>{
 exports.setBookStatus = async(req,res)=>{
   try{
     let book = await Reservation.findOne({_id : req.params.bookId})
-    book.status = req.body.status ;
+    book.status =  req.body.value;
     await book.save();
     res.json({
       flag : true,
