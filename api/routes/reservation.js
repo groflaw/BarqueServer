@@ -11,6 +11,6 @@ router.get("/getBookings/:hostId", reservationController.getBookings)
 router.get("/getHostNews/:hostId",reservationController.getHostNews)
 router.get("/getUserNews/:userId",reservationController.getUserNews)
 //----------------Host Confirm------------//
-router.get("/tobeconfirm/:bookId", reservationController.Tobeconfirm)
+router.post("/setBookStatus/:bookId", reservationController.setBookStatus)
 
 module.exports = router;
