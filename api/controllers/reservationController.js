@@ -69,3 +69,21 @@ exports.getUserNews = async(req,res)=>{
     });
   }
 }
+
+exports.Tobeconfirm = async(req,res)=>{
+  try{
+    let book = await Reservation.find({_id : req.params.bookId})
+    book.status = 2 ;
+    await book.save();
+    res.json({
+      flag : true,
+      data : book
+    })
+  }catch(error){
+    res.json({
+      false : false,
+      sort : "general",
+      error : "Could not confirm"
+    })
+  }
+}
