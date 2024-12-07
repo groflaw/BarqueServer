@@ -653,7 +653,7 @@ exports.addPlan = async (req, res) => {
     const boat = await Boat.findOne({ _id: req.params.id });
 
     const existingPlanIndex = boat.plans.findIndex(
-      (plan) => plan._id.toString() === _id
+      (plan) => plan._id == _id
     );
 
     if (existingPlanIndex !== -1) {
