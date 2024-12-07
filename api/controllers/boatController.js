@@ -566,7 +566,7 @@ exports.getAllowes = async (req, res) => {
   }
 };
 
-// -----------------ADDBOAT---------------------//
+// -----------------(ADD, Update, Delete)BOAT---------------------//
 exports.addBoat = async (req, res) => {
   try {
     const newboat = new Boat(req.body);
@@ -580,13 +580,42 @@ exports.addBoat = async (req, res) => {
     });
   }
 };
+exports.delBoat = async (req, res) => {
+  try {
+    const reservationCount = await Reservation.countDocuments({
+      boatId: req.params.boatId
+    });
+
+    if (reservationCount > 0) {
+      res.json({
+        flag : false,
+        sort : "general",
+        error : "This boat is currently booked and cannot be deleted"
+      })
+    } else {
+      const result = await Boat.deleteOne({ _id: req.params.boatId });
+      if (result.deletedCount === 1) {
+       res.json({
+        flag : true,
+        data : result.deletedCount
+       }) 
+      }
+    }
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "There is unknown error, Please try again.",
+    });
+  }
+};
 exports.updateBoat = async (req, res) => {
   try {
-    let curboat = await Boat.findOne({_id : req.params.boatId})
+    let curboat = await Boat.findOne({ _id: req.params.boatId });
     curboat = Object.assign(curboat, req.body);
     await curboat.save();
     res.json({ flag: true, data: curboat });
-  } catch (error){
+  } catch (error) {
     res.json({
       flag: false,
       sort: "general",

@@ -46,10 +46,11 @@ router.post(
 );
 router.get("/getAllowes", boatController.getAllowes);
 
-//------------------ADDBOAT--------------------//
+//------------------(ADD, Update, Delete)BOAT--------------------//
 router.post("/addboat", boatController.addBoat);
-router.put("/updateboat/:boatId",boatController.updateBoat);
+router.delete("/delboat/:boatId", boatController.delBoat)
 router.get("/getbasicInfo/:id", boatController.getboatbasicInfo);
+router.put("/updateboat/:boatId",boatController.updateBoat);
 
 router.post("/addplan/:id", boatController.addPlan);
 router.post("/delplan/:id", boatController.delPlan);
