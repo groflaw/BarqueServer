@@ -76,13 +76,12 @@ router.post("/addAllowes/:id", boatController.addAllowes);
 //------------------MyBoat Setting---------------------//
 router.get("/getMyboat/:userid", boatController.getMyboat);
 router.post("/setBoatFlag/:id", boatController.setBoatFlag);
-
 //-------------------GET AllBOATS---------------------//
 router.get("/getAllboats/:userId", boatController.getAllboats);
-
+//------------------//Get Top Destinations-------------//
+router.get("/getTopdes", boatController.getTopDes);
 //-------------------GET SIMILAR---------------------//
 router.get("/getSimilar/:location/:boatId", boatController.getSimilar);
-
 //-------------------SEARCH BOAT----------------------//
 router.get("/search/:location/:userId", boatController.searchBoats)
 router.post("/search/filter/:userId", boatController.filterBoats)

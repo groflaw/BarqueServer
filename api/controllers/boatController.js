@@ -918,6 +918,43 @@ const calculateAverageReview = (reviews) => {
   const total = reviews.reduce((sum, review) => sum + review.review, 0);
   return (total / reviews.length).toFixed(2);
 };
+//----------------------GET TOp DES-------------------------//
+exports.getTopDes = async(req,res)=>{
+  try{
+    const results = await Boat.aggregate([
+      {
+          $group: {
+              _id: "$location1",
+              count: { $sum: 1 }
+          }
+      },
+      {
+          $sort: { count: -1 }
+      },
+      {
+          $limit: 6
+      },
+      {
+          $project: {
+              _id: 0,
+              location1: "$_id",
+              count: 1
+          }
+      }
+  ]);
+  res.json({
+    flag : true,
+    data : results
+  })
+  }catch(error){
+    res.json({
+      flag : false,
+      general : "general",
+      error : "There is an unknown error, please try again"
+    })
+  }
+}
+
 //-------------------GET SIMILAR---------------------//
 exports.getSimilar = async (req, res) => {
   try {
