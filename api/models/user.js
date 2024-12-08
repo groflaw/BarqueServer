@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema({
     front: { type: String },
     back: { type: String },
   },
+  bio : {type : String},
   review : {type : Number, default : 0},
   booking : {type : Number, default : 0},
   resrate : {type : Number, default : 100},
