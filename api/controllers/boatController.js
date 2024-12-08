@@ -1076,51 +1076,68 @@ exports.searchBoats = async (req, res) => {
 exports.filterBoats = async (req, res) => {
   try {
     const { size, boattype, capacity, price, any } = req.body;
-
     let boats = [];
     if (any) {
-      const queryConditions = [{ flag: true }];
+      const queryConditions = [];
+
+      if (price) {
+        queryConditions.push({
+          $or: [
+            { plans: { $elemMatch: { price: { $gte: price } } } }, // At least one plan with price >= specified price
+            { plans: { $exists: false } }, // Boats that do not have any plans
+          ],
+        });
+      }
+
+      // Add other optional criteria as OR conditions
       if (size) queryConditions.push({ size });
       if (boattype) queryConditions.push({ boattype });
       if (capacity) queryConditions.push({ capacity });
-      if (price) queryConditions.push({ price });
-      const query = { $or: queryConditions };
-      boats = await Boat.find(query)
+
+      queryConditions.push({ flag: true });
+      console.log(queryConditions);
+      boats = await Boat.find({ $or: queryConditions })
         .select(
           "model size capacity year review location1 boatImage.cover plans user"
         )
         .lean();
     } else {
-      boats = await Boat.find({
-        size,
-        boattype,
-        capacity,
+      const query = {
         flag: true,
-      })
+      };
+
+      if (size) query.size = size;
+      if (boattype) query.boattype = boattype;
+      if (capacity) query.capacity = capacity;
+      if (price) query.price = price;
+      
+      boats = await Boat.find(query)
         .select(
           "model size capacity year review location1 boatImage.cover plans user"
         )
         .lean();
+
+      if (price) {
+        boats = boats.filter((boat) => {
+          const firstPlanPrice = boat.plans?.[0]?.price || 0;
+          const lastPlanPrice = boat.plans?.[boat.plans.length - 1]?.price || 0;
+          return firstPlanPrice >= price || lastPlanPrice >= price;
+        });
+      }
     }
 
-    const result = boats
-      .filter((boat) => {
-        const firstPlanPrice = boat.plans?.[0]?.price || 0;
-        const lastPlanPrice = boat.plans?.[boat.plans.length - 1]?.price || 0;
-        return firstPlanPrice >= price || lastPlanPrice >= price;
-      })
-      .map((boat) => ({
-        _id: boat._id,
-        user: boat.user,
-        model: boat.model,
-        size: boat.size,
-        capacity: boat.capacity,
-        year: boat.year,
-        location1: boat.location1,
-        coverImage: boat.boatImage?.cover || "",
-        price: boat.plans?.[0]?.price || null,
-        review: calculateAverageReview(boat.reviews),
-      }));
+    const result = boats.map((boat) => ({
+      _id: boat._id,
+      user: boat.user,
+      model: boat.model,
+      size: boat.size,
+      capacity: boat.capacity,
+      year: boat.year,
+      location1: boat.location1,
+      coverImage: boat.boatImage?.cover || "",
+      price: boat.plans?.[0]?.price || null,
+      review: calculateAverageReview(boat.reviews),
+    }));
 
     res.json({
       flag: true,
