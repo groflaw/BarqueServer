@@ -583,22 +583,22 @@ exports.addBoat = async (req, res) => {
 exports.delBoat = async (req, res) => {
   try {
     const reservationCount = await Reservation.countDocuments({
-      boatId: req.params.boatId
+      boatId: req.params.boatId,
     });
 
     if (reservationCount > 0) {
       res.json({
-        flag : false,
-        sort : "general",
-        error : "This boat is currently booked and cannot be deleted"
-      })
+        flag: false,
+        sort: "general",
+        error: "This boat is currently booked and cannot be deleted",
+      });
     } else {
       const result = await Boat.deleteOne({ _id: req.params.boatId });
       if (result.deletedCount === 1) {
-       res.json({
-        flag : true,
-        data : result.deletedCount
-       }) 
+        res.json({
+          flag: true,
+          data: result.deletedCount,
+        });
       }
     }
   } catch (error) {
@@ -652,9 +652,7 @@ exports.addPlan = async (req, res) => {
   try {
     const boat = await Boat.findOne({ _id: req.params.id });
 
-    const existingPlanIndex = boat.plans.findIndex(
-      (plan) => plan._id == _id
-    );
+    const existingPlanIndex = boat.plans.findIndex((plan) => plan._id == _id);
 
     if (existingPlanIndex !== -1) {
       boat.plans[existingPlanIndex] = {
@@ -918,43 +916,63 @@ const calculateAverageReview = (reviews) => {
   const total = reviews.reduce((sum, review) => sum + review.review, 0);
   return (total / reviews.length).toFixed(2);
 };
-//----------------------GET TOp DES-------------------------//
-exports.getTopDes = async(req,res)=>{
-  try{
+//----------------------GET Top Destinations-------------------------//
+exports.getTopDes = async (req, res) => {
+  try {
     const results = await Boat.aggregate([
       {
-          $group: {
-              _id: "$location1",
-              count: { $sum: 1 }
-          }
+        $group: {
+          _id: "$location1",
+          count: { $sum: 1 },
+        },
       },
       {
-          $sort: { count: -1 }
+        $sort: { count: -1 },
       },
       {
-          $limit: 4
+        $limit: 4,
       },
       {
-          $project: {
-              _id: 0,
-              location1: "$_id",
-              count: 1
-          }
-      }
-  ]);
-  res.json({
-    flag : true,
-    data : results
-  })
-  }catch(error){
+        $project: {
+          _id: 0,
+          location1: "$_id",
+          count: 1,
+        },
+      },
+    ]);
     res.json({
-      flag : false,
-      general : "general",
-      error : "There is an unknown error, please try again"
-    })
+      flag: true,
+      data: results,
+    });
+  } catch (error) {
+    res.json({
+      flag: false,
+      general: "general",
+      error: "There is an unknown error, please try again",
+    });
   }
-}
+};
+//----------------------GET NEW Boats-------------------//
+exports.getNewBoats = async (req, res) => {
+  try {
+    const results = await Boat.find({})
+      .select("model boatImage.cover")
+      .select()
+      .sort({ year: -1 })
+      .limit(6);
 
+    res.json({
+      flag: true,
+      data: results,
+    });
+  } catch (error) {
+    res.json({
+      flag: true,
+      general: "general",
+      error: "There is an unknown error, please try again",
+    });
+  }
+};
 //-------------------GET SIMILAR---------------------//
 exports.getSimilar = async (req, res) => {
   try {
