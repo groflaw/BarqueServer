@@ -106,6 +106,7 @@ exports.changeProfile = async (req, res) => {
     user.address = req.body.address;
     user.country = req.body.country;
     user.city = req.body.city;
+    user.bio = req.body.bio
     await user.save();
     res.json({ flag: true, data: user });
   } catch (error) {
