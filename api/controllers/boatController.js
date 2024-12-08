@@ -988,7 +988,7 @@ exports.getTopDes = async (req, res) => {
 exports.getNewBoats = async (req, res) => {
   try {
     const results = await Boat.find({ flag: true })
-      .select("model boatImage.cover")
+      .select("model boatImage.cover user")
       .select()
       .sort({ year: -1 })
       .limit(6);
@@ -1076,12 +1076,14 @@ exports.searchBoats = async (req, res) => {
 exports.filterBoats = async (req, res) => {
   try {
     const { size, boattype, capacity, price } = req.body;
+    
 
     const boats = await Boat.find({
       size,
       boattype,
       capacity,
       flag: true,
+      user: { $ne: userId },
     })
       .select(
         "model size capacity year review location1 boatImage.cover plans user"
