@@ -1077,55 +1077,43 @@ exports.filterBoats = async (req, res) => {
   try {
     const { size, boattype, capacity, price, any } = req.body;
     let boats = [];
+    const baseQuery = { flag: true };
+
     if (any) {
       const queryConditions = [];
-
-      if (price) {
-        queryConditions.push({
-          $or: [
-            { plans: { $elemMatch: { price: { $gte: price } } } }, // At least one plan with price >= specified price
-            { plans: { $exists: false } }, // Boats that do not have any plans
-          ],
-        });
-      }
-
-      // Add other optional criteria as OR conditions
       if (size) queryConditions.push({ size });
       if (boattype) queryConditions.push({ boattype });
       if (capacity) queryConditions.push({ capacity });
-
-      queryConditions.push({ flag: true });
-      console.log(queryConditions);
-      boats = await Boat.find({ $or: queryConditions })
+      if (price) {
+        queryConditions.push({
+          $or: [
+            { plans: { $elemMatch: { price: { $gte: price } } } },
+            { plans: { $exists: false } },
+          ],
+        });
+      }
+      boats = await Boat.find({ $and: [baseQuery, { $or: queryConditions }] })
         .select(
           "model size capacity year review location1 boatImage.cover plans user"
         )
         .lean();
     } else {
-      const query = {
-        flag: true,
-      };
-
-      if (size) query.size = size;
-      if (boattype) query.boattype = boattype;
-      if (capacity) query.capacity = capacity;
-      if (price) query.price = price;
-      
-      boats = await Boat.find(query)
+      if (size) baseQuery.size = size;
+      if (boattype) baseQuery.boattype = boattype;
+      if (capacity) baseQuery.capacity = capacity;
+      boats = await Boat.find(baseQuery)
         .select(
           "model size capacity year review location1 boatImage.cover plans user"
         )
         .lean();
-
       if (price) {
         boats = boats.filter((boat) => {
           const firstPlanPrice = boat.plans?.[0]?.price || 0;
           const lastPlanPrice = boat.plans?.[boat.plans.length - 1]?.price || 0;
-          return firstPlanPrice >= price || lastPlanPrice >= price;
+          return firstPlanPrice >= price || lastPlanPrice >= price; // Check using provided logic
         });
       }
     }
-
     const result = boats.map((boat) => ({
       _id: boat._id,
       user: boat.user,
@@ -1135,7 +1123,7 @@ exports.filterBoats = async (req, res) => {
       year: boat.year,
       location1: boat.location1,
       coverImage: boat.boatImage?.cover || "",
-      price: boat.plans?.[0]?.price || null,
+      price: boat.plans?.[0]?.price || null, 
       review: calculateAverageReview(boat.reviews),
     }));
 
