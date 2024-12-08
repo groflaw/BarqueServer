@@ -77,7 +77,8 @@ router.post("/addAllowes/:id", boatController.addAllowes);
 router.get("/getMyboat/:userid", boatController.getMyboat);
 router.post("/setBoatFlag/:id", boatController.setBoatFlag);
 //-------------------GET AllBOATS---------------------//
-router.get("/getAllboats/:userId", boatController.getAllboats);
+router.get("/getAllboats", boatController.getAllboats);
+router.get("/getAllboatsCity/:location1", boatController.getAllboatsCity);
 //------------------//Get Mainpage Data(TopDestinations, Newboats)-------------//
 router.get("/getTopdes", boatController.getTopDes);
 router.get("/getNewboats", boatController.getNewBoats);

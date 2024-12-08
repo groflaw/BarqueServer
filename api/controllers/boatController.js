@@ -875,17 +875,13 @@ exports.setBoatFlag = async (req, res) => {
 
 exports.getAllboats = async (req, res) => {
   try {
-    const userId = req.params.userId === "0" ? null : req.params.userId;
-
     const boats = await Boat.find({
       flag: true,
-      user: { $ne: userId },
     })
       .select(
         "model size capacity year review location1 boatImage.cover plans user"
       )
       .lean();
-
     const result = boats.map((boat) => ({
       _id: boat._id,
       user: boat.user,
@@ -915,6 +911,42 @@ const calculateAverageReview = (reviews) => {
   if (!reviews || reviews.length === 0) return 0;
   const total = reviews.reduce((sum, review) => sum + review.review, 0);
   return (total / reviews.length).toFixed(2);
+};
+//--------------------GET BOATS FROM LOCATION--------------------------//
+exports.getAllboatsCity = async (req, res) => {
+  try {
+    const boats = await Boat.find({
+      flag: true,
+      location1: req.params.location1,
+    })
+      .select(
+        "model size capacity year review location1 boatImage.cover plans user"
+      )
+      .lean();
+    const result = boats.map((boat) => ({
+      _id: boat._id,
+      user: boat.user,
+      model: boat.model,
+      size: boat.size,
+      capacity: boat.capacity,
+      year: boat.year,
+      location1: boat.location1,
+      coverImage: boat.boatImage?.cover || "",
+      price: boat.plans?.[0]?.price || null,
+      review: calculateAverageReview(boat.reviews),
+    }));
+    res.json({
+      flag: true,
+      data: result,
+    });
+  } catch (error) {
+    console.log("Error fetching boats:", error);
+    res.json({
+      flag: false,
+      general: "general",
+      error: "There is an unknown error, please try again.",
+    });
+  }
 };
 //----------------------GET Top Destinations-------------------------//
 exports.getTopDes = async (req, res) => {
@@ -955,7 +987,7 @@ exports.getTopDes = async (req, res) => {
 //----------------------GET NEW Boats-------------------//
 exports.getNewBoats = async (req, res) => {
   try {
-    const results = await Boat.find({})
+    const results = await Boat.find({ flag: true })
       .select("model boatImage.cover")
       .select()
       .sort({ year: -1 })
