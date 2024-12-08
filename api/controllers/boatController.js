@@ -1075,20 +1075,33 @@ exports.searchBoats = async (req, res) => {
 //--------------------FILTER BOAT------------------//
 exports.filterBoats = async (req, res) => {
   try {
-    const { size, boattype, capacity, price } = req.body;
-    
+    const { size, boattype, capacity, price, any } = req.body;
 
-    const boats = await Boat.find({
-      size,
-      boattype,
-      capacity,
-      flag: true,
-      user: { $ne: userId },
-    })
-      .select(
-        "model size capacity year review location1 boatImage.cover plans user"
-      )
-      .lean();
+    let boats = [];
+    if (any) {
+      const queryConditions = [{ flag: true }];
+      if (size) queryConditions.push({ size });
+      if (boattype) queryConditions.push({ boattype });
+      if (capacity) queryConditions.push({ capacity });
+      if (price) queryConditions.push({ price });
+      const query = { $or: queryConditions };
+      boats = await Boat.find(query)
+        .select(
+          "model size capacity year review location1 boatImage.cover plans user"
+        )
+        .lean();
+    } else {
+      boats = await Boat.find({
+        size,
+        boattype,
+        capacity,
+        flag: true,
+      })
+        .select(
+          "model size capacity year review location1 boatImage.cover plans user"
+        )
+        .lean();
+    }
 
     const result = boats
       .filter((boat) => {
