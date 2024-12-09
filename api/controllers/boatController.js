@@ -838,7 +838,7 @@ exports.addAllowes = async (req, res) => {
 exports.getMyboat = async (req, res) => {
   try {
     const boats = await Boat.find({ user: req.params.userid }).select(
-      "location2.boatname boattype location1 flag"
+      "location2.boatname boattype location1 flag boatImage"
     );
     res.json({
       flag: true,
