@@ -4,7 +4,7 @@ const Users = require("../models/user");
 exports.getallboattype = async (req, res) => {
   try {
     const boats = await Boat.find({})
-    .select("location2 user location1 status date")
+    .select("location2 user location1 status date model")
     .populate("user","_id firstName lastName")
     res.json({
         flag: true,
