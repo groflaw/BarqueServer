@@ -55,7 +55,7 @@ const userSchema = new mongoose.Schema({
       date : {type : Date},
     }
   ]},
-  status : {type : Boolean,default : false}, // 0: at the first , 1:boat approve , 2: request pending
+  status : {type : Number, default : 0}, // 0: at the first , 1:boat approve , 2: request pending
   date : {type : Date,}
 });
 
