@@ -54,7 +54,9 @@ const userSchema = new mongoose.Schema({
       review : {type : Number},
       date : {type : Date},
     }
-  ]}
+  ]},
+  status : {type : Boolean,default : false}, // 0: at the first , 1:boat approve , 2: request pending
+  date : {type : Date,}
 });
 
 module.exports = mongoose.model("boat", userSchema);
