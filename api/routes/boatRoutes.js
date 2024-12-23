@@ -46,6 +46,9 @@ router.post(
 );
 router.get("/getAllowes", boatController.getAllowes);
 
+router.post("/setPayment", boatController.setPayment);
+router.get("/getAllBasicData", boatController.getAllBasicData);
+
 //------------------(ADD, Update, Delete)BOAT--------------------//
 router.post("/addboat", boatController.addBoat);
 router.delete("/delboat/:boatId", boatController.delBoat);

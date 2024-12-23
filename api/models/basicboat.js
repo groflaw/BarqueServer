@@ -36,6 +36,36 @@ const basicboatSchema = new mongoose.Schema({
       },
     ],
   },
+  servicefee: {
+    type: Number,
+    default: 10,
+  },
+  payment: {
+    Zelle: {
+      name: { type: String },
+      email: { type: String },
+    },
+    Binance: {
+      name: { type: String },
+      email: { type: String },
+      ID: { type: String },
+    },
+    PayPal: {
+      name: { type: String },
+      email: { type: String },
+    },
+    Bank: {
+      bank: { type: String },
+      name: { type: String },
+      email: { type: String },
+      accoountN: { type: String },
+      aba: { type: String },
+      address: {
+        type: String,
+      },
+      switf: { type: String },
+    },
+  },
 });
 
 module.exports = mongoose.model("basicboat", basicboatSchema);

@@ -75,18 +75,18 @@ exports.getallboatbrand = async (req, res) => {
 };
 exports.addboatbrand = async (req, res) => {
   try {
-    const boatBrand = req.body.name;
+    const id = req.body.id;
+    const newName = req.body.name;
+    console.log(id, newName);
     let basicset = await BasicBoat.findOne({});
-    if (basicset) {
-      if (!basicset.brands.some((type) => type.name === boatBrand)) {
-        basicset.brands.push({
-          _id: basicset.brands.length + 1,
-          name: boatBrand,
-        });
-
-        await basicset.save();
+    if (basicset && basicset.brands) {
+      const brandIndex = basicset.brands.findIndex((brand) => brand._id == id);
+      if (brandIndex !== -1) {
+        basicset.brands[brandIndex].name = newName;
+      } else {
+        basicset.brands.push({ _id: basicset.brands.length, name: newName });
       }
-
+      await basicset.save();
       return res.json({ flag: true, data: basicset.brands });
     } else {
       basicset = new BasicBoat();
@@ -566,6 +566,46 @@ exports.getAllowes = async (req, res) => {
   }
 };
 
+exports.setPayment = async (req, res) => {
+  try {
+    let basicset = await BasicBoat.findOne({});
+    if (basicset) {
+      basicset.payment = req.body.payment;
+      await basicset.save();
+      res.json({ flag: true, data: basicset.payment });
+    } else {
+      basicset = new BasicBoat();
+      basicset.payment = req.body.payment;
+      await basicset.save();
+      res.json({ flag: true, data: basicset.payment });
+    }
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could not set capacity",
+    });
+  }
+};
+
+exports.getAllBasicData = async (req, res) => {
+  try {
+    let basicset = await BasicBoat.findOne({});
+    if (basicset) {
+      res.json({ flag: true, data: basicset });
+    } else {
+      basicset = new BasicBoat();
+      await basicset.save();
+      res.json({ flag: true, data: basicset });
+    }
+  } catch (eror) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could not set capacity",
+    });
+  }
+};
 // -----------------(ADD, Update, Delete)BOAT---------------------//
 exports.addBoat = async (req, res) => {
   try {
