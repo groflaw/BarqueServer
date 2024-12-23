@@ -21,10 +21,12 @@ const userSchema = new mongoose.Schema({
     front: { type: String },
     back: { type: String },
   },
-  bio : {type : String, default : ''},
-  review : {type : Number, default : 0},
-  booking : {type : Number, default : 0},
-  resrate : {type : Number, default : 100},
+  bio: { type: String, default: "" },
+  review: { type: Number, default: 0 },
+  booking: { type: Number, default: 0 },
+  resrate: { type: Number, default: 100 },
+  date: { type: Date, default: Date.now },
+  block: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model("User", userSchema);

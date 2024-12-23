@@ -9,6 +9,8 @@ const boatRoutes = require("./routes/boatRoutes");
 const reservationRoutes = require("./routes/reservation");
 
 const AdminBoatRoutes = require("./routes/adminboatRoutes");
+const AdminUserRoutes = require("./routes/adminuserRoutes");
+const AdminBookingRoutes = require("./routes/adminbookingRoutes");
 const app = express();
 
 app.use(cors());
@@ -27,7 +29,9 @@ app.use("/api/users", userRoutes);
 app.use("/api/boats", boatRoutes);
 app.use("/api/reservation", reservationRoutes);
 
-app.use("/api/admin/boats",AdminBoatRoutes);
+app.use("/api/admin/boats", AdminBoatRoutes);
+app.use("/api/admin/users", AdminUserRoutes);
+app.use("/api/admin/booking", AdminBookingRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;

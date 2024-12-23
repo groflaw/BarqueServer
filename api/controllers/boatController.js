@@ -625,7 +625,10 @@ exports.updateBoat = async (req, res) => {
 };
 exports.getboatbasicInfo = async (req, res) => {
   try {
-    const boat = await Boat.findOne({ _id: req.params.id });
+    const boat = await Boat.findOne({ _id: req.params.id }).populate({
+      path: "reviews.customer",
+      select: "firstName lastName avatar", // Adjust fields as needed
+    });
     if (boat) {
       res.json({
         flag: true,
@@ -877,7 +880,8 @@ exports.getAllboats = async (req, res) => {
   try {
     const boats = await Boat.find({
       flag: true,
-      status : true
+      "status.navigation": 1,
+      "status.authorization": 1,
     })
       .select(
         "model size capacity year review location1 boatImage.cover plans user"
@@ -1124,7 +1128,7 @@ exports.filterBoats = async (req, res) => {
       year: boat.year,
       location1: boat.location1,
       coverImage: boat.boatImage?.cover || "",
-      price: boat.plans?.[0]?.price || null, 
+      price: boat.plans?.[0]?.price || null,
       review: calculateAverageReview(boat.reviews),
     }));
 

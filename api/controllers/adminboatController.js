@@ -75,3 +75,23 @@ exports.filterBoats = async (req, res) => {
     });
   }
 };
+
+exports.setBoatStatus = async (req, res) => {
+  try {
+    const { sort, result } = req.body;
+    const boat = await Boat.findOne({ _id: req.params.boatId });
+    boat.status[sort] = result;
+    await boat.save();
+    res.json({
+      flag: true,
+      data: boat,
+    });
+  } catch (error) {
+    console.error("Error fetching boats:", error);
+    res.status(500).json({
+      flag: false,
+      general: "general",
+      error: "There is an unknown error, please try again.",
+    });
+  }
+};

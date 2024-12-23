@@ -50,12 +50,15 @@ const userSchema = new mongoose.Schema({
   status : {type : Boolean, default : true}, // true : can , false : can't reservation
   reviews:{type : [
     {
-      customer : {type: String },
+      customer :  { type: mongoose.Schema.ObjectId, ref: "User" },
       review : {type : Number},
       date : {type : Date},
     }
   ]},
-  status : {type : Number, default : 0}, // 0: at the first , 1:boat approve , 2: request pending
+  status : {
+    navigation : {type : Number, default : 0},
+    authorization : {type : Number, default : 0}
+  }, // 0: at the first , 1:boat approve , 2: request pending
   date : {type : Date,}
 });
 
