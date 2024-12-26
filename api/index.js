@@ -22,7 +22,7 @@ connectDB();
 
 // Define your routes here (example)
 app.get("/", (req, res) => {
-  res.send("API is running...");
+  res.send("Barqe Server API is running...");
 });
 
 app.use("/users", userRoutes);
