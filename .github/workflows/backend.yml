@@ -1,0 +1,37 @@
+name: CI/CD for Backend
+
+on:
+  push:
+    branches:
+      - main  # or your chosen branch
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'  # Use the version matching your project
+
+      - name: Install dependencies
+        run: |
+          cd /home/BarqueServer  # Change to your backend directory
+          npm install
+
+      - name: Deploy to Server
+        env:
+          HOST: ${{ secrets.HOST }}            # Reference to GitHub secret for HOST
+          USER: ${{ secrets.USER }}            # Reference to GitHub secret for USER
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}  # Reference to GitHub secret for PRIVATE_KEY
+        run: |
+          eval "$(ssh-agent -s)"
+          echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add -
+          ssh -o StrictHostKeyChecking=no $USER@$HOST "pm2 restart your-backend-app && echo 'Backend restarted successfully'"
