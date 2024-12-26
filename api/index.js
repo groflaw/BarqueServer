@@ -25,13 +25,13 @@ app.get("/", (req, res) => {
   res.send("API is running...");
 });
 
-app.use("/users", userRoutes);
-app.use("/boats", boatRoutes);
-app.use("/reservation", reservationRoutes);
+app.use("users", userRoutes);
+app.use("boats", boatRoutes);
+app.use("reservation", reservationRoutes);
 
-app.use("/admin/boats", AdminBoatRoutes);
-app.use("/admin/users", AdminUserRoutes);
-app.use("/admin/booking", AdminBookingRoutes);
+app.use("admin/boats", AdminBoatRoutes);
+app.use("admin/users", AdminUserRoutes);
+app.use("admin/booking", AdminBookingRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
