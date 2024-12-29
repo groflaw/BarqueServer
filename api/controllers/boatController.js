@@ -12,6 +12,40 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 // -----------------BOATBASIC---------------------//
+exports.getfee = async (req, res) => {
+  try {
+    const basicset = await BasicBoat.findOne({});
+    res.json({
+      flag: true,
+      data: basicset.servicefee,
+    });
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      eror: "Could not get service fee",
+    });
+  }
+};
+exports.setfee = async (req, res) => {
+  try {
+    const fee = req.body.fee;
+    const basicset = await BasicBoat.findOne({});
+    basicset.servicefee = fee;
+    await basicset.save();
+    res.json({
+      flag: true,
+      data: basicset.servicefee,
+    });
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could not get service fee",
+    });
+  }
+};
+
 exports.getallboattype = async (req, res) => {
   try {
     const basicset = await BasicBoat.findOne({});
@@ -29,31 +63,55 @@ exports.getallboattype = async (req, res) => {
 };
 exports.addboattype = async (req, res) => {
   try {
-    const boatType = req.body.name;
+    const id = req.body.id;
+    const newName = req.body.name;
     let basicset = await BasicBoat.findOne({});
-    if (basicset) {
-      if (!basicset.types.some((type) => type.name === boatType)) {
-        basicset.types.push({
-          _id: basicset.types.length + 1,
-          name: boatType,
-        });
-
-        await basicset.save();
+    if (basicset && basicset.types) {
+      const typeIndex = basicset.types.findIndex((item) => item._id == id);
+      if (typeIndex !== -1) {
+        basicset.types[typeIndex].name = newName;
+      } else {
+        basicset.types.push({ _id: id, name: newName });
       }
-
+      await basicset.save();
       return res.json({ flag: true, data: basicset.types });
     } else {
       basicset = new BasicBoat();
-      basicset.types.push({ _id: 1, name: boatType });
+      basicset.types.push({ _id: 1, name: newName });
 
       await basicset.save();
       return res.json({ flag: true, data: basicset.types });
     }
   } catch (error) {
+    console.log(error);
     return res.json({
       flag: false,
       sort: "general",
       error: "Could not add boat type",
+    });
+  }
+};
+exports.deletetype = async (req, res) => {
+  const { typeId } = req.params;
+  try {
+    let types = await Boat.find({ boatbrand: typeId });
+    if (types.length > 0)
+      return res.json({
+        flag: false,
+        sort: "general",
+        error: "There is aboat using this brand",
+      });
+    let basicset = await BasicBoat.findOne({});
+    if (basicset && basicset.types) {
+      basicset.types = basicset.types.filter((item) => item._id != typeId);
+      await basicset.save();
+      return res.json({ flag: true, data: basicset.types });
+    }
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "There is unknown error,Please try again",
     });
   }
 };
@@ -77,7 +135,6 @@ exports.addboatbrand = async (req, res) => {
   try {
     const id = req.body.id;
     const newName = req.body.name;
-    console.log(id, newName);
     let basicset = await BasicBoat.findOne({});
     if (basicset && basicset.brands) {
       const brandIndex = basicset.brands.findIndex((brand) => brand._id == id);
@@ -100,6 +157,30 @@ exports.addboatbrand = async (req, res) => {
       flag: false,
       sort: "general",
       error: "Could not add boat brand",
+    });
+  }
+};
+exports.deletebrand = async (req, res) => {
+  const { brandId } = req.params;
+  try {
+    let boats = await Boat.find({ boatbrand: brandId });
+    if (boats.length > 0)
+      return res.json({
+        flag: false,
+        sort: "general",
+        error: "There is a boat using this brand",
+      });
+    let basicset = await BasicBoat.findOne({});
+    if (basicset && basicset.brands) {
+      basicset.brands = basicset.brands.filter((brand) => brand._id != brandId);
+      await basicset.save();
+      return res.json({ flag: true, data: basicset.brands });
+    }
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "There is unknown error,Pleae try again",
     });
   }
 };
@@ -504,6 +585,34 @@ exports.getAccessories = async (req, res) => {
     });
   }
 };
+exports.deleteAccessories = async (req, res) => {
+  const { accessId } = req.params;
+  try {
+    const boats = await Boat.find({
+      accessories: { $in: [accessId] },
+    });
+    if (boats.length > 0)
+      return res.json({
+        flag: false,
+        sort: "general",
+        error: "There is a boat using this brand",
+      });
+    let basicset = await BasicBoat.findOne({});
+    if (basicset && basicset.accessories) {
+      basicset.accessories = basicset.accessories.filter(
+        (access) => access._id != accessId
+      );
+      await basicset.save();
+      return res.json({ flag: true, data: basicset.accessories });
+    }
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "There is unknown error,Pleae try again",
+    });
+  }
+};
 
 exports.setAllowes = async (req, res) => {
   const title = req.params.title;
@@ -565,6 +674,34 @@ exports.getAllowes = async (req, res) => {
     });
   }
 };
+exports.deleteAllow = async (req, res) => {
+  const { allowId } = req.params;
+  try {
+    const boats = await Boat.find({
+      allowes: { $in: [allowId] },
+    });
+    if (boats.length > 0)
+      return res.json({
+        flag: false,
+        sort: "general",
+        error: "There is a boat using this brand",
+      });
+    let basicset = await BasicBoat.findOne({});
+    if (basicset && basicset.allowes) {
+      basicset.allowes = basicset.allowes.filter(
+        (allow) => allow._id != allowId
+      );
+      await basicset.save();
+      return res.json({ flag: true, data: basicset.allowes });
+    }
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "There is unknown error,Pleae try again",
+    });
+  }
+};
 
 exports.setPayment = async (req, res) => {
   try {
@@ -583,29 +720,23 @@ exports.setPayment = async (req, res) => {
     res.json({
       flag: false,
       sort: "general",
-      error: "Could not set capacity",
+      error: "Could not set Payment",
+    });
+  }
+};
+exports.getPayment = async (req, res) => {
+  try {
+    let basicset = await BasicBoat.findOne({});
+    res.json({ flag: true, data: basicset.payment });
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could not get Payment",
     });
   }
 };
 
-exports.getAllBasicData = async (req, res) => {
-  try {
-    let basicset = await BasicBoat.findOne({});
-    if (basicset) {
-      res.json({ flag: true, data: basicset });
-    } else {
-      basicset = new BasicBoat();
-      await basicset.save();
-      res.json({ flag: true, data: basicset });
-    }
-  } catch (eror) {
-    res.json({
-      flag: false,
-      sort: "general",
-      error: "Could not set capacity",
-    });
-  }
-};
 // -----------------(ADD, Update, Delete)BOAT---------------------//
 exports.addBoat = async (req, res) => {
   try {
@@ -723,7 +854,7 @@ exports.addPlan = async (req, res) => {
   } catch (error) {
     res.json({
       flag: false,
-      general: "general",
+      sort: "general",
       error: "There is unknown error,Pleae try again",
     });
   }
@@ -738,7 +869,7 @@ exports.delPlan = async (req, res) => {
   } catch (error) {
     res.json({
       flag: false,
-      general: "general",
+      sort: "general",
       error: "There is unknown error,Pleae try again",
     });
   }
@@ -753,7 +884,7 @@ exports.addLocation = async (req, res) => {
   } catch (error) {
     res.json({
       flag: false,
-      general: "general",
+      sort: "general",
       error: "There is unknown error, Please try again",
     });
   }
@@ -839,7 +970,7 @@ exports.addCancellation = async (req, res) => {
   } catch (error) {
     res.json({
       flag: false,
-      general: "general",
+      sort: "general",
       error: "There is unknown error, Please try again",
     });
   }
@@ -855,7 +986,7 @@ exports.addAccessories = async (req, res) => {
   } catch (error) {
     res.json({
       flag: false,
-      general: "general",
+      sort: "general",
       error: "There is unknown error, Please try again",
     });
   }
@@ -871,7 +1002,7 @@ exports.addAllowes = async (req, res) => {
   } catch (error) {
     res.json({
       flag: false,
-      general: "general",
+      sort: "general",
       error: "There is unknown error, Please try again",
     });
   }
@@ -891,7 +1022,7 @@ exports.getMyboat = async (req, res) => {
     console.error("Error fetching boats:", error);
     res.status(500).json({
       flag: false,
-      general: "general",
+      sort: "general",
       error: "There is an unknown error, please try again.",
     });
   }
@@ -908,7 +1039,7 @@ exports.setBoatFlag = async (req, res) => {
     console.error("Error fetching boats:", error);
     res.status(500).json({
       flag: false,
-      general: "general",
+      sort: "general",
       error: "There is an unknown error, please try again.",
     });
   }
@@ -947,7 +1078,7 @@ exports.getAllboats = async (req, res) => {
     console.error("Error fetching boats:", error);
     res.status(500).json({
       flag: false,
-      general: "general",
+      sort: "general",
       error: "There is an unknown error, please try again.",
     });
   }
@@ -988,7 +1119,7 @@ exports.getAllboatsCity = async (req, res) => {
     console.log("Error fetching boats:", error);
     res.json({
       flag: false,
-      general: "general",
+      sort: "general",
       error: "There is an unknown error, please try again.",
     });
   }
@@ -1024,7 +1155,7 @@ exports.getTopDes = async (req, res) => {
   } catch (error) {
     res.json({
       flag: false,
-      general: "general",
+      sort: "general",
       error: "There is an unknown error, please try again",
     });
   }
@@ -1045,7 +1176,7 @@ exports.getNewBoats = async (req, res) => {
   } catch (error) {
     res.json({
       flag: true,
-      general: "general",
+      sort: "general",
       error: "There is an unknown error, please try again",
     });
   }
@@ -1074,7 +1205,7 @@ exports.getSimilar = async (req, res) => {
     console.error("Error fetching boats:", error);
     res.status(500).json({
       flag: false,
-      general: "general",
+      sort: "general",
       error: "There is an unknown error, please try again.",
     });
   }
@@ -1112,7 +1243,7 @@ exports.searchBoats = async (req, res) => {
     console.error("Error fetching boats:", error);
     res.status(500).json({
       flag: false,
-      general: "general",
+      sort: "general",
       error: "There is an unknown error, please try again.",
     });
   }
@@ -1180,7 +1311,7 @@ exports.filterBoats = async (req, res) => {
     console.error("Error fetching boats:", error);
     res.status(500).json({
       flag: false,
-      general: "general",
+      sort: "general",
       error: "There is an unknown error, please try again.",
     });
   }
@@ -1209,7 +1340,7 @@ exports.getHostBoats = async (req, res) => {
     console.error("Error fetching boats:", error);
     res.status(500).json({
       flag: false,
-      general: "general",
+      sort: "general",
       error: "There is an unknown error, please try again.",
     });
   }
@@ -1227,7 +1358,7 @@ exports.getUserBookings = async (req, res) => {
     console.error("Error fetching boats:", error);
     res.status(500).json({
       flag: false,
-      general: "general",
+      sort: "general",
       error: "There is an unknown error, please try again.",
     });
   }

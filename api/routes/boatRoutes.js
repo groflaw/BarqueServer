@@ -5,11 +5,16 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 const boatController = require("../controllers/boatController");
 
-router.post("/addboattype", boatController.addboattype);
+router.get("/getfee", boatController.getfee);
+router.post("/setfee", boatController.setfee);
+
 router.get("/getallboattype", boatController.getallboattype);
+router.post("/addboattype", boatController.addboattype);
+router.get("/deletetype/:typeId", boatController.deletetype);
 
 router.get("/getallboatbrand", boatController.getallboatbrand);
 router.post("/addboatbrand", boatController.addboatbrand);
+router.get("/deletebrand/:brandId", boatController.deletebrand);
 
 router.get("/getallboatpower", boatController.getallboatpower);
 router.post("/addboatpower", boatController.addboatpower);
@@ -38,6 +43,7 @@ router.post(
   boatController.setAccessories
 );
 router.get("/getAccessories", boatController.getAccessories);
+router.get("/deleteAccessories/:accessId", boatController.deleteAccessories);
 
 router.post(
   "/setAllowes/:title",
@@ -45,9 +51,10 @@ router.post(
   boatController.setAllowes
 );
 router.get("/getAllowes", boatController.getAllowes);
+router.get("/deleteallow/:allowId", boatController.deleteAllow);
 
 router.post("/setPayment", boatController.setPayment);
-router.get("/getAllBasicData", boatController.getAllBasicData);
+router.get("/getPayment", boatController.getPayment);
 
 //------------------(ADD, Update, Delete)BOAT--------------------//
 router.post("/addboat", boatController.addBoat);

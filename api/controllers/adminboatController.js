@@ -14,7 +14,7 @@ exports.getallboattype = async (req, res) => {
     console.error("Error fetching boats:", error);
     res.status(500).json({
       flag: false,
-      general: "general",
+      sort: "general",
       error: "There is an unknown error, please try again.",
     });
   }
@@ -70,7 +70,7 @@ exports.filterBoats = async (req, res) => {
     console.error("Error fetching boats:", error);
     res.status(500).json({
       flag: false,
-      general: "general",
+      sort: "general",
       error: "There is an unknown error, please try again.",
     });
   }
@@ -90,7 +90,7 @@ exports.setBoatStatus = async (req, res) => {
     console.error("Error fetching boats:", error);
     res.status(500).json({
       flag: false,
-      general: "general",
+      sort: "general",
       error: "There is an unknown error, please try again.",
     });
   }

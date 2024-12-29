@@ -42,19 +42,23 @@ const basicboatSchema = new mongoose.Schema({
   },
   payment: {
     Zelle: {
+      status : {type : Boolean, default : false},
       name: { type: String },
       email: { type: String },
     },
     Binance: {
+      status : {type : Boolean, default : false},
       name: { type: String },
       email: { type: String },
       ID: { type: String },
     },
     PayPal: {
+      status : {type : Boolean, default : false},
       name: { type: String },
       email: { type: String },
     },
     Bank: {
+      status : {type : Boolean, default : false},
       bank: { type: String },
       name: { type: String },
       email: { type: String },

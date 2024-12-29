@@ -6,3 +6,5 @@ const AdminBookingController = require("../controllers/adminbookingController");
 router.get("/getAllBooking", AdminBookingController.getAllBooking);
 
 module.exports = router;
+
+
