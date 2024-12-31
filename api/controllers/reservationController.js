@@ -17,8 +17,14 @@ exports.saveReservation = async (req, res) => {
 exports.getReservations = async (req, res) => {
   try {
     const reservations = await Reservation.find({ userId: req.params.userId })
-      .populate("hostId", "_id firstName lastName avatar phoneNumber review booking")
-      .populate("boatId", "_id model description boatImage.cover location2 boattype capacity location1 plans cancellation");
+      .populate(
+        "hostId",
+        "_id firstName lastName avatar phoneNumber review booking"
+      )
+      .populate(
+        "boatId",
+        "_id model description boatImage.cover location2 boattype capacity location1 plans cancellation"
+      );
     res.json({ flag: true, data: reservations });
   } catch (error) {
     res.json({
@@ -32,8 +38,14 @@ exports.getReservations = async (req, res) => {
 exports.getBookings = async (req, res) => {
   try {
     const bookings = await Reservation.find({ hostId: req.params.hostId })
-      .populate("userId", "_id firstName lastName avatar phoneNumber review booking")
-      .populate("boatId", "_id model description boatImage.cover location2 boattype capacity location1 plans cancellation");
+      .populate(
+        "userId",
+        "_id firstName lastName avatar phoneNumber review booking"
+      )
+      .populate(
+        "boatId",
+        "_id model description boatImage.cover location2 boattype capacity location1 plans cancellation"
+      );
     res.json({ flag: true, data: bookings });
   } catch (error) {
     res.json({
@@ -44,46 +56,65 @@ exports.getBookings = async (req, res) => {
   }
 };
 
-exports.getHostNews = async(req,res)=>{
-  try{
-    const news = await Reservation.find({status : 0, hostId : req.params.hostId})
-    res.json({flag : true, data : news.length > 0 ? true : false})
-  }catch (error) {
+exports.getHostNews = async (req, res) => {
+  try {
+    const news = await Reservation.find({
+      status: 0,
+      hostId: req.params.hostId,
+    });
+    res.json({ flag: true, data: news.length > 0 ? true : false });
+  } catch (error) {
     res.json({
       flag: false,
       sort: "general",
       error: "Could not get bookings",
     });
   }
-}
+};
 
-exports.getUserNews = async(req,res)=>{
-  try{
-    const news = await Reservation.find({status : 2, userId : req.params.userId})
-    res.json({flag : true, data : news.length > 0 ? true : false})
-  }catch (error) {
+exports.getUserNews = async (req, res) => {
+  try {
+    const news = await Reservation.find({
+      status: 2,
+      userId: req.params.userId,
+    });
+    res.json({ flag: true, data: news.length > 0 ? true : false });
+  } catch (error) {
     res.json({
       flag: false,
       sort: "general",
       error: "Could not get bookings",
     });
   }
-}
+};
 
-exports.setBookStatus = async(req,res)=>{
-  try{
-    let book = await Reservation.findOne({_id : req.params.bookId})
-    book.status =  req.body.value;
+exports.setBookStatus = async (req, res) => {
+  try {
+    let book = await Reservation.findOne({ _id: req.params.bookId });
+    book.status = req.body.value;
     await book.save();
     res.json({
-      flag : true,
-      data : book
-    })
-  }catch(error){
+      flag: true,
+      data: book,
+    });
+  } catch (error) {
     res.json({
-      false : false,
-      sort : "general",
-      error : "Could not confirm"
-    })
+      false: false,
+      sort: "general",
+      error: "Could not confirm",
+    });
   }
-}
+};
+
+exports.checkReviews = async (req, res) => {
+  try {
+    const reviews = Reservation.find({ end: new Date(req.body.today) });
+    res.json({ flag: true, data: reviews });
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could not get Reviews",
+    });
+  }
+};
