@@ -8,7 +8,7 @@ const reservationSchema = new mongoose.Schema({
   count : {type : Number}, // Number of Passengers
   start : {type : Date},
   end : {type : Date},
-  status: { type: Number, default: 0 }, // 0 : TobeConfirmed, 1 : Cancelled, 2 : Due, 3 : Confirmed.
+  status: { type: Number, default: 0 }, // 0 : TobeConfirmed, 1 : Cancelled, 2 : Due, 3 : Confirmed, 4: end
   paid: { type: Number },
   paymethod: { type: Number, default: 0 }, // 0: cash,1: card,2: Zelle,3 : binance,4 : paypal, 5 : bank
   confrimID: { type: String },

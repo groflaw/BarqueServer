@@ -108,7 +108,18 @@ exports.setBookStatus = async (req, res) => {
 
 exports.checkReviews = async (req, res) => {
   try {
-    const reviews = Reservation.find({ end: new Date(req.body.today) });
+    const today = new Date(req.body.today);
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1); 
+    const reviews = await Reservation.find({
+      end: {
+        $gte: today,
+        $lt: tomorrow, 
+      },
+      status: { $ne: 4 }, 
+    });
+
     res.json({ flag: true, data: reviews });
   } catch (error) {
     res.json({
