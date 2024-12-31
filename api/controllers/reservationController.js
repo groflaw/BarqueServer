@@ -111,14 +111,14 @@ exports.checkReviews = async (req, res) => {
     const today = new Date(req.body.today);
     today.setHours(0, 0, 0, 0);
     const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1); 
+    tomorrow.setDate(today.getDate() + 1);
     const reviews = await Reservation.find({
       end: {
         $gte: today,
-        $lt: tomorrow, 
+        $lt: tomorrow,
       },
-      status: { $ne: 4 }, 
-    });
+      status: { $ne: 4 },
+    }).populate("boatId", "_id model boatImage.cover");
 
     res.json({ flag: true, data: reviews });
   } catch (error) {
