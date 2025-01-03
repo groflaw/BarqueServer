@@ -106,7 +106,7 @@ exports.setBookStatus = async (req, res) => {
   }
 };
 
-exports.checkReviews = async (req, res) => {
+exports.checkUserReview = async (req, res) => {
   try {
     const today = new Date(req.body.today);
     today.setHours(0, 0, 0, 0);
@@ -115,8 +115,8 @@ exports.checkReviews = async (req, res) => {
         $gte: today,
       },
       status: 3,
+      userId: req.params.userId,
     }).populate("boatId", "_id model boatImage.cover");
-
     res.json({ flag: true, data: reviews });
   } catch (error) {
     res.json({
@@ -127,3 +127,23 @@ exports.checkReviews = async (req, res) => {
   }
 };
 
+exports.checkHostReview = async(req,res)=>{
+  try{
+    const today = new Date(req.body.today);
+    today.setHours(0, 0, 0, 0);
+    const reviews = await Reservation.find({
+      end: {
+        $gte: today,
+      },
+      status: 3,
+      hostId: req.params.hostId,
+    }).populate("boatId", "_id model boatImage.cover");
+    res.json({ flag: true, data: reviews });
+  }catch(eror){
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could not get Reviews",
+    });
+  }
+}

@@ -11,7 +11,8 @@ router.get("/getBookings/:hostId", reservationController.getBookings)
 router.get("/getHostNews/:hostId",reservationController.getHostNews)
 router.get("/getUserNews/:userId",reservationController.getUserNews)
 //----------------check reviews-----------//
-router.post("/checkReviews",reservationController.checkReviews)
+router.post("/checkUserReview/:userId",reservationController.checkUserReview)
+router.post("/checkUserReview/:hostId",reservationController.checkHostReview)
 //----------------Host Confirm------------//
 router.post("/setBookStatus/:bookId", reservationController.setBookStatus)
 
