@@ -1363,3 +1363,19 @@ exports.getUserBookings = async (req, res) => {
     });
   }
 };
+//--------------------SET Review---------------------//
+exports.setReview = async (req, res) => {
+  try {
+    const boat = await Boat.findOne({ _id: req.params.id });
+    boat.reviews.append(req.body.data);
+    await boat.save();
+    res.json({ flag: true, data: boat });
+  } catch (error) {
+    console.error("Error fetching boats:", error);
+    res.status(500).json({
+      flag: false,
+      sort: "general",
+      error: "There is an unknown error, please try again.",
+    });
+  }
+};

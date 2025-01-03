@@ -100,4 +100,6 @@ router.post("/search/filter", boatController.filterBoats);
 //-------------------GET HOST/USER BOATS/BOOKINGS------------------//
 router.get("/getHostboats/:userId", boatController.getHostBoats);
 router.get("/getUserbookings/:userId", boatController.getUserBookings);
+//-------------------SET Review--------------------------------//
+router.post("/setReview/:id", boatController.setReview);
 module.exports = router;
