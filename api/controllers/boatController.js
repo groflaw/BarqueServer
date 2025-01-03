@@ -1364,7 +1364,7 @@ exports.getUserBookings = async (req, res) => {
   }
 };
 //--------------------SET Review---------------------//
-exports.setReview = async (req, res) => {
+exports.setHostReview = async (req, res) => {
   try {
     const boat = await Boat.findOne({ _id: req.params.boatId });
     boat.reviews.append(req.body.data);
@@ -1375,7 +1375,7 @@ exports.setReview = async (req, res) => {
     });
     reservation.status = 4;
     await reservation.save();
-    
+
     res.json({ flag: true, data: boat });
   } catch (error) {
     console.error("Error fetching boats:", error);
