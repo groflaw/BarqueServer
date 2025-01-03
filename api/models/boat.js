@@ -52,6 +52,7 @@ const userSchema = new mongoose.Schema({
     {
       customer :  { type: mongoose.Schema.ObjectId, ref: "User" },
       review : {type : Number},
+      content : {type : String},
       date : {type : Date},
     }
   ]},
