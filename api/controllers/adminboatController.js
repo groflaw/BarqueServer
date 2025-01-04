@@ -101,10 +101,12 @@ exports.getAllReviews = async (req, res) => {
     const boats = await Boat.find({
       $expr: { $gt: [{ $size: "$reviews" }, 0] },
       delete: false,
-    }).populate({
-      path: "reviews.customer",
-      select: "firstName lastName",
-    });
+    })
+      .select("reviews")
+      .populate({
+        path: "reviews.customer",
+        select: "firstName lastName",
+      });
 
     res.json({
       flag: true,
