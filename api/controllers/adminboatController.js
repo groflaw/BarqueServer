@@ -121,3 +121,29 @@ exports.getAllReviews = async (req, res) => {
     });
   }
 };
+
+exports.setHostReview = async (req, res) => {
+  try {
+    const { reviewId, review, content } = req.body;
+    const result = await Boat.updateOne(
+      { _id: req.params.boatId, "reviews._id": reviewId },
+      {
+        $set: {
+          "reviews.$.content": content,
+          "reviews.$.review": review,
+        },
+      }
+    );
+    res.json({
+      flag: true,
+      data: result,
+    });
+  } catch (error) {
+    console.error("Error fetching boats:", error);
+    res.status(500).json({
+      flag: false,
+      sort: "general",
+      error: "There is an unknown error, please try again.",
+    });
+  }
+};

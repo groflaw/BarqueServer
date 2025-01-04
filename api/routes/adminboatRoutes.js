@@ -7,4 +7,5 @@ router.get("/getAllboats", AdminBoatController.getallboattype);
 router.post("/search/filter", AdminBoatController.filterBoats);
 router.post("/setBoatStatus/:boatId", AdminBoatController.setBoatStatus);
 router.get("/getAllReviews", AdminBoatController.getAllReviews);
+router.post("/setHostReview/:boatId", AdminBoatController.setHostReview);
 module.exports = router;
