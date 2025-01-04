@@ -1093,6 +1093,8 @@ exports.getAllboatsCity = async (req, res) => {
   try {
     const boats = await Boat.find({
       flag: true,
+      "status.navigation": 1,
+      "status.authorization": 1,
       location1: req.params.location1,
     })
       .select(
@@ -1129,6 +1131,13 @@ exports.getTopDes = async (req, res) => {
   try {
     const results = await Boat.aggregate([
       {
+        $match: {
+          "status.navigation": 1,
+          "status.authorization": 1,
+          flag: true,
+        },
+      },
+      {
         $group: {
           _id: "$location1",
           count: { $sum: 1 },
@@ -1148,6 +1157,7 @@ exports.getTopDes = async (req, res) => {
         },
       },
     ]);
+
     res.json({
       flag: true,
       data: results,
@@ -1156,14 +1166,19 @@ exports.getTopDes = async (req, res) => {
     res.json({
       flag: false,
       sort: "general",
-      error: "There is an unknown error, please try again",
+      error: "There is an unknown error, please try again.",
     });
   }
 };
+
 //----------------------GET NEW Boats-------------------//
 exports.getNewBoats = async (req, res) => {
   try {
-    const results = await Boat.find({ flag: true })
+    const results = await Boat.find({
+      flag: true,
+      "status.navigation": 1,
+      "status.authorization": 1,
+    })
       .select("model boatImage.cover user")
       .select()
       .sort({ year: -1 })
