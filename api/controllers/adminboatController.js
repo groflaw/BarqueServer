@@ -126,22 +126,23 @@ exports.setHostReview = async (req, res) => {
   try {
     const { reviewId, review, content } = req.body;
     const updatedBoat = await Boat.findOneAndUpdate(
-      { _id: req.params.boatId, "reviews._id": reviewId }, 
+      { _id: req.params.boatId, "reviews._id": reviewId },
       {
         $set: {
-          "reviews.$.content": content, 
-          "reviews.$.review": review,   
+          "reviews.$.content": content,
+          "reviews.$.review": review,
         },
       },
-      { new: true, select: 'model reviews' } 
-    );
+      { new: true, select: "model reviews" }
+    ).populate({
+      path: "reviews.customer",
+      select: "firstName lastName", 
+    });
     res.json({
       flag: true,
       data: updatedBoat,
     });
   } catch (error) {
-
-
     console.error("Error fetching boats:", error);
     res.status(500).json({
       flag: false,
