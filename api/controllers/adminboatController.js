@@ -98,7 +98,7 @@ exports.setBoatStatus = async (req, res) => {
 
 exports.getAllReviews = async (req, res) => {
   try {
-    const boats = await Boat.findOne({
+    const boats = await Boat.find({
       $expr: { $gt: [{ $size: "$reviews" }, 0] },
       delete: false,
     }).populate({
