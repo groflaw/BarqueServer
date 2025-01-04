@@ -143,7 +143,7 @@ exports.checkHostReview = async (req, res) => {
       },
       status: 4,
       hostId: req.params.hostId,
-    }).populate("boatId", "_id model boatImage.cover");
+    }).populate("hostId", "_id firstName lastName avatar");
     res.json({ flag: true, data: reviews });
   } catch (eror) {
     res.json({
