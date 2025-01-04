@@ -4,7 +4,7 @@ const Reservation = require("../models/reservation");
 
 exports.getAllBooking = async (req, res) => {
   try {
-    const bookings = await Reservation.find({})
+    const bookings = await Reservation.find({ status: { $lte: 3 } })
       .populate({
         path: "userId",
         select: "firstName lastName email phoneNumber",
@@ -34,11 +34,11 @@ exports.getAllBooking = async (req, res) => {
       boatLocation: reservation.boatId.location2.marinaname,
       boatAddress: reservation.boatId.location2.address,
       location: reservation.boatId.location1,
-      confirmID : reservation.confrimID,
-      paymethod : reservation.paymethod,
-      guestEmail : reservation.userId.email,
-      guestNumber : reservation.userId.phoneNumber,
-      count : reservation.count
+      confirmID: reservation.confrimID,
+      paymethod: reservation.paymethod,
+      guestEmail: reservation.userId.email,
+      guestNumber: reservation.userId.phoneNumber,
+      count: reservation.count,
     }));
 
     res.json({
