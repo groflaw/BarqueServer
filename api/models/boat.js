@@ -48,6 +48,7 @@ const userSchema = new mongoose.Schema({
   allowes: { type: [{ type: Number }] },
   flag: { type: Boolean, default: false }, // only can set by host. true : show, false : hidden.
   free : {type : Boolean, default : true}, // true : can , false : can't reservation
+  delete : {type : Boolean, default : false},
   reviews:{type : [
     {
       customer :  { type: mongoose.Schema.ObjectId, ref: "User" },

@@ -764,13 +764,13 @@ exports.delBoat = async (req, res) => {
         error: "This boat is currently booked and cannot be deleted",
       });
     } else {
-      const result = await Boat.deleteOne({ _id: req.params.boatId });
-      if (result.deletedCount === 1) {
-        res.json({
-          flag: true,
-          data: result.deletedCount,
-        });
-      }
+      const boat = await Boat.findOne({ _id: req.params.boatId });
+      boat.delete = true;
+      await boat.save();
+      res.json({
+        flag: true,
+        data: 1,
+      });
     }
   } catch (error) {
     res.json({
@@ -1011,9 +1011,10 @@ exports.addAllowes = async (req, res) => {
 
 exports.getMyboat = async (req, res) => {
   try {
-    const boats = await Boat.find({ user: req.params.userid }).select(
-      "location2.boatname boattype location1 flag boatImage"
-    );
+    const boats = await Boat.find({
+      user: req.params.userid,
+      delete: false,
+    }).select("location2.boatname boattype location1 flag boatImage");
     res.json({
       flag: true,
       data: boats,
@@ -1051,6 +1052,7 @@ exports.getAllboats = async (req, res) => {
   try {
     const boats = await Boat.find({
       flag: true,
+      delete: false,
       "status.navigation": 1,
       "status.authorization": 1,
     })
@@ -1093,6 +1095,7 @@ exports.getAllboatsCity = async (req, res) => {
   try {
     const boats = await Boat.find({
       flag: true,
+      delte: false,
       "status.navigation": 1,
       "status.authorization": 1,
       location1: req.params.location1 + " ",
@@ -1135,6 +1138,7 @@ exports.getTopDes = async (req, res) => {
           "status.navigation": 1,
           "status.authorization": 1,
           flag: true,
+          delete: false,
         },
       },
       {
@@ -1176,6 +1180,7 @@ exports.getNewBoats = async (req, res) => {
   try {
     const results = await Boat.find({
       flag: true,
+      delete: false,
       "status.navigation": 1,
       "status.authorization": 1,
     })
@@ -1201,6 +1206,9 @@ exports.getSimilar = async (req, res) => {
   try {
     const boats = await Boat.find({
       flag: true,
+      delete: false,
+      "status.navigation": 1,
+      "status.authorization": 1,
       location1: req.params.location,
       _id: { $ne: req.params.boatId },
     })
@@ -1231,6 +1239,9 @@ exports.searchBoats = async (req, res) => {
   try {
     const boats = await Boat.find({
       flag: true,
+      delete: false,
+      "status.navigation": 1,
+      "status.authorization": 1,
       location1: { $regex: req.params.location, $options: "i" },
     })
       .select(
@@ -1268,7 +1279,12 @@ exports.filterBoats = async (req, res) => {
   try {
     const { size, boattype, capacity, price, any } = req.body;
     let boats = [];
-    const baseQuery = { flag: true };
+    const baseQuery = {
+      flag: true,
+      delete: false,
+      "status.navigation": 1,
+      "status.authorization": 1,
+    };
 
     if (any) {
       const queryConditions = [];
@@ -1334,7 +1350,13 @@ exports.filterBoats = async (req, res) => {
 //--------------------GET HOST/USRER BOATS/BOOKINGS--------------//
 exports.getHostBoats = async (req, res) => {
   try {
-    const boats = await Boat.find({ flag: true, user: req.params.userId })
+    const boats = await Boat.find({
+      flag: true,
+      delete: false,
+      "status.navigation": 1,
+      "status.authorization": 1,
+      user: req.params.userId,
+    })
       .select("model size capacity year reviews location1 boatImage.cover")
       .lean();
     const result = boats.map((boat) => ({
@@ -1364,6 +1386,7 @@ exports.getUserBookings = async (req, res) => {
   try {
     const bookings = await Reservation.find({
       userId: req.params.userId,
+      status: 3,
     }).populate("boatId", "_id model boatImage.cover");
     res.json({
       flag: true,
