@@ -1370,11 +1370,11 @@ exports.setHostReview = async (req, res) => {
     boat.reviews.append(req.body.data);
     await boat.save();
 
-    const reservation = await Reservation.findOne({
-      _id: req.params.reservationId,
-    });
-    reservation.status = 4;
-    await reservation.save();
+    // const reservation = await Reservation.findOne({
+    //   _id: req.params.reservationId,
+    // });
+    // reservation.status = 4;
+    // await reservation.save();
 
     res.json({ flag: true, data: boat });
   } catch (error) {
