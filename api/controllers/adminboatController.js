@@ -102,7 +102,7 @@ exports.getAllReviews = async (req, res) => {
       $expr: { $gt: [{ $size: "$reviews" }, 0] },
       delete: false,
     })
-      .select("reviews")
+      .select("_id model reviews")
       .populate({
         path: "reviews.customer",
         select: "firstName lastName",
