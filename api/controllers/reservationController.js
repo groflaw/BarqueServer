@@ -16,7 +16,10 @@ exports.saveReservation = async (req, res) => {
 
 exports.getReservations = async (req, res) => {
   try {
-    const reservations = await Reservation.find({ userId: req.params.userId })
+    const reservations = await Reservation.find({
+      userId: req.params.userId,
+      status: { $lte: 3 },
+    })
       .populate(
         "hostId",
         "_id firstName lastName avatar phoneNumber review booking"
@@ -37,7 +40,10 @@ exports.getReservations = async (req, res) => {
 
 exports.getBookings = async (req, res) => {
   try {
-    const bookings = await Reservation.find({ hostId: req.params.hostId })
+    const bookings = await Reservation.find({
+      hostId: req.params.hostId,
+      status: { $lte: 3 },
+    })
       .populate(
         "userId",
         "_id firstName lastName avatar phoneNumber review booking"
@@ -127,8 +133,8 @@ exports.checkUserReview = async (req, res) => {
   }
 };
 
-exports.checkHostReview = async(req,res)=>{
-  try{
+exports.checkHostReview = async (req, res) => {
+  try {
     const today = new Date(req.body.today);
     today.setHours(0, 0, 0, 0);
     const reviews = await Reservation.find({
@@ -139,11 +145,11 @@ exports.checkHostReview = async(req,res)=>{
       hostId: req.params.hostId,
     }).populate("boatId", "_id model boatImage.cover");
     res.json({ flag: true, data: reviews });
-  }catch(eror){
+  } catch (eror) {
     res.json({
       flag: false,
       sort: "general",
       error: "Could not get Reviews",
     });
   }
-}
+};
