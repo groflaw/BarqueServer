@@ -1095,7 +1095,7 @@ exports.getAllboatsCity = async (req, res) => {
       flag: true,
       "status.navigation": 1,
       "status.authorization": 1,
-      location1: req.params.location1,
+      location1: req.params.location1 + " ",
     })
       .select(
         "model size capacity year review location1 boatImage.cover plans user"
