@@ -133,7 +133,7 @@ exports.setHostReview = async (req, res) => {
           "reviews.$.review": review,   
         },
       },
-      { new: true } 
+      { new: true, select: 'model reviews' } 
     );
     res.json({
       flag: true,
@@ -141,7 +141,7 @@ exports.setHostReview = async (req, res) => {
     });
   } catch (error) {
 
-    
+
     console.error("Error fetching boats:", error);
     res.status(500).json({
       flag: false,
