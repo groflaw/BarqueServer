@@ -6,4 +6,5 @@ const AdminBoatController = require("../controllers/adminboatController");
 router.get("/getAllboats", AdminBoatController.getallboattype);
 router.post("/search/filter", AdminBoatController.filterBoats);
 router.post("/setBoatStatus/:boatId", AdminBoatController.setBoatStatus);
+router.get("/getAllReviews", AdminBoatController.getAllReviews);
 module.exports = router;

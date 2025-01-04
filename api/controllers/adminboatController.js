@@ -3,7 +3,7 @@ const Users = require("../models/user");
 
 exports.getallboattype = async (req, res) => {
   try {
-    const boats = await Boat.find({})
+    const boats = await Boat.find({ delete: false })
       .select("location2 user location1 status date model")
       .populate("user", "_id firstName lastName");
     res.json({
@@ -24,13 +24,14 @@ exports.filterBoats = async (req, res) => {
   try {
     const { size, boattype, capacity, price, any } = req.body;
     let boats = [];
-
+    const baseQuery = {
+      delete: false,
+    };
     if (any) {
       const queryConditions = [];
       if (size) queryConditions.push({ size });
       if (boattype) queryConditions.push({ boattype });
       if (capacity) queryConditions.push({ capacity });
-
       if (price) {
         queryConditions.push({
           $or: [
@@ -39,7 +40,7 @@ exports.filterBoats = async (req, res) => {
           ],
         });
       }
-      boats = await Boat.find({ $or: queryConditions })
+      boats = await Boat.find({ $and: [baseQuery, { $or: queryConditions }] })
         .select("location2 user location1 status date model")
         .populate("user", "_id firstName lastName");
       res.json({
@@ -47,7 +48,6 @@ exports.filterBoats = async (req, res) => {
         data: boats,
       });
     } else {
-      const baseQuery = {};
       if (size) baseQuery.size = size;
       if (boattype) baseQuery.boattype = boattype;
       if (capacity) baseQuery.capacity = capacity;
@@ -85,6 +85,30 @@ exports.setBoatStatus = async (req, res) => {
     res.json({
       flag: true,
       data: boat,
+    });
+  } catch (error) {
+    console.error("Error fetching boats:", error);
+    res.status(500).json({
+      flag: false,
+      sort: "general",
+      error: "There is an unknown error, please try again.",
+    });
+  }
+};
+
+exports.getAllReviews = async (req, res) => {
+  try {
+    const boats = await Boat.findOne({
+      $expr: { $gt: [{ $size: "$reviews" }, 0] },
+      delete: false,
+    }).populate({
+      path: "reviews.customer",
+      select: "firstName lastName",
+    });
+
+    res.json({
+      flag: true,
+      data: boats,
     });
   } catch (error) {
     console.error("Error fetching boats:", error);
