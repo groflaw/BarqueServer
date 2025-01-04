@@ -1,7 +1,7 @@
 const BasicBoat = require("../models/basicboat");
 const Boat = require("../models/boat");
 const Reservation = require("../models/reservation");
-
+const User = require("../models/user");
 const AWS = require("aws-sdk");
 
 AWS.config.update({
@@ -1391,7 +1391,13 @@ exports.setHostReview = async (req, res) => {
     reservation.status = 4;
     await reservation.save();
 
-    res.json({ flag: true, data: boat });
+    const host = await User.findOne({ _id: reservation.hostId });
+    if (host.booking == 0) host.review = req.body.data.review;
+    else host.review = ((host.review + req.body.data.review) / 2).toFixed(2);
+    host.booking += 1;
+    await host.save();
+
+    await res.json({ flag: true, data: boat });
   } catch (error) {
     console.error("Error fetching boats:", error);
     res.status(500).json({
