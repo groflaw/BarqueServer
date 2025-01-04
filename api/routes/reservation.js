@@ -12,7 +12,7 @@ router.get("/getHostNews/:hostId",reservationController.getHostNews)
 router.get("/getUserNews/:userId",reservationController.getUserNews)
 //----------------check reviews-----------//
 router.post("/checkUserReview/:userId",reservationController.checkUserReview)
-router.post("/checkUserReview/:hostId",reservationController.checkHostReview)
+router.post("/checkHostReview/:hostId",reservationController.checkHostReview)
 //----------------Host Confirm------------//
 router.post("/setBookStatus/:bookId", reservationController.setBookStatus)
 

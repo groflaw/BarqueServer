@@ -141,7 +141,7 @@ exports.checkHostReview = async (req, res) => {
       end: {
         $gte: today,
       },
-      status: 3,
+      status: 4,
       hostId: req.params.hostId,
     }).populate("boatId", "_id model boatImage.cover");
     res.json({ flag: true, data: reviews });
