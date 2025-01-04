@@ -1367,8 +1367,8 @@ exports.getUserBookings = async (req, res) => {
 exports.setHostReview = async (req, res) => {
   try {
     const boat = await Boat.findOne({ _id: req.params.boatId });
-    // boat.reviews.append(req.body.data);
-    // await boat.save();
+    boat.reviews.push(req.body.data);
+    await boat.save();
 
     // const reservation = await Reservation.findOne({
     //   _id: req.params.reservationId,
