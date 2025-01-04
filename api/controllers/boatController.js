@@ -1430,3 +1430,27 @@ exports.setHostReview = async (req, res) => {
     });
   }
 };
+exports.setUserReview = async (req,res)=>{
+  try {
+    const reservation = await Reservation.findOne({
+      _id: req.params.reservationId,
+    });
+    reservation.status = 5;
+    await reservation.save();
+
+    const user = await User.findOne({ _id: req.params.userId });
+    if (user.booking == 0) user.review = req.body.review;
+    else user.review = ((user.review + req.body.review) / 2).toFixed(2);
+    user.booking += 1;
+    await user.save();
+
+    await res.json({ flag: true, data: user });
+  } catch (error) {
+    console.error("Error fetching boats:", error);
+    res.status(500).json({
+      flag: false,
+      sort: "general",
+      error: "There is an unknown error, please try again.",
+    });
+  }
+}
