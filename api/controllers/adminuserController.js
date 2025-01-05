@@ -138,3 +138,31 @@ exports.addAdmin = async (req, res) => {
     res.json({ flag: false, sort: "general", error: "Could not create user" });
   }
 };
+exports.updateAdmin = async (req, res) => {
+  try {
+    const { adminId } = req.params;
+    const updateData = req.body.data;
+    const updatedAdmin = await Admin.findByIdAndUpdate(adminId, updateData, {
+      new: true,
+      runValidators: true,
+    });
+    res.json({
+      flag: true,
+      data: updatedAdmin,
+    });
+  } catch (error) {
+    res.json({ flag: false, sort: "general", error: "Could not update admin" });
+  }
+};
+exports.deleteAdmin = async (req, res) => {
+  try {
+    const { adminId } = req.params;
+    const deletedAdmin = await Admin.findByIdAndDelete(adminId);
+    res.json({
+      flag: true,
+      data: deletedAdmin,
+    });
+  } catch (error) {
+    res.json({ flag: false, sort: "general", error: "Could not delete admin" });
+  }
+};

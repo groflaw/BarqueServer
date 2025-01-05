@@ -1,12 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const AdminBoatController = require("../controllers/adminuserController");
+const AdminUserController = require("../controllers/adminuserController");
 
-router.get("/getAllusers", AdminBoatController.getAllUsers);
-router.post("/updateInfo/:userId", AdminBoatController.updateInfo);
-router.post("/blockUser/:userId", AdminBoatController.blockUser);
-router.get("/", AdminBoatController.getAllAdmins);
-router.post("/", AdminBoatController.addAdmin);
+router.get("/getAllusers", AdminUserController.getAllUsers);
+router.post("/updateInfo/:userId", AdminUserController.updateInfo);
+router.post("/blockUser/:userId", AdminUserController.blockUser);
+router.get("/", AdminUserController.getAllAdmins);
+router.post("/", AdminUserController.addAdmin);
+router.put("/:adminId", AdminUserController.updateAdmin);
+router.delete("/:adminId", AdminUserController.deleteAdmin);
 
 module.exports = router;
