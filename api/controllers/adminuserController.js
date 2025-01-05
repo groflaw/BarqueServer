@@ -106,7 +106,7 @@ exports.blockUser = async (req, res) => {
   }
 };
 exports.addAdmin = async (req, res) => {
-  const newAdmin = new Admin(req.body);
+  const newAdmin = new Admin(req.body.data);
   try {
     const existingUser = await Admin.findOne({ email: newAdmin.email });
     if (existingUser) {
