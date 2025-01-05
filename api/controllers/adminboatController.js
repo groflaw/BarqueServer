@@ -125,6 +125,15 @@ exports.getAllReviews = async (req, res) => {
 exports.setHostReview = async (req, res) => {
   try {
     const { reviewId, review, content } = req.body;
+    
+    const boat = await Boat.findOne({ _id: req.params.boatId });
+    const reviewItem = await boat.reviews.find(
+      (review) => review._id === reviewId
+    );
+    const user = await Users.findOne({ _id: boat.user });
+    user.review = (Math.abs(review - reviewItem.review) / 2).toFixed(2);
+    await user.save();
+
     const updatedBoat = await Boat.findOneAndUpdate(
       { _id: req.params.boatId, "reviews._id": reviewId },
       {
@@ -136,8 +145,9 @@ exports.setHostReview = async (req, res) => {
       { new: true, select: "model reviews" }
     ).populate({
       path: "reviews.customer",
-      select: "firstName lastName", 
+      select: "firstName lastName",
     });
+
     res.json({
       flag: true,
       data: updatedBoat,
