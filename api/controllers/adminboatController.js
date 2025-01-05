@@ -165,3 +165,33 @@ exports.setHostReview = async (req, res) => {
     });
   }
 };
+
+exports.deleteHostReview = async (req, res) => {
+  try {
+    const { boatId, reviewId } = req.params;
+    const boat = await Boat.findOne({ _id: boatId });
+    const reviewItem = await boat.reviews.find(
+      (review) => review._id === reviewId
+    );
+    const user = await Users.findOne({ _id: boat.user });
+    if (user.booking == 1) {
+      user.review = 0;
+    } else {
+      user.review = user.review * 2 - reviewItem.review;
+    }
+    user.booking -= 1;
+    await user.save();
+
+    const result = await Boat.updateOne(
+      { _id: boatId },
+      { $pull: { reviews: { _id: reviewId } } }
+    );
+  } catch (error) {
+    console.error("Error fetching boats:", error);
+    res.status(500).json({
+      flag: false,
+      sort: "general",
+      error: "There is an unknown error, please try again.",
+    });
+  }
+};
