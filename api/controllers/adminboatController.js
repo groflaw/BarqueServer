@@ -125,13 +125,17 @@ exports.getAllReviews = async (req, res) => {
 exports.setHostReview = async (req, res) => {
   try {
     const { reviewId, review, content } = req.body;
-    
+
     const boat = await Boat.findOne({ _id: req.params.boatId });
     const reviewItem = await boat.reviews.find(
       (review) => review._id === reviewId
     );
     const user = await Users.findOne({ _id: boat.user });
-    user.review = (Math.abs(review - reviewItem.review) / 2).toFixed(2);
+    if (user.booking == 1) {
+      user.review = review;
+    } else {
+      user.review = (Math.abs(review - reviewItem.review) / 2).toFixed(2);
+    }
     await user.save();
 
     const updatedBoat = await Boat.findOneAndUpdate(
