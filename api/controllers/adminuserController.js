@@ -105,6 +105,22 @@ exports.blockUser = async (req, res) => {
     });
   }
 };
+exports.getAllAdmins = async (req, res) => {
+  try {
+    const admins = await Admin.find({});
+    res.json({
+      flag: true,
+      data: admins,
+    });
+  } catch (error) {
+    console.error("Error fetching boats:", error);
+    res.status(500).json({
+      flag: false,
+      sort: "general",
+      error: "There is an unknown error, please try again.",
+    });
+  }
+};
 exports.addAdmin = async (req, res) => {
   const newAdmin = new Admin(req.body.data);
   try {
