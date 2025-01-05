@@ -132,8 +132,6 @@ exports.addAdmin = async (req, res) => {
         error: "Email already exists",
       });
     }
-    const saltRounds = 10;
-    newAdmin.password = await bcrypt.hash(newAdmin.password, saltRounds);
     await newAdmin.save();
     res.json({ flag: true, data: newAdmin });
   } catch (error) {
