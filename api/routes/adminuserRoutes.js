@@ -6,5 +6,6 @@ const AdminBoatController = require("../controllers/adminuserController");
 router.get("/getAllusers", AdminBoatController.getAllUsers);
 router.post("/updateInfo/:userId", AdminBoatController.updateInfo);
 router.post("/blockUser/:userId", AdminBoatController.blockUser);
+router.post("/", AdminBoatController.addAdmin);
 
 module.exports = router;

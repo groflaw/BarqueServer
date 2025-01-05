@@ -1,5 +1,6 @@
 const User = require("../models/user");
-const Boat = require("../models/boat");
+const Admin = require("../models/admin");
+const bcrypt = require("bcrypt");
 
 exports.getAllUsers = async (req, res) => {
   try {
@@ -32,14 +33,14 @@ exports.getAllUsers = async (req, res) => {
           booking: 1,
           resrate: 1,
           block: 1,
-          boatCount: { $size: "$boats" }, // Count of boats
+          boatCount: { $size: "$boats" },
           boats: {
             $map: {
               input: "$boats",
               as: "boat",
               in: {
-                _id: "$$boat._id", // Boat ID
-                model: "$$boat.model", // Boat model
+                _id: "$$boat._id",
+                model: "$$boat.model",
               },
             },
           },
@@ -102,5 +103,24 @@ exports.blockUser = async (req, res) => {
       sort: "general",
       error: "There is an unknown error, please try again.",
     });
+  }
+};
+exports.addAdmin = async (req, res) => {
+  const newAdmin = new Admin(req.body);
+  try {
+    const existingUser = await Admin.findOne({ email: newAdmin.email });
+    if (existingUser) {
+      return res.json({
+        flag: false,
+        sort: "email",
+        error: "Email already exists",
+      });
+    }
+    const saltRounds = 10;
+    newAdmin.password = await bcrypt.hash(newAdmin.password, saltRounds);
+    await newAdmin.save();
+    res.json({ flag: true, newAdmin });
+  } catch (error) {
+    res.json({ flag: false, sort: "general", error: "Could not create user" });
   }
 };
