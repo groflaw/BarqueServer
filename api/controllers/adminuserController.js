@@ -119,7 +119,7 @@ exports.addAdmin = async (req, res) => {
     const saltRounds = 10;
     newAdmin.password = await bcrypt.hash(newAdmin.password, saltRounds);
     await newAdmin.save();
-    res.json({ flag: true, newAdmin });
+    res.json({ flag: true, data: newAdmin });
   } catch (error) {
     res.json({ flag: false, sort: "general", error: "Could not create user" });
   }
