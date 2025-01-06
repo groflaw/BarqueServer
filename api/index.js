@@ -42,8 +42,8 @@ io.on("connection", (socket) => {
   });
 });
 setInterval(() => {
-  console.log("Hello");
-  // io.sockets.emit('time-msg', { time: new Date().toISOString() });
+  io.sockets.emit('time-msg', { time: new Date().toISOString() });
+  console.log(new Date().toISOString());
 }, 1000);
 
 const PORT = process.env.PORT || 5000;
