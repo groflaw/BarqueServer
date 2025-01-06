@@ -43,7 +43,7 @@ io.on("connection", (socket) => {
 });
 setInterval(() => {
   io.sockets.emit('time-msg', { time: new Date().toISOString() });
-  console.log(new Date().toISOString());
+  // console.log(new Date().toISOString());
 }, 1000);
 
 const PORT = process.env.PORT || 5000;
