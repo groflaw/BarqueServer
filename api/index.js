@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const http = require("http");
-const socketIo = require("socket.io");
+const { Server } = require("socket.io");
 require("dotenv").config();
 
 const connectDB = require("./config/db");
@@ -34,17 +34,25 @@ app.use("/admin/users", adminUserRoutes);
 app.use("/admin/booking", adminBookingRoutes);
 
 const server = http.createServer(app);
-const io = socketIo(server);
+
+const io = new Server(server, {
+  cors: {
+    origin: "*", // Allow requests from this origin and my frontend port = 5173
+    methods: ["GET", "POST","PUT","DELETE"], // Allow these HTTP methods
+  },
+});
+
+// Listen for incoming Socket.IO connections
 io.on("connection", (socket) => {
-  console.log(`[${socket.id}] socket connected`);
-  socket.on("disconnect", (reason) => {
-    console.log(`[${socket.id}] socket disconnected - ${reason}`);
+  console.log("User connected ", socket.id); // Log the socket ID of the connected user
+
+  // Listen for "send_message" events from the connected client
+  socket.on("send_message", (data) => {
+    console.log("Message Received ", data); // Log the received message data
+    io.emit("receive_message", data);
   });
 });
-setInterval(() => {
-  io.sockets.emit('time-msg', { time: new Date().toISOString() });
-  // console.log(new Date().toISOString());
-}, 1000);
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
