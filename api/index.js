@@ -42,14 +42,11 @@ const io = new Server(server, {
   },
 });
 
-// Listen for incoming Socket.IO connections
 io.on("connection", (socket) => {
-  console.log("User connected ", socket.id); // Log the socket ID of the connected user
+  console.log("User connected ", socket.id);
 
-  // Listen for "send_message" events from the connected client
-  socket.on("send_message", (data) => {
-    console.log("Message Received ", data); // Log the received message data
-    io.emit("receive_message", data);
+  socket.on("reqCancel", (data) => {
+    console.log("Cancel request Received ", data); 
   });
 });
 
