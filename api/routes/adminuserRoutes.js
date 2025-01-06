@@ -10,5 +10,5 @@ router.get("/", AdminUserController.getAllAdmins);
 router.post("/", AdminUserController.addAdmin);
 router.put("/:adminId", AdminUserController.updateAdmin);
 router.delete("/:adminId", AdminUserController.deleteAdmin);
-
+router.get("/:email/:password", AdminUserController.loginAdmin);
 module.exports = router;

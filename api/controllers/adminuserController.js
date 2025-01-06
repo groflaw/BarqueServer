@@ -125,16 +125,15 @@ exports.addAdmin = async (req, res) => {
     const existingUser = await User.findOne({ email: newUser.email });
     if (existingUser) {
       existingUser.role = req.body.data.role;
-      res.json({ flag: true, data : existingUser });
+      res.json({ flag: true, data: existingUser });
     } else {
       await newUser.save();
-      res.json({ flag: true, data : newUser });
+      res.json({ flag: true, data: newUser });
     }
   } catch (error) {
     res.json({ flag: false, sort: "general", error: "Could not update admin" });
   }
 };
-
 exports.updateAdmin = async (req, res) => {
   try {
     const { adminId } = req.params;
@@ -163,5 +162,29 @@ exports.deleteAdmin = async (req, res) => {
     });
   } catch (error) {
     res.json({ flag: false, sort: "general", error: "Could not delete admin" });
+  }
+};
+exports.loginAdmin = async (req, res) => {
+  try {
+    const { email, password } = req.params;
+    const existingUser = await User.findOne({ email: email, role: { $ne: 0 } });
+    if (!existingUser) {
+      return res.json({
+        flag: false,
+        sort: "email",
+        error: "Unregistered Admin",
+      });
+    }
+    const isMatch = password === existingUser.password;
+    if (!isMatch) {
+      return res.json({
+        flag: false,
+        sort: "password",
+        error: "Incorrect password",
+      });
+    }
+    res.json({ flag: true, existingUser });
+  } catch (error) {
+    res.json({ flag: false, sort: "general", error: "Could not Login admin" });
   }
 };
