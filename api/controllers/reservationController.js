@@ -1,4 +1,6 @@
 const Reservation = require("../models/reservation");
+const Chat = require("../models/chat");
+const User = require("../models/user");
 
 exports.saveReservation = async (req, res) => {
   try {
@@ -154,6 +156,35 @@ exports.checkHostReview = async (req, res) => {
   }
 };
 
-exports.reqCancel = async (req,res) =>{
-  
-}
+exports.reqCancel = async (userId) => {
+  try {
+    const customers = await User.find({ role: 3 });
+    const messages = customers.map((customer) => {
+      return {
+        sender: userId,
+        receiver: customer._id,
+        content: "I want to cancel booking",
+      };
+    });
+
+    if (messages.length > 0) {
+      await Chat.insertMany(messages);
+      res.json({
+        flag: true,
+        data: messages,
+      });
+    } else {
+      res.json({
+        flag: false,
+        sort: "general",
+        error: "No customers.",
+      });
+    }
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could not send rquest",
+    });
+  }
+};

@@ -13,6 +13,9 @@ const reservationRoutes = require("./routes/reservation");
 const adminBoatRoutes = require("./routes/adminboatRoutes");
 const adminUserRoutes = require("./routes/adminuserRoutes");
 const adminBookingRoutes = require("./routes/adminbookingRoutes");
+
+import { reqCancel } from "./controllers/reservationController";
+
 const app = express();
 
 app.use(cors());
@@ -38,7 +41,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "*", // Allow requests from this origin and my frontend port = 5173
-    methods: ["GET", "POST","PUT","DELETE"], // Allow these HTTP methods
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allow these HTTP methods
   },
 });
 
@@ -46,10 +49,9 @@ io.on("connection", (socket) => {
   console.log("User connected ", socket.id);
 
   socket.on("reqCancel", (data) => {
-    console.log("Cancel request Received ", data); 
+    reqCancel(data.userId);
   });
 });
-
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {

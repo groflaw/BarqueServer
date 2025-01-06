@@ -17,8 +17,8 @@ const chatSchema = new mongoose.Schema({
     default: Date.now,
   },
   status: {
-    type: String, // e.g., 'sent', 'delivered', 'read'
-    default: "sent",
+    type: Boolean, // e.g., 'false' :  unread, 'true' : read
+    default: false,
   },
 });
 
