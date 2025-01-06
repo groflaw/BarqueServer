@@ -153,3 +153,7 @@ exports.checkHostReview = async (req, res) => {
     });
   }
 };
+
+exports.reqCancel = async (req,res) =>{
+  
+}

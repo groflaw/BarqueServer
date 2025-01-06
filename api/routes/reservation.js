@@ -15,5 +15,6 @@ router.post("/checkUserReview/:userId",reservationController.checkUserReview)
 router.post("/checkHostReview/:hostId",reservationController.checkHostReview)
 //----------------Host Confirm------------//
 router.post("/setBookStatus/:bookId", reservationController.setBookStatus)
-
+//----------------Request Cancel-----------//
+router.get("/reqCancel/:bookId", reservationController.reqCancel)
 module.exports = router;
