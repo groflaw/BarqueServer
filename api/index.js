@@ -14,7 +14,7 @@ const adminBoatRoutes = require("./routes/adminboatRoutes");
 const adminUserRoutes = require("./routes/adminuserRoutes");
 const adminBookingRoutes = require("./routes/adminbookingRoutes");
 
-import { reqCancel } from "./controllers/reservationController";
+const reservationController = require("./controllers/reservationController");
 
 const app = express();
 
@@ -49,7 +49,7 @@ io.on("connection", (socket) => {
   console.log("User connected ", socket.id);
 
   socket.on("reqCancel", (data) => {
-    reqCancel(data.userId);
+    reservationController.reqCancel(data.userId);
   });
 });
 
