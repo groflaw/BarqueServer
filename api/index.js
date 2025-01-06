@@ -41,6 +41,11 @@ io.on("connection", (socket) => {
     console.log(`[${socket.id}] socket disconnected - ${reason}`);
   });
 });
+setInterval(() => {
+  console.log("Hello");
+  // io.sockets.emit('time-msg', { time: new Date().toISOString() });
+}, 1000);
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
