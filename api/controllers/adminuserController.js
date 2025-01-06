@@ -126,10 +126,10 @@ exports.addAdmin = async (req, res) => {
     const existingUser = await User.findOne({ email: newUser.email });
     if (existingUser) {
       existingUser.role = req.body.data.role;
-      res.json({ flag: true, existingUser });
+      res.json({ flag: true, data : existingUser });
     } else {
       await newUser.save();
-      res.json({ flag: true, newUser });
+      res.json({ flag: true, data : newUser });
     }
   } catch (error) {
     res.json({ flag: false, sort: "general", error: "Could not update admin" });
