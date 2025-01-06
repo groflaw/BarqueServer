@@ -48,8 +48,21 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log("User connected ", socket.id);
 
-  socket.on("reqCancel", (data) => {
-    reservationController.reqCancel(data.userId);
+  socket.on("requestCancel", async (data) => {
+    let result = await reservationController.reqCancel(data.userId);
+    setTimeout(() => {
+      if (result.flag === true) {
+        socket.emit("resrequestCancel", {
+          status: "success",
+          message: "Cancellation request processed.",
+        });
+      } else {
+        socket.emit("resrequestCancel", {
+          status: "error",
+          message: "Error processing cancellation request.",
+        });
+      }
+    }, 5000); 
   });
 });
 
