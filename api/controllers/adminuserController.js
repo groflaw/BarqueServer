@@ -120,6 +120,22 @@ exports.getAllAdmins = async (req, res) => {
     });
   }
 };
+exports.addAdmin = async (req, res) => {
+  try {
+    const newUser = new User(req.body.data);
+    const existingUser = await User.findOne({ email: newUser.email });
+    if (existingUser) {
+      existingUser.role = req.body.data.role;
+      res.json({ flag: true, existingUser });
+    } else {
+      await newUser.save();
+      res.json({ flag: true, newUser });
+    }
+  } catch (error) {
+    res.json({ flag: false, sort: "general", error: "Could not update admin" });
+  }
+};
+
 exports.updateAdmin = async (req, res) => {
   try {
     const { adminId } = req.params;
