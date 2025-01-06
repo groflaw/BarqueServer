@@ -23,10 +23,6 @@ exports.createUser = async (req, res) => {
         error: "Email already exists",
       });
     }
-
-    const saltRounds = 10;
-    newUser.password = await bcrypt.hash(newUser.password, saltRounds);
-
     await newUser.save();
 
     res.json({ flag: true, newUser });
@@ -48,7 +44,7 @@ exports.loginUser = async (req, res) => {
       });
     }
 
-    const isMatch = await bcrypt.compare(password, existingUser.password);
+    const isMatch = password === existingUser.password;
 
     if (!isMatch) {
       return res.json({
@@ -106,7 +102,7 @@ exports.changeProfile = async (req, res) => {
     user.address = req.body.address;
     user.country = req.body.country;
     user.city = req.body.city;
-    user.bio = req.body.bio
+    user.bio = req.body.bio;
     await user.save();
     res.json({ flag: true, data: user });
   } catch (error) {
@@ -194,17 +190,17 @@ exports.changePassword = async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.params.id });
     const isMatch = await bcrypt.compare(curpassword, user.password);
-    if(!isMatch){
+    if (!isMatch) {
       return res.json({
-        flag : false,
-        sort : "curpassword",
-        error : "Incorrect password"
-      })
-    }else{
+        flag: false,
+        sort: "curpassword",
+        error: "Incorrect password",
+      });
+    } else {
       const saltRounds = 10;
       user.password = await bcrypt.hash(newpassword, saltRounds);
       await user.save();
-      res.json({ flag: true, data : user });
+      res.json({ flag: true, data: user });
     }
   } catch (error) {
     res.json({ flag: false, sort: "general", error: "Server error" });
