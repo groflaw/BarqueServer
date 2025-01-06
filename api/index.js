@@ -14,8 +14,6 @@ const adminBoatRoutes = require("./routes/adminboatRoutes");
 const adminUserRoutes = require("./routes/adminuserRoutes");
 const adminBookingRoutes = require("./routes/adminbookingRoutes");
 const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -35,6 +33,8 @@ app.use("/admin/boats", adminBoatRoutes);
 app.use("/admin/users", adminUserRoutes);
 app.use("/admin/booking", adminBookingRoutes);
 
+const server = http.createServer(app);
+const io = socketIo(server);
 io.on("connection", (socket) => {
   console.log(`[${socket.id}] socket connected`);
   socket.on("disconnect", (reason) => {
