@@ -37,24 +37,17 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "*", // Allow requests from this origin and my frontend port = 5173
-    methods: ["GET", "POST","PUT","DELETE"], // Allow these HTTP methods
+    origin: "*",
+    methods: ["GET", "POST","PUT","DELETE"], 
   },
 });
 
-// Listen for incoming Socket.IO connections
 io.on("connection", (socket) => {
-  console.log("User connected ", socket.id); // Log the socket ID of the connected user
-
-  // Listen for "send_message" events from the connected client
-  socket.on("send_message", (data) => {
-    console.log("Message Received ", data); // Log the received message data
-    io.emit("receive_message", data);
-  });
+  console.log("User connected ", socket.id); 
 });
 
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
