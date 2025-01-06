@@ -1,5 +1,4 @@
 const User = require("../models/user");
-const Admin = require("../models/admin");
 const bcrypt = require("bcrypt");
 
 exports.getAllUsers = async (req, res) => {
@@ -107,7 +106,7 @@ exports.blockUser = async (req, res) => {
 };
 exports.getAllAdmins = async (req, res) => {
   try {
-    const admins = await Admin.find({});
+    const admins = await User.find({ role: { $ne: 0 } });
     res.json({
       flag: true,
       data: admins,
@@ -121,28 +120,11 @@ exports.getAllAdmins = async (req, res) => {
     });
   }
 };
-exports.addAdmin = async (req, res) => {
-  const newAdmin = new Admin(req.body.data);
-  try {
-    const existingUser = await Admin.findOne({ email: newAdmin.email });
-    if (existingUser) {
-      return res.json({
-        flag: false,
-        sort: "email",
-        error: "Email already exists",
-      });
-    }
-    await newAdmin.save();
-    res.json({ flag: true, data: newAdmin });
-  } catch (error) {
-    res.json({ flag: false, sort: "general", error: "Could not create user" });
-  }
-};
 exports.updateAdmin = async (req, res) => {
   try {
     const { adminId } = req.params;
     const updateData = req.body.data;
-    const updatedAdmin = await Admin.findByIdAndUpdate(adminId, updateData, {
+    const updatedAdmin = await User.findByIdAndUpdate(adminId, updateData, {
       new: true,
       runValidators: true,
     });
@@ -157,10 +139,12 @@ exports.updateAdmin = async (req, res) => {
 exports.deleteAdmin = async (req, res) => {
   try {
     const { adminId } = req.params;
-    const deletedAdmin = await Admin.findByIdAndDelete(adminId);
+    const admin = await User.findOne({ _id: adminId });
+    admin.role = 0;
+    await admin.save();
     res.json({
       flag: true,
-      data: deletedAdmin,
+      data: admin,
     });
   } catch (error) {
     res.json({ flag: false, sort: "general", error: "Could not delete admin" });

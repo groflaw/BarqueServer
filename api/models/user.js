@@ -7,10 +7,10 @@ const userSchema = new mongoose.Schema({
   address: { type: String },
   country: { type: String },
   city: { type: String },
-  email: { type: String, required: true },
-  birthDay: { type: Date, required: true },
-  password: { type: String, required: true },
-  phoneNumber: { type: String, required: true },
+  email: { type: String },
+  birthDay: { type: Date },
+  password: { type: String },
+  phoneNumber: { type: String },
   notification: {
     newoffer: { type: Boolean, default: false },
     allnotifi: { type: Boolean, default: false },
@@ -27,6 +27,7 @@ const userSchema = new mongoose.Schema({
   resrate: { type: Number, default: 100 },
   date: { type: Date, default: Date.now },
   block: { type: Boolean, default: false },
+  role: { type: Number, default: 0 },
 });
 
 module.exports = mongoose.model("User", userSchema);
