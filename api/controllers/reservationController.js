@@ -163,7 +163,8 @@ exports.reqCancel = async (userId) => {
       return {
         sender: userId,
         receiver: customer._id,
-        content: "I want to cancel booking",
+        content:
+          "I hope this message finds you well. I would like to kindly request the cancellation of my boat booking. Thank you for your assistance.",
       };
     });
 
