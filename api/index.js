@@ -68,13 +68,11 @@ io.on("connection", (socket) => {
   socket.on("registerUser", (userId) => {
     userSockets[userId] = socket.id; // Map userId to socket ID
     console.log(`User ${userId} registered with socket ${socket.id}`);
+    socket.on("disconnect", () => {
+      console.log(`User ${userId} disconnected`);
+      delete userSockets[userId]; // Clean up mapping
+    });
   });
- 
-  socket.on("disconnect", () => {
-    console.log(`User ${userId} disconnected`);
-    delete userSockets[userId]; // Clean up mapping
-  });
-  
 });
 
 const PORT = process.env.PORT || 5000;
