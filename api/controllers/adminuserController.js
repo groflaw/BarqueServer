@@ -200,7 +200,7 @@ exports.loginAdmin = async (req, res) => {
 };
 exports.authenticateToken = (req, res, next) => {
   const token = req.headers["Authorization"]?.split(" ")[1];
-  console.log(token);
+  console.log(req.headers["Authorization"]);
   if (!token) return res.sendStatus(401);
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
