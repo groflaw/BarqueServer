@@ -66,13 +66,18 @@ io.on("connection", (socket) => {
   });
 
   socket.on("registerUser", (userId) => {
-    userSockets[userId] = socket.id; 
+    userSockets[userId] = socket.id;
     console.log(`User ${userId} registered with socket ${socket.id}`);
     socket.on("disconnect", () => {
       console.log(`User ${userId} disconnected`);
-      delete userSockets[userId]; 
+      delete userSockets[userId];
     });
   });
+
+  socket.on("reqbooking", (data) => {
+    console.log(data.userId, data.hostId);
+  });
+  
 });
 
 const PORT = process.env.PORT || 5000;
