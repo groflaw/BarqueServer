@@ -81,6 +81,7 @@ io.on("connection", (socket) => {
   socket.on("reqbooking", async (hostId) => {
     let result = await userController.getAdmins();
     result?.push(hostId);
+    console.log(result);
     // send socket signal to Admins and Host.
     result.forEach((item) => {
       const hostSocketId = userSockets[item];
