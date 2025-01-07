@@ -83,12 +83,14 @@ io.on("connection", (socket) => {
     result?.push(hostId);
     console.log(result);
     // send socket signal to Admins and Host.
-    result.forEach((item) => {
-      const hostSocketId = userSockets[item];
+    for (let i = 0; i < result.length; i++) {
+      const hostId = result[i];
+      const hostSocketId = userSockets[hostId];
+
       if (hostSocketId) {
         io.to(hostSocketId).emit("receivebooking", "You have a new booking 🎉");
       }
-    });
+    }
     // send push notification to Host
     // const notificationResponse = await fetch(
     //   "https://exp.host/--/api/v2/push/send",
