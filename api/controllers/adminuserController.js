@@ -188,7 +188,7 @@ exports.loginAdmin = async (req, res) => {
     const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-    res.json({ flag: true, data: token });
+    res.json({ flag: true, token, existingUser });
   } catch (error) {
     res.json({ flag: false, sort: "general", error: "Could not Login admin" });
   }
