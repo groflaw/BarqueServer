@@ -31,6 +31,21 @@ exports.createUser = async (req, res) => {
   }
 };
 
+exports.saveToken = async (req, res) => {
+  const { userId, expoPushToken } = req.body;
+  try {
+    const user = await User.findOne({ _id: userId });
+    user.expoPushToken = expoPushToken;
+    await user.save();
+    res.json({ flag: true, data: user });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      errors: { general: "There was an error save Token" },
+    });
+  }
+};
+
 exports.loginUser = async (req, res) => {
   const { email, password } = req.params;
   try {

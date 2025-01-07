@@ -28,6 +28,7 @@ const userSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now },
   block: { type: Boolean, default: false },
   role: { type: Number, default: 0 }, // 1 : full, 2 : Manager , 3 : Customer
+  expoPushToken: { type: String },
 });
 
 module.exports = mongoose.model("User", userSchema);

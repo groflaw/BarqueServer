@@ -38,7 +38,7 @@ app.use("/admin/booking", adminBookingRoutes);
 
 const server = http.createServer(app);
 
-const userSockets = {}; // Store user IDs and their socket IDs
+const userSockets = {};
 
 const io = new Server(server, {
   cors: {

@@ -7,6 +7,7 @@ const userController = require("../controllers/userController");
 const upload = multer({ storage: multer.memoryStorage() });
 
 router.post("/", userController.createUser);
+router.post("/save-token", userController.saveToken)
 router.get("/:email/:password", userController.loginUser);
 router.post(
   "/setAvatar/:id",
