@@ -82,30 +82,29 @@ io.on("connection", (socket) => {
     let result = await userController.getAdmins();
     result?.push(hostId);
     // send socket signal to Admins and Host.
-    result.forEach((hostId) => {
-      const hostSocketId = userSockets[hostId];
+    result.forEach((item) => {
+      const hostSocketId = userSockets[item];
       if (hostSocketId) {
         io.to(hostSocketId).emit("receivebooking", "You have a new booking 🎉");
       }
     });
     // send push notification to Host
-    const notificationResponse = await fetch(
-      "https://exp.host/--/api/v2/push/send",
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          to: userExpoTokens[hostId],
-          sound: "default",
-          title: "Barque",
-          body: "You have a new booking 🎉",
-        }),
-      }
-    );
-    console.log("Notification sent:", notificationResponse);
+    // const notificationResponse = await fetch(
+    //   "https://exp.host/--/api/v2/push/send",
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       Accept: "application/json",
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       to: userExpoTokens[hostId],
+    //       sound: "default",
+    //       title: "Barque",
+    //       body: "You have a new booking 🎉",
+    //     }),
+    //   }
+    // );
   });
 });
 
