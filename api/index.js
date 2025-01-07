@@ -38,10 +38,12 @@ app.use("/admin/booking", adminBookingRoutes);
 
 const server = http.createServer(app);
 
+const userSockets = {}; // Store user IDs and their socket IDs
+
 const io = new Server(server, {
   cors: {
-    origin: "*", // Allow requests from this origin and my frontend port = 5173
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allow these HTTP methods
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
   },
 });
 
@@ -50,20 +52,29 @@ io.on("connection", (socket) => {
 
   socket.on("requestCancel", async (data) => {
     let result = await reservationController.reqCancel(data.userId);
-    setTimeout(() => {
-      if (result.flag === true) {
-        socket.emit("resrequestCancel", {
-          status: "success",
-          message: "Cancellation request processed.",
-        });
-      } else {
-        socket.emit("resrequestCancel", {
-          status: "error",
-          message: "Error processing cancellation request.",
-        });
-      }
-    }, 5000); 
+    if (result.flag === true) {
+      socket.emit("resrequestCancel", {
+        status: "success",
+        message: "Cancellation request processed.",
+      });
+    } else {
+      socket.emit("resrequestCancel", {
+        status: "error",
+        message: "Error processing cancellation request.",
+      });
+    }
   });
+
+  socket.on("registerUser", (userId) => {
+    userSockets[userId] = socket.id; // Map userId to socket ID
+    console.log(`User ${userId} registered with socket ${socket.id}`);
+  });
+ 
+  socket.on("disconnect", () => {
+    console.log(`User ${userId} disconnected`);
+    delete userSockets[userId]; // Clean up mapping
+  });
+  
 });
 
 const PORT = process.env.PORT || 5000;

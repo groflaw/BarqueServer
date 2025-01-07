@@ -1,12 +1,18 @@
 const Reservation = require("../models/reservation");
 const Chat = require("../models/chat");
 const User = require("../models/user");
+const Boat = require("../models/boat");
 
 exports.saveReservation = async (req, res) => {
   try {
+    const boat = Boat.findOne({ _id: req.body.boatId });
+    boat.free = true;
+    await boat.save();
+
     const newreservation = new Reservation(req.body);
     await newreservation.save();
     res.json({ flag: true, data: newreservation });
+    
   } catch (error) {
     res.json({
       flag: false,
@@ -70,7 +76,7 @@ exports.getHostNews = async (req, res) => {
       status: 0,
       hostId: req.params.hostId,
     });
-    res.json({ flag: true, data: news.length > 0 ? true : false });
+    res.json({ flag: true, data: news?.length > 0 ? true : false });
   } catch (error) {
     res.json({
       flag: false,
@@ -168,7 +174,7 @@ exports.reqCancel = async (userId) => {
       };
     });
 
-    if (messages.length > 0) {
+    if (messages?.length > 0) {
       await Chat.insertMany(messages);
       return {
         flag: true,
