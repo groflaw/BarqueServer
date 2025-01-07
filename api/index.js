@@ -79,8 +79,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("reqbooking", async (hostId) => {
-    let result = userController.getAdmins();
-    result.push(hostId);
+    let result = await userController.getAdmins();
+    result?.push(hostId);
     // send socket signal to Admins and Host.
     result.forEach((hostId) => {
       const hostSocketId = userSockets[hostId];
