@@ -66,11 +66,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("registerUser", (userId) => {
-    userSockets[userId] = socket.id; // Map userId to socket ID
+    userSockets[userId] = socket.id; 
     console.log(`User ${userId} registered with socket ${socket.id}`);
     socket.on("disconnect", () => {
       console.log(`User ${userId} disconnected`);
-      delete userSockets[userId]; // Clean up mapping
+      delete userSockets[userId]; 
     });
   });
 });

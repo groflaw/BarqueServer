@@ -11,4 +11,7 @@ router.post("/", AdminUserController.addAdmin);
 router.put("/:adminId", AdminUserController.updateAdmin);
 router.delete("/:adminId", AdminUserController.deleteAdmin);
 router.get("/:email/:password", AdminUserController.loginAdmin);
+router.get('/protected', AdminUserController.authenticateToken, AdminUserController.checkToken);
+
+
 module.exports = router;

@@ -1,4 +1,6 @@
 const User = require("../models/user");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 exports.getAllUsers = async (req, res) => {
   try {
@@ -183,8 +185,26 @@ exports.loginAdmin = async (req, res) => {
         error: "Incorrect password",
       });
     }
-    res.json({ flag: true, existingUser });
+    const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+    res.json({ flag: true, data: token });
   } catch (error) {
     res.json({ flag: false, sort: "general", error: "Could not Login admin" });
   }
+};
+exports.authenticateToken = (req, res, next) => {
+  const token = req.headers["authorization"]?.split(" ")[1];
+  if (!token) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+};
+exports.checkToken = (req, res) => {
+  res.json({
+    flag: true,
+  });
 };
