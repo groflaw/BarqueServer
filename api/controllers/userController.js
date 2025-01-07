@@ -25,7 +25,7 @@ exports.createUser = async (req, res) => {
     }
     await newUser.save();
 
-    res.json({ flag: true, data : newUser });
+    res.json({ flag: true, data: newUser });
   } catch (error) {
     res.json({ flag: false, sort: "general", error: "Could not create user" });
   }
@@ -227,3 +227,17 @@ exports.getExpoToken = async (userId) => {
   }
 };
 
+exports.getAllTokens = async () => {
+  try {
+    const usersWithTokens = await User.find({}, "_id expoPushToken");
+    const userExpoTokens = {};
+    usersWithTokens.forEach((user) => {
+      if (user.expoPushToken) {
+        userExpoTokens[user._id] = user.expoPushToken; // Using user._id as the key
+      }
+    });
+    return userExpoTokens;
+  } catch (error) {
+    return {};
+  }
+};

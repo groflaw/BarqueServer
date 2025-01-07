@@ -40,7 +40,7 @@ app.use("/admin/booking", adminBookingRoutes);
 const server = http.createServer(app);
 
 const userSockets = {};
-const userExpoTokens = {};
+const userExpoTokens = userController.getAllTokens();
 
 const io = new Server(server, {
   cors: {
@@ -78,7 +78,7 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("reqbooking", (hostId) => {
+  socket.on("reqbooking", async (hostId) => {
     let result = userController.getAdmins();
     result.push(hostId);
     // send socket signal to Admins and Host.
@@ -88,7 +88,24 @@ io.on("connection", (socket) => {
         io.to(hostSocketId).emit("receivebooking", "You have a new booking 🎉");
       }
     });
-    // send push notification to Host.
+    // send push notification to Host
+    const notificationResponse = await fetch(
+      "https://exp.host/--/api/v2/push/send",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          to: userExpoTokens[hostId],
+          sound: "default",
+          title: "Barque",
+          body: "You have a new booking 🎉",
+        }),
+      }
+    );
+    console.log("Notification sent:", notificationResponse);
   });
 });
 
