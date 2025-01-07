@@ -25,7 +25,7 @@ exports.createUser = async (req, res) => {
     }
     await newUser.save();
 
-    res.json({ flag: true, newUser });
+    res.json({ flag: true, data : newUser });
   } catch (error) {
     res.json({ flag: false, sort: "general", error: "Could not create user" });
   }
