@@ -7,8 +7,7 @@ const userController = require("../controllers/userController");
 const upload = multer({ storage: multer.memoryStorage() });
 
 router.post("/", userController.createUser);
-router.post("/save-token", userController.saveToken)
-router.get("/:email/:password", userController.loginUser);
+router.get("/:email/:password/:expoPushToken", userController.loginUser);
 router.post(
   "/setAvatar/:id",
   upload.fields([{ name: "photo" }, { name: "exif" }]),
@@ -19,12 +18,12 @@ router.post("/setNotifi/:id", userController.setNotifi);
 router.post(
   "/addCoHost/:id",
   upload.fields([
-    { name: "profileImage"},
-    { name: "frontID"},
-    { name: "backID"},
+    { name: "profileImage" },
+    { name: "frontID" },
+    { name: "backID" },
   ]),
   userController.addCoHost
 );
-router.get("/:id",userController.getUser);
-router.post("/changePassword/:id",userController.changePassword)
+router.get("/:id", userController.getUser);
+router.post("/changePassword/:id", userController.changePassword);
 module.exports = router;
