@@ -6,6 +6,11 @@ exports.getAllUsers = async (req, res) => {
   try {
     const result = await User.aggregate([
       {
+        $match: {
+          role: 0,
+        },
+      },
+      {
         $lookup: {
           from: "boats",
           localField: "_id",
@@ -195,6 +200,7 @@ exports.loginAdmin = async (req, res) => {
 };
 exports.authenticateToken = (req, res, next) => {
   const token = req.headers["Authorization"]?.split(" ")[1];
+  console.log(token);
   if (!token) return res.sendStatus(401);
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {

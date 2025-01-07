@@ -15,6 +15,7 @@ const adminUserRoutes = require("./routes/adminuserRoutes");
 const adminBookingRoutes = require("./routes/adminbookingRoutes");
 
 const reservationController = require("./controllers/reservationController");
+const userController = require("./controllers/userController");
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use("/admin/booking", adminBookingRoutes);
 const server = http.createServer(app);
 
 const userSockets = {};
+const userExpoTokens = {};
 
 const io = new Server(server, {
   cors: {
@@ -67,6 +69,8 @@ io.on("connection", (socket) => {
 
   socket.on("registerUser", (userId) => {
     userSockets[userId] = socket.id;
+    userExpoTokens[userId] = userController.getExpoToken(userId);
+
     console.log(`User ${userId} registered with socket ${socket.id}`);
     socket.on("disconnect", () => {
       console.log(`User ${userId} disconnected`);
@@ -74,10 +78,18 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("reqbooking", (data) => {
-    console.log(data.userId, data.hostId);
+  socket.on("reqbooking", (hostId) => {
+    let result = userController.getAdmins();
+    result.push(hostId);
+    // send socket signal to Admins and Host.
+    result.forEach((hostId) => {
+      const hostSocketId = userSockets[hostId];
+      if (hostSocketId) {
+        io.to(hostSocketId).emit("receivebooking", "You have a new booking 🎉");
+      }
+    });
+    // send push notification to Host.
   });
-  
 });
 
 const PORT = process.env.PORT || 5000;

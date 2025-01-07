@@ -207,3 +207,23 @@ exports.changePassword = async (req, res) => {
     res.json({ flag: false, sort: "general", error: "Server error" });
   }
 };
+
+//---------Socket Function------------//
+exports.getAdmins = async () => {
+  try {
+    let admins = await User.find({ role: { $ne: 0 } });
+    return admins;
+  } catch (error) {
+    return [];
+  }
+};
+
+exports.getExpoToken = async (userId) => {
+  try {
+    let user = await User.findOne({ _id: userId });
+    return user.expoPushToken;
+  } catch (error) {
+    return "";
+  }
+};
+

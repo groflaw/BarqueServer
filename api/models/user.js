@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
   resrate: { type: Number, default: 100 },
   date: { type: Date, default: Date.now },
   block: { type: Boolean, default: false },
-  role: { type: Number, default: 0 }, // 1 : full, 2 : Manager , 3 : Customer
+  role: { type: Number, default: 0 }, //0: User, 1 : full, 2 : Manager , 3 : Customer
   expoPushToken: { type: String },
 });
 
