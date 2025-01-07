@@ -6,7 +6,7 @@ const Boat = require("../models/boat");
 exports.saveReservation = async (req, res) => {
   try {
     const boat = await Boat.findOne({ _id: req.body.boatId });
-    boat.free = true;
+    boat.free = false;
     await boat.save();
 
     const newreservation = new Reservation(req.body);
