@@ -212,7 +212,8 @@ exports.changePassword = async (req, res) => {
 exports.getAdmins = async () => {
   try {
     let admins = await User.find({ role: { $ne: 0 } });
-    return admins;
+    let adminIds = admins.map((admin) => admin._id);
+    return adminIds;
   } catch (error) {
     return [];
   }
