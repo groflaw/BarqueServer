@@ -96,7 +96,7 @@ io.on("connection", (socket) => {
     }
     console.log("userToken", userExpoTokens[userId]);
     // send push notification to Host
-    await fetch("https://exp.host/--/api/v2/push/send", {
+    const response = await fetch("https://exp.host/--/api/v2/push/send", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -109,6 +109,9 @@ io.on("connection", (socket) => {
         body: "You have a new booking 🎉",
       }),
     });
+
+    const data = await response.json();
+    console.log(data);
   });
 });
 
