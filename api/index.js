@@ -41,7 +41,6 @@ const server = http.createServer(app);
 
 const userSockets = {};
 const userExpoTokens = userController.getAllTokens();
-
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -82,8 +81,9 @@ io.on("connection", (socket) => {
     console.log(`reqbooking received for hostId: ${hostId}`);
 
     let result = await userController.getAdmins();
-    result?.push(hostId);
+    // result?.push(hostId);
     console.log(result);
+  
     // send socket signal to Admins and Host.
     for (let i = 0; i < result.length; i++) {
       const hostId = result[i];
