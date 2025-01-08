@@ -96,7 +96,7 @@ io.on("connection", (socket) => {
         console.log("sent socket signal");
       }
     }
-    console.log("userToken", userExpoTokens[userId]);
+    console.log("userToken", userExpoTokens[userId], typeof userExpoTokens[userId]);
     // send push notification to Host
     const response = await fetch("https://exp.host/--/api/v2/push/send", {
       method: "POST",
