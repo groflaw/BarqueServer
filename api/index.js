@@ -44,7 +44,6 @@ const server = http.createServer(app);
 const userSockets = {};
 const userExpoTokens = userController.getAllTokens();
 
-console.log("basic:", userExpoTokens);
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -54,6 +53,7 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   console.log("User connected ", socket.id);
+  console.log("basic:", userExpoTokens);
 
   socket.on("requestCancel", async (data) => {
     let result = await reservationController.reqCancel(data.userId);
