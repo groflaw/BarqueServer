@@ -110,8 +110,8 @@ io.on("connection", (socket) => {
       }),
     });
 
-    const data = await response.json();
-    console.log(data);
+    result = await response.json();
+    console.log(result);
   });
 });
 
