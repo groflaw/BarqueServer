@@ -79,6 +79,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("reqbooking", async (hostId) => {
+    console.log(`reqbooking received for hostId: ${hostId}`);
+
     let result = await userController.getAdmins();
     result?.push(hostId);
     console.log(result);
