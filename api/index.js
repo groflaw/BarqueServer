@@ -85,6 +85,7 @@ io.on("connection", (socket) => {
     result?.push(hostId);
 
     // send socket signal to Admins and Host.
+    console.log(result);
     for (let i = 0; i < result.length; i++) {
       const temp = result[i];
       const hostSocketId = userSockets[temp];
@@ -96,20 +97,20 @@ io.on("connection", (socket) => {
     }
     console.log("userToken", userExpoTokens[userId]);
     // send push notification to Host
-    await fetch("https://exp.host/--/api/v2/push/send", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        to: userExpoTokens[userId],
-        sound: "default",
-        title: "Barque",
-        body: "You have a new booking 🎉",
-      }),
-    });
-  });
+  //   await fetch("https://exp.host/--/api/v2/push/send", {
+  //     method: "POST",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       to: userExpoTokens[userId],
+  //       sound: "default",
+  //       title: "Barque",
+  //       body: "You have a new booking 🎉",
+  //     }),
+  //   });
+  // });
 });
 
 const PORT = process.env.PORT || 5000;
