@@ -43,10 +43,29 @@ const server = http.createServer(app);
 
 const userSockets = {};
 let userExpoTokens = {};
+
 const logUserExpoTokens = async () => {
   userExpoTokens = await userController.getAllTokens();
 };
 logUserExpoTokens();
+
+const sendNotificatoin = async (to, message) => {
+  const response = await fetch("https://exp.host/--/api/v2/push/send", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      to: to,
+      sound: "default",
+      title: "Barque",
+      body: message
+    }),
+  });
+  result = await response.json();
+  return result;
+};
 
 const io = new Server(server, {
   cors: {
@@ -57,7 +76,6 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   console.log("User connected ", socket.id);
-  console.log("basic:", userExpoTokens);
 
   socket.on("requestCancel", async (data) => {
     let result = await reservationController.reqCancel(data.userId);
@@ -74,10 +92,9 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("registerUser", async(userId) => {
+  socket.on("registerUser", async (userId) => {
     userSockets[userId] = socket.id;
     userExpoTokens[userId] = await userController.getExpoToken(userId);
-    console.log("after login:", userExpoTokens);
     console.log(`User ${userId} registered with socket ${socket.id}`);
     socket.on("disconnect", () => {
       console.log(`User ${userId} disconnected`);
@@ -91,8 +108,6 @@ io.on("connection", (socket) => {
 
     let result = await userController.getAdmins();
     result?.push(hostId);
-
-    // send socket signal to Admins and Host.
     for (let i = 0; i < result.length; i++) {
       const temp = result[i];
       const hostSocketId = userSockets[temp];
@@ -102,24 +117,7 @@ io.on("connection", (socket) => {
         console.log("sent socket signal");
       }
     }
-    console.log("userToken", typeof userExpoTokens[userId]);
-    // send push notification to Host
-    const response = await fetch("https://exp.host/--/api/v2/push/send", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        to: userExpoTokens[userId],
-        sound: "default",
-        title: "Barque",
-        body: "You have a new booking 🎉",
-      }),
-    });
-
-    result = await response.json();
-    console.log(result);
+    sendNotificatoin(userExpoTokens[userId], "You have a new booking 🎉");
   });
 });
 
