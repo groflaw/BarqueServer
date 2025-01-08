@@ -85,7 +85,7 @@ io.on("connection", (socket) => {
     result?.push(hostId);
 
     // send socket signal to Admins and Host.
-    console.log(result);
+    console.log(result, userSockets);
     for (let i = 0; i < result.length; i++) {
       const temp = result[i];
       const hostSocketId = userSockets[temp];
