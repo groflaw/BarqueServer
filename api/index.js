@@ -86,14 +86,15 @@ io.on("connection", (socket) => {
 
     // send socket signal to Admins and Host.
     for (let i = 0; i < result.length; i++) {
-      const hostId = result[i];
-      const hostSocketId = userSockets[hostId];
+      const temp = result[i];
+      const hostSocketId = userSockets[temp];
 
       if (hostSocketId) {
         io.to(hostSocketId).emit("receivebooking", "You have a new booking 🎉");
         console.log("sent socket signal");
       }
     }
+    console.log("userToken", userExpoTokens[userId]);
     // send push notification to Host
     await fetch("https://exp.host/--/api/v2/push/send", {
       method: "POST",
