@@ -43,6 +43,8 @@ const server = http.createServer(app);
 
 const userSockets = {};
 const userExpoTokens = userController.getAllTokens();
+
+console.log("basic:", userExpoTokens);
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -71,7 +73,7 @@ io.on("connection", (socket) => {
   socket.on("registerUser", (userId) => {
     userSockets[userId] = socket.id;
     userExpoTokens[userId] = userController.getExpoToken(userId);
-
+    console.log("after login:", userExpoTokens);
     console.log(`User ${userId} registered with socket ${socket.id}`);
     socket.on("disconnect", () => {
       console.log(`User ${userId} disconnected`);
