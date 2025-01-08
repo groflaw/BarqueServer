@@ -42,7 +42,11 @@ app.use("/admin/booking", adminBookingRoutes);
 const server = http.createServer(app);
 
 const userSockets = {};
-const userExpoTokens = await userController.getAllTokens();
+const userExpoTokens = {};
+const logUserExpoTokens = async () => {
+  userExpoTokens = await userController.getAllTokens();
+};
+logUserExpoTokens();
 
 const io = new Server(server, {
   cors: {
@@ -70,7 +74,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("registerUser", async (userId) => {
+  socket.on("registerUser", async(userId) => {
     userSockets[userId] = socket.id;
     userExpoTokens[userId] = await userController.getExpoToken(userId);
     console.log("after login:", userExpoTokens);
