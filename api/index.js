@@ -102,8 +102,7 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("reqbooking", async (data) => {
-    let { hostId, userId } = data;
+  socket.on("reqbooking", async (hostId) => {
     console.log(`reqbooking received for hostId: ${hostId}`);
 
     let result = await userController.getAdmins();
@@ -111,13 +110,11 @@ io.on("connection", (socket) => {
     for (let i = 0; i < result.length; i++) {
       const temp = result[i];
       const hostSocketId = userSockets[temp];
-
       if (hostSocketId) {
         io.to(hostSocketId).emit("receivebooking", "You have a new booking 🎉");
-        console.log("sent socket signal");
       }
     }
-    sendNotificatoin(userExpoTokens[userId], "You have a new booking 🎉");
+    sendNotificatoin(userExpoTokens[hostId], "You have a new booking 🎉");
   });
 });
 
