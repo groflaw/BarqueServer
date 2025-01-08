@@ -42,7 +42,7 @@ app.use("/admin/booking", adminBookingRoutes);
 const server = http.createServer(app);
 
 const userSockets = {};
-const userExpoTokens = {};
+let userExpoTokens = {};
 const logUserExpoTokens = async () => {
   userExpoTokens = await userController.getAllTokens();
 };
