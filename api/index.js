@@ -91,6 +91,7 @@ io.on("connection", (socket) => {
 
       if (hostSocketId) {
         io.to(hostSocketId).emit("receivebooking", "You have a new booking 🎉");
+        console.log("sent socket signal");
       }
     }
     // send push notification to Host
