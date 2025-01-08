@@ -114,7 +114,6 @@ io.on("connection", (socket) => {
         io.to(hostSocketId).emit("receivebooking", "You have a new booking 🎉");
       }
     }
-    console.log("host Token", userExpoTokens[hostId]);
     sendNotificatoin(userExpoTokens[hostId], "You have a new booking 🎉");
   });
 });
