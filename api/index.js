@@ -60,7 +60,7 @@ const sendNotificatoin = async (to, message) => {
       to: to,
       sound: "default",
       title: "Barque",
-      body: message
+      body: message,
     }),
   });
   result = await response.json();
@@ -114,6 +114,7 @@ io.on("connection", (socket) => {
         io.to(hostSocketId).emit("receivebooking", "You have a new booking 🎉");
       }
     }
+    console.log("host Token", userExpoTokens[hostId]);
     sendNotificatoin(userExpoTokens[hostId], "You have a new booking 🎉");
   });
 });
