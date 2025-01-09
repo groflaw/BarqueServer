@@ -85,6 +85,7 @@ io.on("connection", (socket) => {
       sendNotificatoin(userExpoTokens[hostId], "You have a new Cancel Request");
     } else {
       socket.emit("Admin:reqcancel", "You have a new Cancel Request");
+      console.log(result);
     }
   });
 
