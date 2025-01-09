@@ -129,7 +129,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("alertsetboatdoc", async ({ message, userId }) => {
-    console.log(message, userId);
+    sendNotificatoin(userExpoTokens[userId], message);
+  });
+
+  socket.on("adminresbooking", ({ userId, hostId, message }) => {
+    sendNotificatoin(userExpoTokens[hostId], message);
     sendNotificatoin(userExpoTokens[userId], message);
   });
 });
