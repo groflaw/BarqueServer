@@ -127,6 +127,10 @@ io.on("connection", (socket) => {
       }
     }
   });
+
+  socket.on("alertsetboatdoc", async (message, userId) => {
+    sendNotificatoin(userExpoTokens[userId], message);
+  });
 });
 
 const PORT = process.env.PORT || 5000;
