@@ -80,12 +80,23 @@ io.on("connection", (socket) => {
   socket.on("requestCancel", async (data) => {
     const { userId, hostId, bookId } = data;
     let result = await reservationController.reqCancel(userId, bookId);
-    console.log(result);
     if (result) {
-      sendNotificatoin(userExpoTokens[hostId], "You have a new Cancel Request");
+      await sendNotificatoin(
+        userExpoTokens[hostId],
+        "You have a new Cancel Request"
+      );
     } else {
-      socket.emit("Admin:reqcancel", "You have a new Cancel Request");
-      console.log(result);
+      let result = await userController.getAdmins();
+      for (let i = 0; i < result.length; i++) {
+        const temp = result[i];
+        const hostSocketId = userSockets[temp];
+        if (hostSocketId) {
+          io.to(hostSocketId).emit(
+            "Admin:reqcancel",
+            "You have a new Cancel Request"
+          );
+        }
+      }
     }
   });
 
