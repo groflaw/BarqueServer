@@ -129,6 +129,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("alertsetboatdoc", async (message, userId) => {
+    console.log(message, userId);
     sendNotificatoin(userExpoTokens[userId], message);
   });
 });
