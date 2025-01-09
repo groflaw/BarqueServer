@@ -116,6 +116,17 @@ io.on("connection", (socket) => {
     }
     sendNotificatoin(userExpoTokens[hostId], "You have a new booking 🎉");
   });
+
+  socket.on("addnewboat", async () => {
+    let result = await userController.getAdmins();
+    for (let i = 0; i < result.length; i++) {
+      const temp = result[i];
+      const hostSocketId = userSockets[temp];
+      if (hostSocketId) {
+        io.to(hostSocketId).emit("alertaddnewboat", "Added new boat 🎉");
+      }
+    }
+  });
 });
 
 const PORT = process.env.PORT || 5000;
