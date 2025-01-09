@@ -78,17 +78,13 @@ io.on("connection", (socket) => {
   console.log("User connected ", socket.id);
 
   socket.on("requestCancel", async (data) => {
-    let result = await reservationController.reqCancel(data.userId);
-    if (result.flag === true) {
-      socket.emit("resrequestCancel", {
-        status: "success",
-        message: "Cancellation request processed.",
-      });
+    const { userId, hostId, bookId } = data;
+    console.log(data);
+    let result = await reservationController.reqCancel(userId, bookId);
+    if (result) {
+      sendNotificatoin(userExpoTokens[hostId], "You have a new Cancel Request");
     } else {
-      socket.emit("resrequestCancel", {
-        status: "error",
-        message: "Error processing cancellation request.",
-      });
+      socket.emit("receivecancel", "You have a new Cancel Request");
     }
   });
 
@@ -134,6 +130,10 @@ io.on("connection", (socket) => {
 
   socket.on("adminresbooking", ({ userId, hostId, message }) => {
     sendNotificatoin(userExpoTokens[hostId], message);
+    sendNotificatoin(userExpoTokens[userId], message);
+  });
+
+  socket.on("hostresbooking", ({ userId, message }) => {
     sendNotificatoin(userExpoTokens[userId], message);
   });
 });

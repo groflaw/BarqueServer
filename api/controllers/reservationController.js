@@ -180,30 +180,25 @@ exports.checkHostReview = async (req, res) => {
   }
 };
 
-exports.reqCancel = async (userId) => {
+exports.reqCancel = async (userId, bookId) => {
   try {
-    const customers = await User.find({ role: 3 });
-    const messages = customers.map((customer) => {
-      return {
-        sender: userId,
-        receiver: customer._id,
-        content:
-          "I hope this message finds you well. I would like to kindly request the cancellation of my boat booking. Thank you for your assistance.",
-      };
-    });
-
-    if (messages?.length > 0) {
-      await Chat.insertMany(messages);
-      return {
-        flag: true,
-        data: messages,
-      };
+    const reservation = await Reservation.findOne({ _id: bookId });
+    if (reservation.status == 0) {
+      reservation.status = 1;
+      await reservation.save();
+      return true;
     } else {
-      return {
-        flag: false,
-        sort: "general",
-        error: "No customers.",
-      };
+      const customers = await User.find({ role: 3 });
+      const messages = customers.map((customer) => {
+        return {
+          sender: userId,
+          receiver: customer._id,
+          content:
+            "I hope this message finds you well. I would like to kindly request the cancellation of my boat booking. Thank you for your assistance.",
+        };
+      });
+      if (messages?.length > 0) await Chat.insertMany(messages);
+      return false;
     }
   } catch (error) {
     return {
