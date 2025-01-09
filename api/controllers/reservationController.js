@@ -12,7 +12,6 @@ exports.saveReservation = async (req, res) => {
     const newreservation = new Reservation(req.body);
     await newreservation.save();
     res.json({ flag: true, data: newreservation });
-    
   } catch (error) {
     res.json({
       flag: false,
@@ -66,6 +65,25 @@ exports.getBookings = async (req, res) => {
       flag: false,
       sort: "general",
       error: "Could not get bookings",
+    });
+  }
+};
+
+exports.getBoatBookings = async (req, res) => {
+  try {
+    const bookings = await Reservation.find({
+      boatId: req.params.boatId,
+      status: { $ne: 1 },
+    });
+    res.json({
+      flag: true,
+      data: bookings,
+    });
+  } catch (error) {
+    res.json({
+      flag: false,
+      sort: "general",
+      error: "Could not get boat bookings",
     });
   }
 };
