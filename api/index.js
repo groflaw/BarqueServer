@@ -84,7 +84,7 @@ io.on("connection", (socket) => {
     if (result) {
       sendNotificatoin(userExpoTokens[hostId], "You have a new Cancel Request");
     } else {
-      socket.emit("receivecancel", "You have a new Cancel Request");
+      socket.emit("Admin:reqcancel", "You have a new Cancel Request");
     }
   });
 
@@ -134,7 +134,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("hostresbooking", ({ userId, message }) => {
-    console.log(userId, message);
+    socket.emit("Admin:hostresbooking");
     sendNotificatoin(userExpoTokens[userId], message);
   });
 });
