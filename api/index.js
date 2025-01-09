@@ -134,6 +134,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("hostresbooking", ({ userId, message }) => {
+    console.log(userId, message);
     sendNotificatoin(userExpoTokens[userId], message);
   });
 });
