@@ -79,8 +79,8 @@ io.on("connection", (socket) => {
 
   socket.on("requestCancel", async (data) => {
     const { userId, hostId, bookId } = data;
-    console.log(data);
     let result = await reservationController.reqCancel(userId, bookId);
+    console.log(result);
     if (result) {
       sendNotificatoin(userExpoTokens[hostId], "You have a new Cancel Request");
     } else {
